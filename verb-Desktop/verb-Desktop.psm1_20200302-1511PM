@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.4.0
+  Version     : 1.0.3.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -979,14 +979,15 @@ Function start-ItunesPlaylist {
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,Compare-ObjectsSideBySide,Compare-ObjectsSideBySide3,Compare-ObjectsSideBySide4,c-winsallk,Define-MoveWindow,Get-FsoShortName,Get-FsoTypeObj,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Move-Window,Move-WindowByWindowTitle,openInput,openTmpps1,Out-Excel,Out-Excel-Events,Report-URL,Set,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
+# Auto-export all Aliases
+Export-ModuleMember -Alias * ;
 
 
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUSBcmsP+zBkNdGHSr/m32GL/C
-# 3DWgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUcOJkTICHIYmvUdhZIwQ+pjZA
+# oPqgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1001,9 +1002,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,Compare-ObjectsSideByS
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRs1u5G
-# lJ0NscO+d9AB7e5j2eAypDANBgkqhkiG9w0BAQEFAASBgHKjEwCMNcVUmNFWhWXa
-# 5S3aMX2DjCdqOD2JshBTnk99w6XJcg0bzNyhRHOpDHy1j475Mg1ihpXZUy/pJnRc
-# mic9sBwy+qPpwqW7HtoW6CSb5h/Qrts3OhZrhrBg/g1+es+aPpP9pRd/38Uz634i
-# f4z2M6R+hTcLtPe9AbKOoZ3I
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBS6Do7G
+# 76G8U1OxRD3A6N5mQ6ptpTANBgkqhkiG9w0BAQEFAASBgAJahIRhu3TIdHOfNQO4
+# VKuUXJfi25va8BROB8f1o6V0ornS+yzalHptFFW0r1QxiuHrTcKVVmCDHmJ8pwNz
+# RJYON/GQ/7GoqizhFZwa440wPfXOiUKBKigKSMckwq5bk0xuSS8B40Qw1TxKMi3+
+# hq8kLZsAjcMAew4Iw4mZPPac
 # SIG # End signature block

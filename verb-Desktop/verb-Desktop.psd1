@@ -12,7 +12,7 @@
 RootModule = 'verb-Desktop.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.3'
+ModuleVersion = '1.0.4'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@ Description = 'Powershell Desktop generic functions module'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+FunctionsToExport = @('....','...','..','~','Clean-Desktop','Compare-ObjectsSideBySide','Compare-ObjectsSideBySide3','Compare-ObjectsSideBySide4','c-winsallk','Define-MoveWindow','Get-FsoShortName','Get-FsoTypeObj','Go','gotoDbox','gotoDboxDb','gotoDownloads','gotoIncid','Move-Window','Move-WindowByWindowTitle','openInput','openTmpps1','Out-Excel','Out-Excel-Events','Report-URL','Set','show-TrayTip','Speak-words','start-ItunesPlaylist')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'
@@ -126,8 +126,8 @@ PrivateData = @{
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUBqqTfgrBbqp0b2WtX7npH6CS
-# J6OgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUl3orWZFwKxRZ5BZezlhHSBmo
+# XzigggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -142,9 +142,9 @@ PrivateData = @{
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTihRdv
-# AszzhT09D5+19Fs09SIquDANBgkqhkiG9w0BAQEFAASBgBQcR/LL4o5QIurft8bZ
-# IeFNaNDkbqqGXZZk9S4BsX+15SIqmndMwCZICzxmLfPphPOsu7KTiF1Pt/J3DcMH
-# KYIv/BkC179ob/VFkpfckKQXtmeyAJa59I4JNZT7qMWmS0Q9IwDyJFc4ISy43vvf
-# yLGxtX2MP75iaRlp/Tn6Am3Z
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBS9rFnE
+# PgFXd+15ICrfjh6/arLMvTANBgkqhkiG9w0BAQEFAASBgCbgqq3n2MScD88eCK/G
+# r3cSwqhqhcyKEWjg83PH4BBz0LGj1eDQLZG1omARZ+XGv9I/ilFAXwIJ5Gn3EbPB
+# JL6boboQL4jg1Hqt9elLuoFJRH2hLzqvPAl4wRUEC1+bJMKc7xOvD2cnDqnF9943
+# 9bs+7SnXoWUZ21uMxPJDPNVy
 # SIG # End signature block
