@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.5.0
+  Version     : 1.0.4.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -985,8 +985,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,Compare-ObjectsSideByS
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUHJP9dw2SNRUtqyTZD0ni8IoW
-# /PmgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUSBcmsP+zBkNdGHSr/m32GL/C
+# 3DWgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1001,9 +1001,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,Compare-ObjectsSideByS
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSbbj2d
-# 4tvrCFJW7Xhbh/HhwrQD/zANBgkqhkiG9w0BAQEFAASBgAdAF9Igb3rLfKTg6nWl
-# W88wcaHfUGgHj0ogxu3fvhSrM1B1WkGUwZYbTIav9CHCEORDUQiEO8qp9RjzLljv
-# lpAOw+h3KKsryL6rgfHZvm6B4lUg3a9pnFh492KhVoVMn77FXw914FvX6lUhPmCO
-# cVUTL/D5AAKTWn+ktpeMsTRq
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRs1u5G
+# lJ0NscO+d9AB7e5j2eAypDANBgkqhkiG9w0BAQEFAASBgHKjEwCMNcVUmNFWhWXa
+# 5S3aMX2DjCdqOD2JshBTnk99w6XJcg0bzNyhRHOpDHy1j475Mg1ihpXZUy/pJnRc
+# mic9sBwy+qPpwqW7HtoW6CSb5h/Qrts3OhZrhrBg/g1+es+aPpP9pRd/38Uz634i
+# f4z2M6R+hTcLtPe9AbKOoZ3I
 # SIG # End signature block
