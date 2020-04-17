@@ -3,4 +3,3 @@
 #function gotoDevadlScripts{set-location C:\usr\work\exch\scripts}
 #function gotoProfile{set-location C:\Users\MyAccount\Documents\WindowsPowerShell}
 function gotoIncid { set-location c:\usr\work\incid }
-Set-Alias p Pop-Location

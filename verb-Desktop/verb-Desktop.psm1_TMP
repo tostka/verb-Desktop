@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.4.0
+  Version     : 1.0.5.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -557,7 +557,6 @@ function gotoDownloads { set-location C:\usr\home\ftp }
 
 #*------v gotoIncid.ps1 v------
 function gotoIncid { set-location c:\usr\work\incid }
-Set-Alias p Pop-Location
 
 #*------^ gotoIncid.ps1 ^------
 
