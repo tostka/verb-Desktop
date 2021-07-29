@@ -1,11 +1,11 @@
-﻿# verb-Desktop.psm1
+﻿# verb-desktop.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.6.0
+  Version     : 1.0.7.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -166,216 +166,6 @@ function Clean-Desktop {
 
 #*------^ Clean-Desktop.ps1 ^------
 
-#*------v Compare-ObjectsSideBySide.ps1 v------
-function Compare-ObjectsSideBySide ($lhs, $rhs) {
-    <#
-    .SYNOPSIS
-    Compare-ObjectsSideBySide() - Displays a pair of objects side-by-side comparatively in console
-    .NOTES
-    Author: Richard Slater
-    Website:	https://stackoverflow.com/users/74302/richard-slater
-    Updated By: Todd Kadrie
-    Website:	http://www.toddomation.com
-    Twitter:	@tostka, http://twitter.com/tostka
-    Additional Credits: REFERENCE
-    Website:	URL
-    Twitter:	URL
-    REVISIONS   :
-    * 10:18 AM 11/2/2018 reformatted, tightened up, shifted params to body, added pshelp
-    * May 7 '16 at 20:55 posted version
-    .DESCRIPTION
-    Compare-ObjectsSideBySide() - Displays a pair of objects side-by-side comparatively in console
-    .PARAMETER  col1
-    Object to be displayed in Left Column [-col1 $PsObject1]
-    .PARAMETER  col2
-    Object to be displayed in Right Column [-col2 $PsObject2]
-    .PARAMETER ShowDebug
-    Parameter to display Debugging messages [-ShowDebug switch]
-    .INPUTS
-    Acceptes piped input.
-    .OUTPUTS
-    Outputs specified object side-by-side on console
-    .EXAMPLE
-    $object1 = New-Object PSObject -Property @{
-      'Forename' = 'Richard';
-      'Surname' = 'Slater';
-      'Company' = 'Amido';
-      'SelfEmployed' = $true;
-    } ;
-    $object2 = New-Object PSObject -Property @{
-      'Forename' = 'Jane';
-      'Surname' = 'Smith';
-      'Company' = 'Google';
-      'MaidenName' = 'Jones' ;
-    } ;
-    Compare-ObjectsSideBySide $object1 $object2 | Format-Table Property, col1, col2;
-    Display $object1 & $object2 in comparative side-by-side columns
-    .LINK
-    https://stackoverflow.com/questions/37089766/powershell-side-by-side-objects
-    #>
-    $col1Members = $col1 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $col2Members = $col2 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $combinedMembers = ($col1Members + $col2Members) | Sort-Object -COque ;
-    $combinedMembers | ForEach-Object {
-        $properties = @{'Property' = $_} ;
-        if ($col1Members.Contains($_)) {$properties['Col1'] = $col1 | Select-Object -ExpandProperty $_} ;
-        if ($col2Members.Contains($_)) {$properties['Col2'] = $col2 | Select-Object -ExpandProperty $_} ;
-        New-Object PSObject -Property $properties ;
-    } ;
-}
-
-#*------^ Compare-ObjectsSideBySide.ps1 ^------
-
-#*------v Compare-ObjectsSideBySide3.ps1 v------
-function Compare-ObjectsSideBySide3 ($col1, $col2, $col3) {
-    <#
-    .SYNOPSIS
-    Compare-ObjectsSideBySide3() - Displays three objects side-by-side comparatively in console
-    .NOTES
-    Author: Richard Slater
-    Website:	https://stackoverflow.com/users/74302/richard-slater
-    Updated By: Todd Kadrie
-    Website:	http://www.toddomation.com
-    Twitter:	@tostka, http://twitter.com/tostka
-    Additional Credits: REFERENCE
-    Website:	URL
-    Twitter:	URL
-    REVISIONS   :
-    * 10:18 AM 11/2/2018 Extension of base model, to 3 columns
-    * May 7 '16 at 20:55 posted version
-    .DESCRIPTION
-    Compare-ObjectsSideBySide3() - Displays three objects side-by-side comparatively in console
-    .PARAMETER  col1
-    Object to be displayed in Column1 [-col1 $PsObject1]
-    .PARAMETER  col2
-    Object to be displayed in Column2 [-col2 $PsObject2]
-    .PARAMETER  col3
-    Object to be displayed in Column3 [-col3 $PsObject3]
-    .PARAMETER ShowDebug
-    Parameter to display Debugging messages [-ShowDebug switch]
-    .INPUTS
-    Acceptes piped input.
-    .OUTPUTS
-    Outputs specified object side-by-side on console
-    .EXAMPLE
-    $object1 = New-Object PSObject -Property @{
-      'Forename' = 'Richard';
-      'Surname' = 'Slater';
-      'Company' = 'Amido';
-      'SelfEmployed' = $true;
-    } ;
-    $object2 = New-Object PSObject -Property @{
-      'Forename' = 'Jane';
-      'Surname' = 'Smith';
-      'Company' = 'Google';
-      'MaidenName' = 'Jones' ;
-    } ;
-    $object3 = New-Object PSObject -Property @{
-      'Forename' = 'Zhe';
-      'Surname' = 'Person';
-      'Company' = 'Apfel';
-      'MaidenName' = 'NunaUBusiness' ;
-    } ;
-    Compare-ObjectsSideBySide3 $object1 $object2 $object3 | Format-Table Property, col1, col2, col3;
-    Display $object1 & $object2 in comparative side-by-side columns
-    .LINK
-    https://stackoverflow.com/questions/37089766/powershell-side-by-side-objects
-    #>
-    $col1Members = $col1 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $col2Members = $col2 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $col3Members = $col3 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $combinedMembers = ($col1Members + $col2Members + $col3Members ) | Sort-Object -COque ;
-    $combinedMembers | ForEach-Object {
-        $properties = @{'Property' = $_} ;
-        if ($col1Members.Contains($_)) {$properties['Col1'] = $col1 | Select-Object -ExpandProperty $_} ;
-        if ($col2Members.Contains($_)) {$properties['Col2'] = $col2 | Select-Object -ExpandProperty $_} ;
-        if ($col3Members.Contains($_)) {$properties['Col3'] = $col3 | Select-Object -ExpandProperty $_} ;
-        New-Object PSObject -Property $properties ;
-    } ;
-}
-
-#*------^ Compare-ObjectsSideBySide3.ps1 ^------
-
-#*------v Compare-ObjectsSideBySide4.ps1 v------
-function Compare-ObjectsSideBySide4 ($col1, $col2, $col3, $col4) {
-    <#
-    .SYNOPSIS
-    Compare-ObjectsSideBySide4() - Displays four objects side-by-side comparatively in console
-    .NOTES
-    Author: Richard Slater
-    Website:	https://stackoverflow.com/users/74302/richard-slater
-    Updated By: Todd Kadrie
-    Website:	http://www.toddomation.com
-    Twitter:	@tostka, http://twitter.com/tostka
-    Additional Credits: REFERENCE
-    Website:	URL
-    Twitter:	URL
-    REVISIONS   :
-    * 10:18 AM 11/2/2018 Extension of base model, to 4 columns
-    * May 7 '16 at 20:55 posted version
-    .DESCRIPTION
-    Compare-ObjectsSideBySide4() - Displays four objects side-by-side comparatively in console
-    .PARAMETER  col1
-    Object to be displayed in Column1 [-col1 $PsObject1]
-    .PARAMETER  col2
-    Object to be displayed in Column2 [-col2 $PsObject2]
-    .PARAMETER  col3
-    Object to be displayed in Column3 [-col3 $PsObject3]
-    .PARAMETER  col4
-    Object to be displayed in Column4 [-col4 $PsObject4]
-    .PARAMETER ShowDebug
-    Parameter to display Debugging messages [-ShowDebug switch]
-    .INPUTS
-    Acceptes piped input.
-    .OUTPUTS
-    Outputs specified object side-by-side on console
-    .EXAMPLE
-    $object1 = New-Object PSObject -Property @{
-      'Forename' = 'Richard';
-      'Surname' = 'Slater';
-      'Company' = 'Amido';
-      'SelfEmployed' = $true;
-    } ;
-    $object2 = New-Object PSObject -Property @{
-      'Forename' = 'Jane';
-      'Surname' = 'Smith';
-      'Company' = 'Google';
-      'MaidenName' = 'Jones' ;
-    } ;
-    $object3 = New-Object PSObject -Property @{
-      'Forename' = 'Zhe';
-      'Surname' = 'Person';
-      'Company' = 'Apfel';
-      'MaidenName' = 'NunaUBusiness' ;
-    } ;
-    $object4 = New-Object PSObject -Property @{
-      'Forename' = 'Zir';
-      'Surname' = 'NPC';
-      'Company' = 'Facemook';
-      'MaidenName' = 'Not!' ;
-    } ;
-    Compare-ObjectsSideBySide4 $object1 $object2 $object3 $object4 | Format-Table Property, col1, col2, col3, col4;
-    Display $object1,2,3 & 4 in comparative side-by-side columns
-    .LINK
-    https://stackoverflow.com/questions/37089766/powershell-side-by-side-objects
-    #>
-    $col1Members = $col1 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $col2Members = $col2 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $col3Members = $col3 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $col4Members = $col4 | Get-Member -MemberType NoteProperty, Property | Select-Object -ExpandProperty Name ;
-    $combinedMembers = ($col1Members + $col2Members + $col3Members + $col4Members) | Sort-Object -COque ;
-    $combinedMembers | ForEach-Object {
-        $properties = @{'Property' = $_} ;
-        if ($col1Members.Contains($_)) {$properties['Col1'] = $col1 | Select-Object -ExpandProperty $_} ;
-        if ($col2Members.Contains($_)) {$properties['Col2'] = $col2 | Select-Object -ExpandProperty $_} ;
-        if ($col3Members.Contains($_)) {$properties['Col3'] = $col3 | Select-Object -ExpandProperty $_} ;
-        if ($col4Members.Contains($_)) {$properties['col4'] = $col4 | Select-Object -ExpandProperty $_} ;
-        New-Object PSObject -Property $properties ;
-    } ;
-}
-
-#*------^ Compare-ObjectsSideBySide4.ps1 ^------
-
 #*------v c-winsallk.ps1 v------
 function c-winsallk {. C:\usr\work\ps\scripts\close-WinsAll.ps1 -kill  }
 
@@ -397,110 +187,6 @@ bool bRepaint);
 }
 
 #*------^ Define-MoveWindow.ps1 ^------
-
-#*------v Get-FsoShortName.ps1 v------
-Function Get-FsoShortName {
-    <#
-    .SYNOPSIS
-    Get-FsoShortName - Return ShortName (8.3) for specified Filesystem object
-    .NOTES
-    Author: Todd Kadrie
-    Website:	http://tinstoys.blogspot.com
-    Twitter:	http://twitter.com/tostka
-    REVISIONS   :
-    * 7:40 AM 3/29/2016 - added string->path conversion
-    * 2:16 PM 3/28/2016 - functional version, no param block
-    .INPUTS
-    Accepts piped input.
-    .OUTPUTS
-    Returns Shortname for specified FSO('s) to the pipeline
-    .EXAMPLE
-    get-childitem "C:\Program Files\DellTPad\Dell.Framework.Library.dll" | get-fsoshortname ;
-    # Retrieve ShortName for a file
-    .EXAMPLE
-    get-childitem ${env:ProgramFiles(x86)} | get-fsoshortname ;
-    Retrieve Shortname for contents of the folder specified by the 'Program Files(x86)' environment variable
-    .EXAMPLE
-    $blah="C:\Program Files (x86)\Log Parser 2.2","C:\Program Files (x86)\Log Parser 2.2\SyntaxerHighlightControl.dll" ;
-    $blah | get-fsoshortname ;
-    Resolve path specification(s) into ShortNames
-    .LINK
-    https://blogs.technet.microsoft.com/heyscriptingguy/2013/08/01/use-powershell-to-display-short-file-and-folder-names/
-    #>
-    BEGIN { $fso = New-Object -ComObject Scripting.FileSystemObject } ;
-    PROCESS {
-        if($_){
-            $fo=$_;
-            # 7:25 AM 3/29/2016 add string-path support
-            switch ($fo.gettype().fullname){
-                "System.IO.FileInfo" {write-output $fso.getfile($fo.fullname).ShortName}
-                "System.IO.DirectoryInfo" {write-output $fso.getfolder($fo.fullname).ShortName}
-                "System.String" {
-                    # if it's a gci'able path, convert to fso object and then recurse back through
-                    if($fio=get-childitem -Path $fo -ea 0){$fio | Get-FsoShortName }
-                    else{write-error "$($fo) is a string variable, but does not reflect the location of a filesystem object"}
-                }
-                default { write-error "$($fo) is not a filesystem object" }
-            } ;
-        } else { write-error "$($fo) is not a filesystem object" } ;
-    }  ;
-}
-
-#*------^ Get-FsoShortName.ps1 ^------
-
-#*------v Get-FsoTypeObj.ps1 v------
-Function Get-FsoTypeObj {
-    <#
-    .SYNOPSIS
-    Get-FsoTypeObj()- convert file/dir object or path string to an fso obj
-    .NOTES
-    Author: Todd Kadrie
-    Website:	http://tinstoys.blogspot.com
-    Twitter:	http://twitter.com/tostka
-    Website:	URL
-    Twitter:	URL
-    REVISIONS   :
-    * 1:37 PM 10/23/2017 Get-FsoTypeObj: simple reworking of get-fsoshortpath() to convert file/dir object or path string to an fso obj
-    .DESCRIPTION
-    .PARAMETER  PARAMNAME
-    .INPUTS
-    Accepts piped input.
-    .OUTPUTS
-    Resolves Dir/File/path string into an fso object
-    .EXAMPLE
-    Get-FsoTypeObj "C:\usr\work\exch\scripts\get-dbmbxsinfo.ps1"
-    Resolve a path string into an fso file object
-    .EXAMPLE
-    Get-FsoTypeObj "C:\usr\work\exch\scripts\"
-    Resolve a path string into an fso container object
-    .EXAMPLE
-    gci "C:\usr\work\exch\scripts\" | Get-FsoTypeObj ;
-    Validates and returns an fso container object
-    .EXAMPLE
-    gci "C:\usr\work\exch\scripts\_.txt" | Get-FsoTypeObj ;
-    Validates input is fso and returns an fso file object
-    .LINK
-    #>
-    Param([Parameter(Position=0,Mandatory=$True,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,HelpMessage="Path or object to be resoved to fso")]$path) ;
-    BEGIN {  } ;
-    PROCESS {
-        if($path){
-            $fo=$path;
-            switch ($fo.gettype().fullname){
-                "System.IO.FileInfo" {$fo | write-output ; } ;
-                "System.IO.DirectoryInfo" {$fo | write-output ; } ;
-                "System.String" {
-                    # if it's a gci'able path, convert to fso object and then recurse back through
-                    if($fio=get-childitem -Path $fo -ea 0){$fio | Get-FsoTypeObj }
-                    else{write-error "$($fo) is a string variable, but does not reflect the location of a filesystem object"} ;
-                } ;
-                default { write-error "$($fo) is not a filesystem object" } ;
-            } ;
-        } else { write-error "$($fo) is not a filesystem object" } ;
-    }  ; # PROC-E
-}
-
-#*------^ Get-FsoTypeObj.ps1 ^------
 
 #*------v Go.ps1 v------
 function Go {
@@ -582,6 +268,445 @@ function Move-WindowByWindowTitle {
 
 #*------^ Move-WindowByWindowTitle.ps1 ^------
 
+#*------v new-WallpaperStatus.ps1 v------
+Function New-WallpaperStatus {
+    <# 
+    .SYNOPSIS
+    New-WallpaperStatus - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
+    .NOTES
+    Version     : 1.0.4
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2020-06-27
+    FileName    : New-WallpaperStatus.ps1
+    License     : (none asserted)
+    Copyright   : (none asserted)
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : Powershell
+    AddedCredit : _Emin_
+    AddedWebsite:	https://p0w3rsh3ll.wordpress.com/
+    AddedTwitter:	URL
+    REVISIONS   :
+    # 10:46 AM 7/29/2021 ren'd New-WallpaperStatus -> New-WallpaperStatus (stuck orig in Alias); added updated Win10 PS console color scheme colors to themes list (they're precurated 'suitable' colors) ; 
+        added $FS3 3rd size, revised FS1 (+1 point of -FontSize), FS2 (-1); added verbose support & echos ; revised CBH (expanded Notes tags)
+    # 11:42 AM 7/28/2021 added Violet & Yellow themes, test for $env:userdomain -like '*lab*' to set violet, expanded CBH example
+    # # 8:51 AM 6/28/2016 fixed ampm -uformat
+    # 11:14 AM 6/27/2016: added get-LocalDiskFreeSpace, local-only version (for BGInfo) drops server specs and reporting, and sorts on Name/driveletter
+    # 1:43 PM 6/27/2016 ln159 psv2 is crapping out here, Primary needs to be tested $primary -eq $true for psv2
+    # 12:29 PM 6/27/2016 params Psv2 Mandatory requires =$true
+    # 12:21 PM 6/27/2016 submain: BGInfo: switch font to courier new
+    # 11:27 AM 6/27/2016  submain: switched AMPM fmt to T
+    # 11:24 AM 6/27/2016  submain: added | out-string | out-default to the drive info
+    # 11:23 AM 6/27/2016 submain: added timestamp and drivespace report
+    * 11:00 AM 6/27/2016 extended to accommodate & detect and redadmin the exchangeadmin acct as well
+    * 10:56 AM 6/27/2016 reflects additions (Current theme)from cemaphore's comments & sample @ http://pastebin.com/Fva47UKT
+		along with the Red Admin Theme I added, and code to detect ucadmin/exchangeadmin 
+		# 10:48 AM 6/27/2016 tweak the uptime fmt:
+    * 9:12 AM 6/27/2016 TSK reformatted, added pshelp
+    * September 5, 2014 - posted version
+    .DESCRIPTION
+    New-WallpaperStatus - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
+    .PARAMETER  Text
+    Text to be overlayed over specified background
+    .PARAMETER  OutFile
+    Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp
+    .PARAMETER  Align
+    Text alignment [Left|Center]
+    .PARAMETER  Theme
+    Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]
+    .PARAMETER  FontName
+    Text Font Name (Defaults Arial) [-FontName Arial]
+    .PARAMETER  FontSize
+    Integer Text Font Size (Defaults 12 point) [9-45]
+    .PARAMETER  UseCurrentWallpaperAsSource
+    Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    Powershell.exe -noprofile -command "& {c:\scripts\set-AdminBG.ps1 }" ; 
+    To launch on startup: Put above into C:\Users\LOGON\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\AdminBG.lnk file
+    .EXAMPLE
+    $BGInfo = @{
+       Text  = $t ;
+       Theme = "Black" ;
+       FontName = "courier new" ;
+       UseCurrentWallpaperAsSource = $false ;
+    } ; 
+    $WallPaper = New-WallpaperStatus @BGInfo ;
+    Generate a wallpaper from  a splat of parameters
+    .EXAMPLE
+    Set-Wallpaper -Path "C:\Windows\Web\Wallpaper\Windows\img0.jpg" -Style Fill ; 
+    To Restore the default VM wallpaper (e.g. generally the Windows OS default)
+    .LINK
+    https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    [Alias('New-BGinfo')]
+    Param(
+        [Parameter(Mandatory=$true,HelpMessage="Text to be overlayed over specified background[-text 'line1`nline2']")]
+        [string] $Text,
+        [Parameter(HelpMessage="Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp[-OutFile c:\path-to\image.jpg]")]
+        [string] $OutFile= "$($($env:temp))\BGInfo.bmp",
+        [Parameter(HelpMessage="Text alignment [Left|Center][-Align Left]")]
+        [ValidateSet("Left","Center")]
+        [string]$Align="Center",
+        [Parameter(HelpMessage="Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]")]
+        [ValidateSet("Current","BrightBlue","Blue","DarkBlue","DarkWhite","Grey","LightGrey","BrightBlack","Black","BrightRed","Red","DarkRed","Purple","BrightYellow","Yellow","DarkYellow","BrightGreen","DarkGreen","BrightCyan","DarkCyan","BrightMagenta","DarkMagenta")]
+        [string]$Theme="Current",
+        [Parameter(HelpMessage="Text Font Name (Defaults Arial) [-FontName 'courier new']")]
+        [string]$FontName="Arial",
+        [Parameter(HelpMessage="Integer Text Font Size (Defaults 8 point) [9-45][-FontSize 12]")]
+        [ValidateRange(9,45)]
+        [int32]$FontSize = 8,
+        [Parameter(HelpMessage="Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]")]
+        [switch]$UseCurrentWallpaperAsSource
+    ) ; 
+    BEGIN {
+        $verbose = ($VerbosePreference -eq "Continue") ; 
+        # 9:59 AM 6/27/2016 add cmaphore's detection of Current Theme
+        # Enumerate current wallpaper now, so we can decide whether it's a solid colour or not
+        try {
+            $wpath = (Get-ItemProperty 'HKCU:\Control Panel\Desktop' -Name WallPaper -ErrorAction Stop).WallPaper
+            if ($wpath.Length -eq 0) {
+                # Solid colour used
+                $UseCurrentWallpaperAsSource = $false ; 
+                $Theme = "Current" ; 
+            } ; 
+        } catch {
+            $UseCurrentWallpaperAsSource = $false ; 
+            $Theme = "Current" ; 
+        } ; 
+        # standardize colors (for easy uese in font colors as well as bg) - lifted many of these from updated Powershell console color scheme specs.
+        $cBrightBlue = @(59,120,255) ;
+        $cBlue = @(58,110,165) ; # default win desktop blue
+        $cDarkBlue = @(0,55,218) ; 
+        $cDarkWhite = @(204,204,204) ; 
+        $cGrey = @(77,77,77) ; 
+        $cLightGrey = @(176,176,176) ; 
+        $cBrightBlack = @(118,118,118) ; 
+        $cBlack = @(12,12,12) ; 
+        $cBrightRed = @(231,72,86) ; 
+        $cRed = @(184,40,50) ; 
+        $cDarkRed = @(197,15,31) ; 
+        $cPurple = @(192,32,214) ; 
+        $cBrightYellow = @(249,241,165) ; 
+        $cYellow = @(255,185,0) ; 
+        $cDarkYellow = @(193,156,0) ; 
+        $cBrightGreen = @(22,198,12) ; 
+        $cDarkGreen = @(19,161,14) ; 
+        $cBrightCyan = @(97,214,214) ; 
+        $cDarkCyan = @(58,150,221) ; 
+        $cBrightMagenta = @(180,0,158) ; 
+        $cDarkMagenta = @(136,23,152) ; 
+        $cWhite = @(242,242,242) ;
+        $cDefaultWhite = @(254,253,254) ; 
+        $cMedGrey = @(185,190,188) ; 
+        
+        
+        Switch ($Theme) {
+            # revised the stock colors to reflect PSConsole's revised color scheme [Updating the Windows Console Colors | Windows Command Line - devblogs.microsoft.com/](https://devblogs.microsoft.com/commandline/updating-the-windows-console-colors/)
+            # 9:42 AM 6/27/2016 add cmaphore's idea of a 'Current' theme switch case, pulling current background color $RGB, and defaulting if not set
+            # $FC1 is used for the first line of any text ; $FC2 is used for the remaining lines of text
+            Current {
+                $RGB = (Get-ItemProperty 'HKCU:\Control Panel\Colors' -ErrorAction Stop).BackGround ; 
+                if ($RGB.Length -eq 0) {
+                    $Theme = "Black" ; # Default to Black and don't break the switch
+                } else {
+                    $BG = $RGB -split " " ; 
+                    $FC1 = $FC2 = $cWhite ; 
+                    $FS1=$FS2=$FontSize ; 
+                    break ; 
+                } ; 
+            } ; 
+            BrightBlue { 
+                $BG = $cBlue ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cMedGrey ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+                break ; 
+            } ; 
+            Blue { # default win desktop blue 
+                $BG = $cBlue ; 
+                $FC1 = $cDefaultWhite ; 
+                $FC2 = $cMedGrey ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+                break ; 
+            } ; 
+            DarkBlue { # 
+                $BG = $cDarkBlue ; 
+                $FC1 = $cDefaultWhite ; 
+                $FC2 = $cMedGrey ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+                break ; 
+            } ; 
+            DarkWhite {
+                $BG = $cDarkWhite ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cBlack ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+                break ; 
+            } ; 
+            Grey {
+                $BG = $cGrey ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+                break ; 
+            } ; 
+            LightGrey {
+                $BG = $cLightGrey ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cBlack ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+                break ; 
+            } ; 
+            BrightBlack {
+                $BG = $cBrightBlack; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite  ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            Black {
+                $BG = $cBlack ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            BrightRed {
+                $BG = $cBrightRed ; 
+                $FC1 = $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            Red {
+                $BG = $cRed ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            DarkRed {
+                $BG = $cDarkRed ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            Purple {
+                $BG = $cPurple ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            BrightYellow {
+                $BG = $cBrightYellow ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            Yellow {
+                $BG = $cYellow ; 
+                $FC1 = $cDarkBlue ; 
+                $FC2 = $cBlack ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            DarkYellow {
+                $BG = $cDarkYellow ; 
+                $FC1 = $cDarkBlue ; 
+                $FC2 = $cBlack ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            BrightGreen {
+                $BG = $cBrightGreen ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            DarkGreen {
+                $BG = $cDarkGreen ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            BrightCyan {
+                $BG = $cBrightCyan ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            DarkCyan {
+                $BG = $cDarkCyan ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            BrightMagenta {
+                $BG = $cBrightMagenta ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+            DarkMagenta {
+                $BG = $cDarkMagenta ; 
+                $FC1 = $cYellow ; 
+                $FC2 = $cWhite ; 
+                $FS1 = $FontSize+1 ; 
+                $FS2 = $FontSize-1 ; 
+                $FS3 = $FontSize-2 ; 
+            } ; 
+        } ;  # swtch-E
+          
+        Try {
+            [system.reflection.assembly]::loadWithPartialName('system.drawing.imaging') | out-null ; 
+            [system.reflection.assembly]::loadWithPartialName('system.windows.forms') | out-null ; 
+            # Draw string > alignement
+            $sFormat = new-object system.drawing.stringformat
+            Switch ($Align) {
+                Center {
+                    $sFormat.Alignment = [system.drawing.StringAlignment]::Center ; 
+                    $sFormat.LineAlignment = [system.drawing.StringAlignment]::Center ; 
+                    break ; 
+                } ; 
+                Left {
+                    $sFormat.Alignment = [system.drawing.StringAlignment]::Center ; 
+                    $sFormat.LineAlignment = [system.drawing.StringAlignment]::Near ; 
+                } ; 
+            } ;  
+     
+            if ($UseCurrentWallpaperAsSource) {
+                # 10:01 AM 6/27/2016 moved $wppath to top of begin
+                if (Test-Path -Path $wpath -PathType Leaf) {
+                    $bmp = new-object system.drawing.bitmap -ArgumentList $wpath ; 
+                    $image = [System.Drawing.Graphics]::FromImage($bmp) ; 
+                    $SR = $bmp | Select Width,Height ; 
+                } else {
+                    Write-Warning -Message "Failed cannot find the current wallpaper $($wpath)" ; 
+                    break ; 
+                } ; 
+            } else {
+                # 1:43 PM 6/27/2016 psv2 is crapping out here, Primary needs to be tested $primary -eq $true for psv2
+                #$SR = [System.Windows.Forms.Screen]::AllScreens | Where Primary | Select -ExpandProperty Bounds | Select Width,Height ; 
+                $SR = [System.Windows.Forms.Screen]::AllScreens |?{$_.Primary} | Select -ExpandProperty Bounds | Select Width,Height ; 
+                #}
+                Write-Verbose -Message "Screen resolution is set to $($SR.Width)x$($SR.Height)" -Verbose ; 
+     
+                # Create Bitmap
+                $bmp = new-object system.drawing.bitmap($SR.Width,$SR.Height) ; 
+                $image = [System.Drawing.Graphics]::FromImage($bmp) ; 
+         
+                $image.FillRectangle(
+                    (New-Object Drawing.SolidBrush (
+                        [System.Drawing.Color]::FromArgb($BG[0],$BG[1],$BG[2]) 
+                    )),
+                    (new-object system.drawing.rectanglef(0,0,($SR.Width),($SR.Height))) 
+                ) ; 
+            } ; 
+            
+        } Catch {
+            Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
+            break ; 
+        } ; 
+    } ;  # BEG-E
+    PROCESS {
+        # Split our string as it can be multiline
+        $artext = ($text -split "\r\n") ; 
+        $i = 1 ; 
+        Try {
+            for ($i ; $i -le $artext.Count ; $i++) {
+                if ($i -eq 1) {
+                    $font1 = New-Object System.Drawing.Font($FontName,$FS1,[System.Drawing.FontStyle]::Bold) ; 
+                    $Brush1 = New-Object Drawing.SolidBrush (
+                        [System.Drawing.Color]::FromArgb($FC1[0],$FC1[1],$FC1[2]) 
+                    ) ; 
+                    $sz1 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font1) ; 
+                    $rect1 = New-Object System.Drawing.RectangleF (0,($sz1.Height),$SR.Width,$SR.Height) ; 
+                    $image.DrawString($artext[$i-1], $font1, $brush1, $rect1, $sFormat) ; 
+                } elseif ($i -eq 2) {
+                    $font2 = New-Object System.Drawing.Font($FontName,$FS2,[System.Drawing.FontStyle]::Bold) ; 
+                    $Brush2 = New-Object Drawing.SolidBrush (
+                        [System.Drawing.Color]::FromArgb($FC2[0],$FC2[1],$FC2[2]) 
+                    ) ; 
+                    $sz2 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font2) ; 
+                    $rect2 = New-Object System.Drawing.RectangleF (0,($i*$FontSize*2 + $sz2.Height),$SR.Width,$SR.Height) ; 
+                    $image.DrawString($artext[$i-1], $font2, $brush2, $rect2, $sFormat) ; 
+                } else {
+                    $font3 = New-Object System.Drawing.Font($FontName,$FS3,[System.Drawing.FontStyle]::Bold) ; 
+                    $Brush3 = New-Object Drawing.SolidBrush (
+                        [System.Drawing.Color]::FromArgb($FC2[0],$FC2[1],$FC2[2]) 
+                    ) ; 
+                    $sz3 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font2) ; 
+                    $rect3 = New-Object System.Drawing.RectangleF (0,($i*$FontSize*2 + $sz3.Height),$SR.Width,$SR.Height) ; 
+                    $image.DrawString($artext[$i-1], $font3, $Brush3, $rect3, $sFormat) ; 
+                } ; 
+            } ;  # loop-E
+            
+        } Catch {
+            Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
+            break ; 
+        } ; 
+        
+    } ;  # PROC-E
+    END {  
+        Try {
+            # Close Graphics
+            $image.Dispose(); ; 
+     
+            # Save and close Bitmap
+            $bmp.Save($OutFile, [system.drawing.imaging.imageformat]::Bmp); ; 
+            $bmp.Dispose() ;      
+            # Output our file path into the pipeline
+            Get-Item -Path $OutFile ; 
+        } Catch {
+            Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
+            break ; 
+        } ; 
+    } ;  # END-E
+}
+
+#*------^ new-WallpaperStatus.ps1 ^------
+
 #*------v openInput.ps1 v------
 function openInput { $sExc = $TextEd + " " + (join-path $binpath input.txt); Invoke-Expression $sExc; }
 
@@ -591,29 +716,6 @@ function openInput { $sExc = $TextEd + " " + (join-path $binpath input.txt); Inv
 function openTmpps1 { $sExc = $TextEd + " C:\tmp\tmp.ps1"; Invoke-Expression $sExc; }
 
 #*------^ openTmpps1.ps1 ^------
-
-#*------v Out-Excel.ps1 v------
-function Out-Excel {
-    PARAM($Path = "$env:temp\$(Get-Date -Format yyyyMMddHHmmss).csv")
-    $input | Export-CSV -Path $Path -UseCulture -Encoding UTF8 -NoTypeInformation
-    Invoke-Item -Path $Path
-}
-
-#*------^ Out-Excel.ps1 ^------
-
-#*------v Out-Excel-Events.ps1 v------
-function Out-Excel-Events {
-    PARAM($Path = "$env:temp\$(Get-Date -Format yyyyMMddHHmmss).csv")
-    $input | Select -Property * |
-    ForEach-Object {
-        $_.ReplacementStrings = $_.ReplacementStrings -join ','
-        $_.Data = $_.Data -join ','
-        $_
-    } | Export-CSV -Path $Path -UseCulture -Encoding UTF8 -NoTypeInformation
-    Invoke-Item -Path $Path
-}
-
-#*------^ Out-Excel-Events.ps1 ^------
 
 #*------v Report-URL.ps1 v------
 function Report-URL {
@@ -684,6 +786,73 @@ If (!(Test-Path ALIAS:Rpt-URL)) { new-Alias -Name Rpt-URL -Value report-url}
 
 #*------^ Report-URL.ps1 ^------
 
+#*------v restart-Shell.ps1 v------
+function restart-Shell {
+    <#
+    .SYNOPSIS
+    restart-Shell - Close and restart windows'shell'/desktop explorer process
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 2020-05-01
+    FileName    : 
+    License     : MIT License
+    Copyright   : (c) 2020 Todd Kadrie
+    Github      : https://github.com/tostka
+    Tags        : Powershell,Registry,Maintenance
+    REVISIONS
+    * 12:55 PM 5/1/2020 init vers
+    .DESCRIPTION
+    restart-Shell - Close and restart windows'shell'/desktop explorer process
+    Identifies 'Taskbar'/Shell explorer process, as the one with no MainWindowTitle. Using Ctrl+Shift+r-click Taskbar > Exit Windows is cleaner - propertly saves shell config changes. But this is a scriptable alt.
+    .PARAMETER ShowDebug
+    Parameter to display Debugging messages [-ShowDebug switch]
+    .PARAMETER Whatif
+    Parameter to run a Test no-change pass [-Whatif switch]
+    .OUTPUT
+    System.Object[]
+    .EXAMPLE
+    restart-Shell -Path 'HKCU:\Control Panel\Desktop' -Name 'AutoColorization' -Value 0
+    Update the desktop AutoColorization property to the value 0 
+    .EXAMPLE
+    restart-Shell 
+    Close and restart explorer shell
+    .EXAMPLE
+    restart-Shell -verbose -whatif
+    Close and restart explorer shell with whatif and verbose output
+    .LINK
+    https://github.com/tostka
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(HelpMessage = "Debugging Flag [-showDebug]")]
+        [switch] $showDebug,
+        [Parameter(HelpMessage = "Whatif Flag  [-whatIf]")]
+        [switch] $whatIf
+    ) ;
+    ${CmdletName} = $PSCmdlet.MyInvocation.MyCommand.Name ;
+    $PSParameters = New-Object -TypeName PSObject -Property $PSBoundParameters ;
+    $Verbose = ($VerbosePreference -eq 'Continue') ; 
+    $error.clear() ;
+    TRY {
+        Get-Process explorer | ? MainWindowTitle -eq '' | stop-process -Force -whatif:$($whatif); 
+        sleep -sec 2 ; 
+        if(!(Get-Process explorer | ? MainWindowTitle -eq '' )){
+            # Only spawn a new explorer if a new 'shell' one didn't auto-load w/in 2secs (generally does on win10 ; avoids opening a spurious new explorer window)
+            start explorer.exe ; 
+        } ; 
+        $true | write-output ; 
+    } CATCH {
+        $ErrTrpd = $_ ; 
+        Write-Warning "$(get-date -format 'HH:mm:ss'): Failed processing $($ErrTrpd.Exception.ItemName). `nError Message: $($ErrTrpd.Exception.Message)`nError Details: $($ErrTrpd)" ;
+        $false | write-output ; 
+    } ; 
+}
+
+#*------^ restart-Shell.ps1 ^------
+
 #*------v Set.ps1 v------
 If (Test-Path ALIAS:set) { Remove-Item ALIAS:set } ;
 Function Set {
@@ -743,6 +912,99 @@ Function Set {
 }
 
 #*------^ Set.ps1 ^------
+
+#*------v Set-Wallpaper.ps1 v------
+Function Set-Wallpaper {
+    <# 
+    .SYNOPSIS
+    Set-Wallpaper - Set specified file as desktop wallpaper
+    .NOTES
+    Author: _Emin_
+    Tweaked/Updated by: Todd Kadrie
+    Website:	https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
+    REVISIONS   :
+    * 9:12 AM 6/27/2016 TSK reformatted & added pshelp
+    * September 5, 2014 - posted version
+    .DESCRIPTION
+    .PARAMETER  Path
+    Path to image to be set as desktop background
+    .PARAMETER  Style
+    Style to apply to wallpaper [Center|Stretch|Fill|Tile|Fit]
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    Set-Wallpaper -Path $WallPaper.FullName -Style Fill ;
+    Set wallpaper file to fill screen
+    .LINK
+    https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$true)]$Path,
+        [ValidateSet('Center','Stretch','Fill','Tile','Fit')]
+        $Style = 'Stretch' 
+    ) ; 
+    $verbose = ($VerbosePreference -eq "Continue") ; 
+    Try {
+        if (-not ([System.Management.Automation.PSTypeName]'Wallpaper.Setter').Type) {
+            Add-Type -TypeDefinition @"
+           using System;
+            using System.Runtime.InteropServices;
+            using Microsoft.Win32;
+            namespace Wallpaper {
+                public enum Style : int {
+                Center, Stretch, Fill, Fit, Tile
+                }
+                public class Setter {
+                    public const int SetDesktopWallpaper = 20;
+                    public const int UpdateIniFile = 0x01;
+                    public const int SendWinIniChange = 0x02;
+                    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+                    private static extern int SystemParametersInfo (int uAction, int uParam, string lpvParam, int fuWinIni);
+                    public static void SetWallpaper ( string path, Wallpaper.Style style ) {
+                        SystemParametersInfo( SetDesktopWallpaper, 0, path, UpdateIniFile | SendWinIniChange );
+                        RegistryKey key = Registry.CurrentUser.OpenSubKey("Control Panel\\Desktop", true);
+                        switch( style ) {
+                            case Style.Tile :
+                                key.SetValue(@"WallpaperStyle", "0") ;
+                                key.SetValue(@"TileWallpaper", "1") ;
+                                break;
+                            case Style.Center :
+                                key.SetValue(@"WallpaperStyle", "0") ;
+                                key.SetValue(@"TileWallpaper", "0") ;
+                                break;
+                            case Style.Stretch :
+                                key.SetValue(@"WallpaperStyle", "2") ;
+                                key.SetValue(@"TileWallpaper", "0") ;
+                                break;
+                            case Style.Fill :
+                                key.SetValue(@"WallpaperStyle", "10") ;
+                                key.SetValue(@"TileWallpaper", "0") ;
+                                break;
+                            case Style.Fit :
+                                key.SetValue(@"WallpaperStyle", "6") ;
+                                key.SetValue(@"TileWallpaper", "0") ;
+                                break;
+}
+                        key.Close();
+                    }
+                }
+            }
+"@ -ErrorAction Stop ; 
+            } else {
+                Write-Verbose -Message "Type already loaded" -Verbose ; 
+            } ; 
+        # } Catch TYPE_ALREADY_EXISTS
+        } Catch {
+            Write-Warning -Message "Failed because $($_.Exception.Message)" ; 
+        } ; 
+     
+    [Wallpaper.Setter]::SetWallpaper( $Path, $Style ) ; 
+}
+
+#*------^ Set-Wallpaper.ps1 ^------
 
 #*------v show-TrayTip.ps1 v------
 function show-TrayTip {
@@ -978,14 +1240,14 @@ Function start-ItunesPlaylist {
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,Compare-ObjectsSideBySide,Compare-ObjectsSideBySide3,Compare-ObjectsSideBySide4,c-winsallk,Define-MoveWindow,Get-FsoShortName,Get-FsoTypeObj,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Move-Window,Move-WindowByWindowTitle,openInput,openTmpps1,Out-Excel,Out-Excel-Events,Report-URL,Set,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
 
 
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUe5DjkeJRRZR8sAad/1de0PH9
-# en+gggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUIABhl1mwOtXSfyd3712xbqTh
+# HGugggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1000,9 +1262,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,Compare-ObjectsSideByS
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQe+DhW
-# KWdHqcHES2lA1pMOLCXyaTANBgkqhkiG9w0BAQEFAASBgLH0P5xKra9HVPIwbhO0
-# KS8pjoNP6T+XEOMVakK2uhl5D6CB3Ap6mUfa4y5G8ds21OA7x3ci0mFqXkreeRB5
-# JQKDED6KjSi14CSEajWmruHm4GB9TjCZcDmnoivGGzvPMLqkVmha7l6uBWWpMWOH
-# qEZXsBwYwTBnbCK6cEuYoDhH
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTm1xCV
+# mph4/pKpVCRP0rg4SUlfDDANBgkqhkiG9w0BAQEFAASBgFSvFemmykjEc5rEAAfR
+# 0Z/VD+oyaXtspzr01qlrgylI2s/7iamVQ3gz5MIpRKZuoolB4sHuAW72O3sYoOs9
+# w7zk/mP8OUypw+FNtERGLFWJWyhj+RNXASwdqIwCVqjwVyCn6Nhlx+qA4hd6TN+J
+# ynjZ7r4zhAIor+UzQMRXC0Rt
 # SIG # End signature block
