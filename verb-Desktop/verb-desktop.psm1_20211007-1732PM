@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.8.0
+  Version     : 1.0.7.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -1246,8 +1246,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,c-winsallk,Define-Move
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuyHHZqc8U0y/EtgVMhCWFDTi
-# YjSgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUIABhl1mwOtXSfyd3712xbqTh
+# HGugggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1262,9 +1262,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,c-winsallk,Define-Move
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQUbbYS
-# 9EcpadBAaPQ9QEt1y1bGODANBgkqhkiG9w0BAQEFAASBgLIp11O+EGrDwOxixK+q
-# rGv2eio7+DHpX8Eaf5v39tc2foGrKXxku5P8cKeUNNIdCeOHs1J4ZwIVzWaD4kad
-# 0sOab9ofHo3r4WMHKSuVaKdG9g4ok8St8sF4lUwuUXmDwcnUa6EZrvc4xtXfcyca
-# 6CIJOvIbv/BJ9+MweKN+fD5i
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTm1xCV
+# mph4/pKpVCRP0rg4SUlfDDANBgkqhkiG9w0BAQEFAASBgFSvFemmykjEc5rEAAfR
+# 0Z/VD+oyaXtspzr01qlrgylI2s/7iamVQ3gz5MIpRKZuoolB4sHuAW72O3sYoOs9
+# w7zk/mP8OUypw+FNtERGLFWJWyhj+RNXASwdqIwCVqjwVyCn6Nhlx+qA4hd6TN+J
+# ynjZ7r4zhAIor+UzQMRXC0Rt
 # SIG # End signature block
