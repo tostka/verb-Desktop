@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.8.0
+  Version     : 1.0.9.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -90,6 +90,75 @@ function .. { Set-Location .. }
 function ~ { Push-Location (Get-PSProvider FileSystem).Home }
 
 #*------^ ~.ps1 ^------
+
+#*------v check-ProgramInstalled.ps1 v------
+Function check-ProgramInstalled {
+    <# 
+    .SYNOPSIS
+    check-ProgramInstalled - Checkregistry for installed software (via Uninstall record)
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2021-10-04
+    FileName    : check-ProgramInstalled.ps1
+    License     : (none asserted)
+    Copyright   : (none asserted)
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : Powershell
+    AddedCredit : Morgan
+    AddedWebsite:	https://morgantechspace.com/2018/02/check-if-software-program-is-installed-powershell.html
+    AddedTwitter:	URL
+    REVISIONS   :
+    # 
+    * - posted version
+    .DESCRIPTION
+    check-ProgramInstalled - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
+    .PARAMETER  Text
+    Text to be overlayed over specified background
+    .PARAMETER  OutFile
+    Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp
+    .PARAMETER  Align
+    Text alignment [Left|Center]
+    .PARAMETER  Theme
+    Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]
+    .PARAMETER  FontName
+    Text Font Name (Defaults Arial) [-FontName Arial]
+    .PARAMETER  FontSize
+    Integer Text Font Size (Defaults 12 point) [9-45]
+    .PARAMETER  UseCurrentWallpaperAsSource
+    Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    if(check-ProgramInstalled -prog Notepad2){"Y"} else { "N" } ; 
+    Check for install of notepad2
+    .LINK
+    https://morgantechspace.com/2018/02/check-if-software-program-is-installed-powershell.html
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$true,HelpMessage="Name of the program to be checked for[-programNam 'notepad2']")]
+        [string] $programNam
+    ) ; 
+    $verbose = ($VerbosePreference -eq "Continue") ; 
+    $x86_check = ((Get-ChildItem "HKLM:Software\Microsoft\Windows\CurrentVersion\Uninstall") |
+        Where-Object { $_."Name" -like "*$programName*" } ).Length -gt 0;
+    write-verbose "`$x86_check:$([boolean]$x86_check)" ; 
+    if(Test-Path 'HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall'){
+        $x64_check = ((Get-ChildItem "HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall") |
+            Where-Object { $_."Name" -like "*$programName*" } ).Length -gt 0;
+            write-verbose "`$x64_check:$([boolean]$x64_check)" ; 
+    } ; 
+    return $x86_check -OR $x64_check;        
+}
+
+#*------^ check-ProgramInstalled.ps1 ^------
 
 #*------v Clean-Desktop.ps1 v------
 function Clean-Desktop {
@@ -1240,14 +1309,14 @@ Function start-ItunesPlaylist {
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
+Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
 
 
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuyHHZqc8U0y/EtgVMhCWFDTi
-# YjSgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUPmKq6Em19VI82qdloW9hp0Y7
+# 7dagggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1262,9 +1331,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,c-winsallk,Define-Move
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQUbbYS
-# 9EcpadBAaPQ9QEt1y1bGODANBgkqhkiG9w0BAQEFAASBgLIp11O+EGrDwOxixK+q
-# rGv2eio7+DHpX8Eaf5v39tc2foGrKXxku5P8cKeUNNIdCeOHs1J4ZwIVzWaD4kad
-# 0sOab9ofHo3r4WMHKSuVaKdG9g4ok8St8sF4lUwuUXmDwcnUa6EZrvc4xtXfcyca
-# 6CIJOvIbv/BJ9+MweKN+fD5i
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSb4ZMy
+# KCcOKSXx2lq5O+oZO+VyiTANBgkqhkiG9w0BAQEFAASBgKDtu2OLVV8nF8PrO6gP
+# cAln0ntaHH23m2oYGfGbFbSrD98LTvIAR+Dhwo2Dsup/3U5FuXWuWXh/lO3+i/a+
+# LaxoLjYxfkxmtP3uhzZ9LlcuMLAYUzXc8qtqLKggyemM5f+vecIzC0K1kBNhwQGg
+# wpeQ5SEeXCbGtTxkSzOpDaWh
 # SIG # End signature block
