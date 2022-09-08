@@ -1,11 +1,11 @@
-# verb-desktop.psm1
+﻿# verb-Desktop.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.8.0
+  Version     : 1.1.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -64,10 +64,12 @@
   #>
 
 
-$script:ModuleRoot = $PSScriptRoot ;
-$script:ModuleVersion = (Import-PowerShellDataFile -Path (get-childitem $script:moduleroot\*.psd1).fullname).moduleversion ;
+    $script:ModuleRoot = $PSScriptRoot ;
+    $script:ModuleVersion = (Import-PowerShellDataFile -Path (get-childitem $script:moduleroot\*.psd1).fullname).moduleversion ;
+    $runningInVsCode = $env:TERM_PROGRAM -eq 'vscode' ;
 
 #*======v FUNCTIONS v======
+
 
 
 
@@ -76,20 +78,24 @@ function .... { ...; .. }
 
 #*------^ .....ps1 ^------
 
+
 #*------v ....ps1 v------
 function ... { ..; .. }
 
 #*------^ ....ps1 ^------
+
 
 #*------v ...ps1 v------
 function .. { Set-Location .. }
 
 #*------^ ...ps1 ^------
 
+
 #*------v ~.ps1 v------
 function ~ { Push-Location (Get-PSProvider FileSystem).Home }
 
 #*------^ ~.ps1 ^------
+
 
 #*------v check-ProgramInstalled.ps1 v------
 Function check-ProgramInstalled {
@@ -159,6 +165,7 @@ Function check-ProgramInstalled {
 }
 
 #*------^ check-ProgramInstalled.ps1 ^------
+
 
 #*------v Clean-Desktop.ps1 v------
 function Clean-Desktop {
@@ -235,10 +242,12 @@ function Clean-Desktop {
 
 #*------^ Clean-Desktop.ps1 ^------
 
+
 #*------v c-winsallk.ps1 v------
 function c-winsallk {. C:\usr\work\ps\scripts\close-WinsAll.ps1 -kill  }
 
 #*------^ c-winsallk.ps1 ^------
+
 
 #*------v Define-MoveWindow.ps1 v------
 function Define-MoveWindow {
@@ -256,6 +265,7 @@ bool bRepaint);
 }
 
 #*------^ Define-MoveWindow.ps1 ^------
+
 
 #*------v Go.ps1 v------
 function Go {
@@ -295,25 +305,81 @@ function Go {
 
 #*------^ Go.ps1 ^------
 
+
 #*------v gotoDbox.ps1 v------
 function gotoDbox { set-location c:\usr\home\dropbox }
 
 #*------^ gotoDbox.ps1 ^------
+
 
 #*------v gotoDboxDb.ps1 v------
 function gotoDboxDb { set-location c:\usr\home\dropbox\db }
 
 #*------^ gotoDboxDb.ps1 ^------
 
+
 #*------v gotoDownloads.ps1 v------
 function gotoDownloads { set-location C:\usr\home\ftp }
 
 #*------^ gotoDownloads.ps1 ^------
 
+
 #*------v gotoIncid.ps1 v------
 function gotoIncid { set-location c:\usr\work\incid }
 
 #*------^ gotoIncid.ps1 ^------
+
+
+#*------v invoke-Explore.ps1 v------
+Function invoke-Explore {
+    <# 
+    .SYNOPSIS
+    invoke-Explore - Spawn explorer on designated path (aliased as 'explore')
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2021-10-04
+    FileName    : invoke-Explore.ps1
+    License     : MIT License
+    Copyright   : (c) 2022 Todd Kadrie
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : Powershell,explorer,Filesystem
+    REVISIONS   :
+    # 8:59 AM 8/25/2022 init
+    .DESCRIPTION
+    invoke-Explore - Spawn explorer on designated path
+    .PARAMETER  Path
+    Path to be overlayed over specified background    
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    PS> Explore c:\usr\local\bin\
+    Invoke explorer.exe on specified path
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    [Alias('Explore')]
+    Param(
+        [Parameter(Mandatory=$true,Position = 0,ValueFromPipeline = $true,HelpMessage="Path to be 'explored'[-path 'c:\some\path']")]
+        [ValidateNotNullOrEmpty()]
+        [string]$Path
+    ) ; 
+    if((get-variable -name IsWindows) -AND (-not $IsWindows)){
+        write-warning "Ps `$isWindows:$($isWindows): This funcion is *only* supported on *Windows*" ; 
+        Break ; 
+    } ;
+    write-verbose "invoking explorer with -path:$($path)" ; 
+    $explorer = New-Object -ComObject shell.application ; 
+    $explorer.Explore($path) ; 
+}
+
+#*------^ invoke-Explore.ps1 ^------
+
 
 #*------v Move-Window.ps1 v------
 function Move-Window {
@@ -322,6 +388,7 @@ function Move-Window {
 }
 
 #*------^ Move-Window.ps1 ^------
+
 
 #*------v Move-WindowByWindowTitle.ps1 v------
 function Move-WindowByWindowTitle {
@@ -336,6 +403,7 @@ function Move-WindowByWindowTitle {
 }
 
 #*------^ Move-WindowByWindowTitle.ps1 ^------
+
 
 #*------v new-WallpaperStatus.ps1 v------
 Function New-WallpaperStatus {
@@ -776,15 +844,18 @@ Function New-WallpaperStatus {
 
 #*------^ new-WallpaperStatus.ps1 ^------
 
+
 #*------v openInput.ps1 v------
 function openInput { $sExc = $TextEd + " " + (join-path $binpath input.txt); Invoke-Expression $sExc; }
 
 #*------^ openInput.ps1 ^------
 
+
 #*------v openTmpps1.ps1 v------
 function openTmpps1 { $sExc = $TextEd + " C:\tmp\tmp.ps1"; Invoke-Expression $sExc; }
 
 #*------^ openTmpps1.ps1 ^------
+
 
 #*------v Report-URL.ps1 v------
 function Report-URL {
@@ -855,6 +926,7 @@ If (!(Test-Path ALIAS:Rpt-URL)) { new-Alias -Name Rpt-URL -Value report-url}
 
 #*------^ Report-URL.ps1 ^------
 
+
 #*------v restart-Shell.ps1 v------
 function restart-Shell {
     <#
@@ -922,6 +994,7 @@ function restart-Shell {
 
 #*------^ restart-Shell.ps1 ^------
 
+
 #*------v Set.ps1 v------
 If (Test-Path ALIAS:set) { Remove-Item ALIAS:set } ;
 Function Set {
@@ -981,6 +1054,7 @@ Function Set {
 }
 
 #*------^ Set.ps1 ^------
+
 
 #*------v Set-Wallpaper.ps1 v------
 Function Set-Wallpaper {
@@ -1074,6 +1148,7 @@ Function Set-Wallpaper {
 }
 
 #*------^ Set-Wallpaper.ps1 ^------
+
 
 #*------v show-TrayTip.ps1 v------
 function show-TrayTip {
@@ -1197,6 +1272,7 @@ function show-TrayTip {
 
 #*------^ show-TrayTip.ps1 ^------
 
+
 #*------v Speak-words.ps1 v------
 function Speak-words {
     <#
@@ -1244,6 +1320,7 @@ function Speak-words {
 if (!(get-alias -name "speak" -ea 0 )) { Set-Alias -Name 'speak' -Value 'speak-words' ; }
 
 #*------^ Speak-words.ps1 ^------
+
 
 #*------v start-ItunesPlaylist.ps1 v------
 Function start-ItunesPlaylist {
@@ -1307,7 +1384,10 @@ Function start-ItunesPlaylist {
 
 #*------^ start-ItunesPlaylist.ps1 ^------
 
+
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
+Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,invoke-Explore,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
+
+
 

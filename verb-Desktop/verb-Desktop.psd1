@@ -12,7 +12,7 @@
 RootModule = 'verb-Desktop.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.9'
+ModuleVersion = '1.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@ Description = 'Powershell Desktop generic functions module'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('....','...','..','~','check-ProgramInstalled','Clean-Desktop','c-winsallk','Define-MoveWindow','Go','gotoDbox','gotoDboxDb','gotoDownloads','gotoIncid','Move-Window','Move-WindowByWindowTitle','New-WallpaperStatus','openInput','openTmpps1','Report-URL','restart-Shell','Set','Set-Wallpaper','show-TrayTip','Speak-words','start-ItunesPlaylist')
+FunctionsToExport = @('....','...','..','~','check-ProgramInstalled','Clean-Desktop','c-winsallk','Define-MoveWindow','Go','gotoDbox','gotoDboxDb','gotoDownloads','gotoIncid','invoke-Explore','Move-Window','Move-WindowByWindowTitle','New-WallpaperStatus','openInput','openTmpps1','Report-URL','restart-Shell','Set','Set-Wallpaper','show-TrayTip','Speak-words','start-ItunesPlaylist')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'
@@ -126,8 +126,8 @@ PrivateData = @{
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU58XJhPlnPjxCdUfSPTtq7HtN
-# p26gggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUaJJiiBa6xRMR7m2qdxuLZLD5
+# J36gggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -142,9 +142,9 @@ PrivateData = @{
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRCY1XA
-# AeQ1tTP9jNdf1Q0iZaXjEDANBgkqhkiG9w0BAQEFAASBgFZRZPb1XkRfD39zHOlG
-# 6QhSogUV20/n97GTYzLTMbYq6WGyVHbvhlJoOAj3N0dgZR9MGJgJE0EfJlI4SEFP
-# MY2XGLFOsNLfv9ppDXKa6NxFn3fDaiE6FM1vjjmvYUKNZl85Gh/Xt16UDqMspgwY
-# 4mbaN9dHM8sp8Z6c12rAZ4/t
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBS7Bb8B
+# 6kZ8wB2JYFr/iaHKkN9c3TANBgkqhkiG9w0BAQEFAASBgLhH0Ho/uIVMMc8xwCnb
+# AydMyktTagIsGQeAw8RuJ5imwpDiok0lY3bKj37Ci7h/ybm1pTYuo8QA0JJKRWsC
+# rYSyLgdTl7joupuaj2tFRNRwi91cXrKfR/s7YnmraLGL9OIfcd7G0T3sayT9R9v8
+# rIfzVxiNyGy26KpsGaZfolX8
 # SIG # End signature block
