@@ -1,4 +1,4 @@
-#*------v Function restart-Shell v------
+﻿#*------v Function restart-Shell v------
 function restart-Shell {
     <#
     .SYNOPSIS

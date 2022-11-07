@@ -1,4 +1,4 @@
-#*------v Function check-ProgramInstalled v------
+﻿#*------v Function check-ProgramInstalled v------
 Function check-ProgramInstalled {
     <# 
     .SYNOPSIS

@@ -1,4 +1,4 @@
-#*------v Function New-WallpaperStatus v------
+﻿#*------v Function New-WallpaperStatus v------
 Function New-WallpaperStatus {
     <# 
     .SYNOPSIS

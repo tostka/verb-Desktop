@@ -1,4 +1,4 @@
-#*------v Function Set-Wallpaper v------
+﻿#*------v Function Set-Wallpaper v------
 Function Set-Wallpaper {
     <# 
     .SYNOPSIS

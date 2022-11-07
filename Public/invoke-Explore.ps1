@@ -1,4 +1,4 @@
-#*------v Function invoke-Explore v------
+﻿#*------v Function invoke-Explore v------
 
 Function invoke-Explore {
     <# 
