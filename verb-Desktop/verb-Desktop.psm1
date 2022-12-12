@@ -1,11 +1,11 @@
-﻿# verb-Desktop.psm1
+﻿# verb-desktop.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.1.0.0
+  Version     : 1.2.1.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -97,76 +97,6 @@ function ~ { Push-Location (Get-PSProvider FileSystem).Home }
 #*------^ ~.ps1 ^------
 
 
-#*------v check-ProgramInstalled.ps1 v------
-Function check-ProgramInstalled {
-    <# 
-    .SYNOPSIS
-    check-ProgramInstalled - Checkregistry for installed software (via Uninstall record)
-    .NOTES
-    Version     : 1.0.0
-    Author      : Todd Kadrie
-    Website     :	http://www.toddomation.com
-    Twitter     :	@tostka / http://twitter.com/tostka
-    CreatedDate : 2021-10-04
-    FileName    : check-ProgramInstalled.ps1
-    License     : (none asserted)
-    Copyright   : (none asserted)
-    Github      : https://github.com/tostka/verb-Desktop
-    Tags        : Powershell
-    AddedCredit : Morgan
-    AddedWebsite:	https://morgantechspace.com/2018/02/check-if-software-program-is-installed-powershell.html
-    AddedTwitter:	URL
-    REVISIONS   :
-    # 
-    * - posted version
-    .DESCRIPTION
-    check-ProgramInstalled - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
-    .PARAMETER  Text
-    Text to be overlayed over specified background
-    .PARAMETER  OutFile
-    Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp
-    .PARAMETER  Align
-    Text alignment [Left|Center]
-    .PARAMETER  Theme
-    Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]
-    .PARAMETER  FontName
-    Text Font Name (Defaults Arial) [-FontName Arial]
-    .PARAMETER  FontSize
-    Integer Text Font Size (Defaults 12 point) [9-45]
-    .PARAMETER  UseCurrentWallpaperAsSource
-    Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]
-    .INPUTS
-    None. Does not accepted piped input.
-    .OUTPUTS
-    None. Returns no objects or output.
-    .EXAMPLE
-    if(check-ProgramInstalled -prog Notepad2){"Y"} else { "N" } ; 
-    Check for install of notepad2
-    .LINK
-    https://morgantechspace.com/2018/02/check-if-software-program-is-installed-powershell.html
-    .LINK
-    https://github.com/tostka/verb-Desktop
-    #>
-    [CmdletBinding()]
-    Param(
-        [Parameter(Mandatory=$true,HelpMessage="Name of the program to be checked for[-programNam 'notepad2']")]
-        [string] $programNam
-    ) ; 
-    $verbose = ($VerbosePreference -eq "Continue") ; 
-    $x86_check = ((Get-ChildItem "HKLM:Software\Microsoft\Windows\CurrentVersion\Uninstall") |
-        Where-Object { $_."Name" -like "*$programName*" } ).Length -gt 0;
-    write-verbose "`$x86_check:$([boolean]$x86_check)" ; 
-    if(Test-Path 'HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall'){
-        $x64_check = ((Get-ChildItem "HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall") |
-            Where-Object { $_."Name" -like "*$programName*" } ).Length -gt 0;
-            write-verbose "`$x64_check:$([boolean]$x64_check)" ; 
-    } ; 
-    return $x86_check -OR $x64_check;        
-}
-
-#*------^ check-ProgramInstalled.ps1 ^------
-
-
 #*------v Clean-Desktop.ps1 v------
 function Clean-Desktop {
         <#
@@ -241,6 +171,98 @@ function Clean-Desktop {
     }
 
 #*------^ Clean-Desktop.ps1 ^------
+
+
+#*------v confirm-GoogleDriveRunning.ps1 v------
+Function confirm-GoogleDriveRunning {
+
+    <# 
+    .SYNOPSIS
+    confirm-GoogleDriveRunning - Confirm/Run Google Drive - Resolve Google Drive letter; test for drive letter present(running): start GD if drive not present (Resolve Google Drive .exe path from default installed Start Mnu .lnk) 
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2022-11-11
+    FileName    : confirm-GoogleDriveRunning.ps1
+    License     : MIT License
+    Copyright   : (c) 2022 Todd Kadrie
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : GoogleDrive
+    AddedCredit : mklement0
+    AddedWebsite:	https://stackoverflow.com/users/45375/mklement0
+    AddedTwitter:	
+    REVISIONS   :
+    # 11:14 AM 11/11/2022 my revisions: added [codewario](https://stackoverflow.com/users/584676/codewario)'s answer to M's question; added .exe resolution via default start mnu Google Drive.lnk expansion. Try catch, whatif, and now outputs boolean to pipeline, for testing 
+    * 11:15 AM 9/1/21 mklement0's posted question code
+    .DESCRIPTION
+    confirm-GoogleDriveRunning - Confirm/Run Google Drive - Resolve Google Drive letter; test for drive letter present(running): start GD if drive not present (Resolve Google Drive .exe path from default installed Start Mnu .lnk) 
+    
+    Expanded version of mklement0's posted concept snippet from stackoverflow question:
+    [powershell - Find the mapped google drive - Stack Overflow - stackoverflow.com/](https://stackoverflow.com/questions/69017164/find-the-mapped-google-drive)
+    Added .exe resolution code; spliced in bender's answer to the original question. 
+    
+    .PARAMETER  Path
+    Path to be overlayed over specified background
+    .PARAMETER Whatif
+    Whatif no-exec test
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    System.Boolean
+    .EXAMPLE
+    PS> if(confirm-GoogleDriveRunning -verbose -whatif){'y'} else { 'n'} ; 
+    Confirm Gdrv running, with verbose and whatif 
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    #[Alias('')]
+    Param(
+        [Parameter(HelpMessage="Whatif Flag  [-whatIf]")]
+        [switch] $whatIf
+    ) ; 
+    write-verbose "Attempt to Resolve Google Drive PSDrive (local drive vs mounted)" ; 
+    Try {
+        If (!($gdrvDrive = Get-PSDrive -PSProvider FileSystem | 
+            Where-Object {$_.Description -eq 'Google Drive' })) {
+            write-verbose "Resolve Google Drive .exe loc from the stock launch .lnk" ; 
+            $gdrvLnk = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Google Drive.lnk" ; 
+            write-verbose "expand shortcut TargetPath" ; 
+            $WScriptShell = New-Object -ComObject WScript.Shell ; 
+            if (Test-Path $gdrvLnk) {
+                $GdfsPath  = $WScriptShell.CreateShortcut((Resolve-Path $gdrvLnk)).targetpath ;
+                if(!$whatif){
+                    write-verbose "Start-Process resolved path:`n$($gdfsPath)`n(30s timeout)" ; 
+                        Start-Process $GdfsPath | Wait-Process -Timeout 30 ;
+                } else { 
+                    write-host "-whatif: skipping run exeution of:`n$($GdfsPath)" ; 
+                } ; 
+            } else {
+                $smsg = "Unable to resolve Google Drive.lnk to an exe path!`n$($gdrvLnk)" ; 
+                write-warning $smsg ; throw $smsg ; 
+            } ; 
+        } else {
+            write-verbose "Google drive present ($($gdrvDrive.Root):), returning `$true to pipeline" ; 
+            $true | write-output ; 
+        } ; 
+    } Catch {
+            $smsg = "Google Drive can't be mapped. Failed to load Gdrv: $($GdfsPath)"
+             write-warning $smsg ; throw $smsg ; 
+             $false | write-output ; 
+    } 
+    Finally {
+        If (!(Get-PSDrive -PSProvider FileSystem | 
+    Where-Object {$_.Description -eq 'Google Drive' })) {
+            $smsg = "Google Drive can't be mapped. Failed to load Gdrv: $($GdfsPath)"
+             write-warning $smsg ; throw $smsg ; 
+             $false | write-output ; 
+        } ;
+    } ;
+}
+
+#*------^ confirm-GoogleDriveRunning.ps1 ^------
 
 
 #*------v c-winsallk.ps1 v------
@@ -1385,9 +1407,123 @@ Function start-ItunesPlaylist {
 #*------^ start-ItunesPlaylist.ps1 ^------
 
 
+#*------v stop-browsers.ps1 v------
+Function stop-browsers {
+
+    <# 
+    .SYNOPSIS
+    stop-browsers - Cycle common browser proceses and close/kill them (as browsers frequently ignore close prompts from shell wo explicitly prompts, when trying to shutdown/reboot).
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2022-11-14
+    FileName    : stop-browsers.ps1
+    License     : MIT License
+    Copyright   : (c) 2022 Todd Kadrie
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : GoogleDrive
+    AddedCredit : mklement0
+    AddedWebsite:	https://stackoverflow.com/users/45375/mklement0
+    AddedTwitter:	
+    REVISIONS   :
+    * 8:26 AM 11/14/2022 init
+    .DESCRIPTION
+    stop-browsers - Cycle common browser proceses and close/kill them (as browsers frequently ignore close prompts from shell wo explicitly prompts, when trying to shutdown/reboot).
+    .PARAMETER Whatif
+    Whatif no-exec test
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    System.Boolean
+    .EXAMPLE
+    PS> if(stop-browsers -verbose -whatif){'y'} else { 'n'} ; 
+    Confirm Gdrv running, with verbose and whatif 
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    [Alias('sbn')]
+    Param(
+        [Parameter(HelpMessage="Whatif Flag  [-whatIf]")]
+        [switch] $whatIf
+    ) ; 
+    BEGIN{
+        $TargAppName="Firefox|Palemoon|Cyberfox|msEdge|Chrome" ;  # descriptive msg text
+        # stop-process names to be killed
+        $rgxPSTargetAppProc="^(firefox|palemoon|Cyberfox|chrome|msedge$)$" ;  
+        # pskill/pslist select-sting pattern targets (as sysinternals don't emit objects, just text)
+        $rgxPSETargetAppProc="(firefox|palemoon|Cyberfox|chrome|msedge)" ;  
+
+    }
+    PROCESS{
+        w-h "Cycle common browser proceses and close/kill them (as browsers frequently ignore close prompts from shell)" ; 
+        [array]$prcs = $prcE = @() ; 
+        Try {
+            write-verbose -verbose:$true "$(get-date -format 'yyyyMMdd-HHmmtt'): --PASS STARTED:$ScriptName --"
+write-verbose -verbose:$true "killing $($TargAppName)"
+
+            $prcs=get-process -ea silentlycontinue| ?{$_.name -match $rgxPSTargetAppProc} | sort name;
+            if($prcs){
+                $smsg = "TARGETS FOUND:`n$(($prcs | group Name | ft -a name,count |out-string).trim())`n" ; 
+                write-host $smsg ; 
+                if($prcs){ 
+                    $prcs | stop-process -verbose -whatif:$($whatif) -erroraction silentlycontinue; 
+                    start-sleep 2 ; 
+                } else {
+                    $smsg = "(no targets found)" ; 
+                    write-host $smsg ; 
+                } ; ; 
+                # anything that survives above, pskill
+                $prcE = pslist | select-string -pattern $rgxPSETargetAppProc ; 
+                if($prcE){
+                    # sysinternals has padded the output from 3 to 7 lines of baloney, including header line
+                    #$prcE = $prcE | Select -Skip 7 |foreach-object{
+                    # prefiltered, doesn't have headers, no need to skip 7
+                    $prcE = $prcE | foreach-object{
+                        $procinfo = $_ -split "\s+" ; 
+                        [pscustomobject][ordered]@{
+                            Name = $procInfo[0..($procInfo.Count -8)] -Join " "; 
+                            Pid = $procInfo[-7].trim()  ; 
+                            Pri = $procInfo[-6].trim() ; 
+                            Thd = $procInfo[-5].trim()  ; 
+                            Hnd = $procInfo[-4].trim() ; 
+                            Priv = $procInfo[-3].trim()      ; 
+                            "CPU Time" = $procInfo[-2].trim()   ; 
+                            "Elapsed Time" = $procInfo[-1].trim()  ; 
+                        }  ;                
+                    } | sort name ; 
+                    foreach($prc in $prcE){
+                        write-verbose "pskill $($prc.pid) ($($prc.name))" ; 
+                        if(!$whatif){
+                        invoke-expression -command "pskill $($prc.pid)"
+                        } else { 
+                            write-host "(-whatif, skipping exec)" ; 
+                        } ; 
+                    } ; 
+                    $smsg = "POST ZOMBIES RESULTS:`n$(($prcE = pslist | select-string -pattern $rgxPSETargetAppProc|out-string).trim())" ; 
+                     write-host -foregroundcolor red $smsg ; 
+                }
+            }
+        } Catch {
+                $smsg = "ERROR!`n$($Error[0])"
+                 write-warning $smsg ; throw $smsg ; 
+                 #$false | write-output ; 
+        } 
+        Finally {
+            
+        } ;
+    }  # PROC-E
+    END{}
+}
+
+#*------^ stop-browsers.ps1 ^------
+
+
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,invoke-Explore,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,invoke-Explore,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist,stop-browsers -Alias *
 
 
 
@@ -1395,8 +1531,8 @@ Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUJ9guiOnXpknInCXPdk2IyBGS
-# UZegggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUfl7+L5x2VwFkZIQp+aZ2jIV8
+# oyWgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1411,9 +1547,9 @@ Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQJFe5B
-# Oxeyeziofe/nwpdCdGHskzANBgkqhkiG9w0BAQEFAASBgC759vL9rkVxQvOi1SRp
-# oU6Ju+bLvEdhzPQILTaZauzThYDWv9R65V4hUaHO3LQKCiN+sanljA/oFX8OIyis
-# U+f3HsWZnAZAg2qC/W4dX35sRrKOIfYGC7iUjdRonDxFuRJ9v59rKvruPsEnpky0
-# tCGAa5W4i0X9ElcXPaIJMDzf
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT1tuRE
+# AlazhNHAFv8ndbb4bT4BkzANBgkqhkiG9w0BAQEFAASBgC+xCsYYsSKU34iAHjQg
+# jOihwchbprruqgRjaCLVlor6C0m8ZnuPI6oAu0iVOTDzeiIKLPe8ncPKSU9vHAX8
+# LueMZyv34Z6jHrFhzSsKSEnQTNDiZqmGHt8gWy8ZLeZU0GNBoXJsw4aDQozMTteH
+# 9zF9qNR3MlHaY5zT0xkDQ3HH
 # SIG # End signature block
