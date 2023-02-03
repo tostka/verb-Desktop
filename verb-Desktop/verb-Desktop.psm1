@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.2.1.0
+  Version     : 2.0.1.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -108,8 +108,8 @@ function Clean-Desktop {
         Twitter:	@tostka, http://twitter.com/tostka
         REVISIONS   :
         * 12:56 PM 9/18/2019 added a catch echo to try clean-desktop as SID, and label the attempt
-        * 8:18 AM 8/1/2019 added OD4B redir & a bunch of logic to leave my normal .lnks in place, also added -whatif & -showdebug, for testing, and extra echos.
-        * 10:46 PM 5/31/2019 init vers
+        * 8:18 AM 8/2.0.19 added OD4B redir & a bunch of logic to leave my normal .lnks in place, also added -whatif & -showdebug, for testing, and extra echos.
+        * 10:46 PM 5/32.0.19 init vers
         .DESCRIPTION
         Clean-Desktop.ps1 - Purges all .lnk files from user profile desktop
         .INPUTS
@@ -401,6 +401,56 @@ Function invoke-Explore {
 }
 
 #*------^ invoke-Explore.ps1 ^------
+
+
+#*------v invoke-SpeakWords.ps1 v------
+function invoke-speakwords {
+    <#
+    .SYNOPSIS
+    invoke-speakwords - Text2Speech specified words
+    .NOTES
+    Author: Karl Prosser
+    Website:	http://poshcode.org/835
+    REVISIONS   :
+    * 11:20 AM 12/9/2022 it's dumping a 1 into the pipeline, eat the output of $voice.speak; added cmdletbinding & moved alias into the body, instead of post-block; rename compliant verb: speak-words -> invoke-speakwords, alias speak-words
+    * 2:02 PM 4/9/2015 - added to profile
+    .PARAMETER  words
+    Words or phrases to be spoken
+    .PARAMETER  pause
+    switch indicating whether to hold execution during speaking
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    invoke-speakwords "here we go now"  ;
+    .EXAMPLE
+    invoke-speakwords "$([datetime]::now)" ;
+    Speak current date and time
+    .EXAMPLE
+    get-fortune | invoke-speakwords ;
+    Speak output of get-fortune
+    .LINK
+    http://poshcode.org/835
+    #>
+    [CmdletBinding()]
+    [Alias('speak-words','speak')]
+    PARAM(
+        [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Specify text to speak")]
+        [ValidateNotNullOrEmpty()]
+        [string]$words
+        ,
+        [Parameter(Position = 1, Mandatory = $False, HelpMessage = "Specify to wait for text to finish speaking")]
+        [switch]$pause = $true
+    ) # PARAM BLOCK END
+    # default to no-pause, unless specified
+    $flag = 1 ; if ($pause) { $flag = 2 }  ;
+    $voice = new-Object -com SAPI.spvoice ;
+    $voice.speak($words, [int] $flag) | out-null ; # 2 means wait until speaking is finished to continue
+
+}
+
+#*------^ invoke-SpeakWords.ps1 ^------
 
 
 #*------v Move-Window.ps1 v------
@@ -1295,55 +1345,6 @@ function show-TrayTip {
 #*------^ show-TrayTip.ps1 ^------
 
 
-#*------v Speak-words.ps1 v------
-function Speak-words {
-    <#
-    .SYNOPSIS
-    speak-words - Text2Speech specified words
-    .NOTES
-    Author: Karl Prosser
-    Website:	http://poshcode.org/835
-    REVISIONS   :
-    * 2:02 PM 4/9/2015 - added to profile
-    .PARAMETER  words
-    Words or phrases to be spoken
-    .PARAMETER  pause
-    switch indicating whether to hold execution during speaking
-    .INPUTS
-    None. Does not accepted piped input.
-    .OUTPUTS
-    None. Returns no objects or output.
-    .EXAMPLE
-    speak-words "here we go now"  ;
-    .EXAMPLE
-    speak-words "$([datetime]::now)" ;
-    Speak current date and time
-    .EXAMPLE
-    get-fortune | speak-words ;
-    Speak output of get-fortune
-    .LINK
-    http://poshcode.org/835
-    #>
-    Param(
-        [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Specify text to speak")]
-        [ValidateNotNullOrEmpty()]
-        [string]$words
-        ,
-        [Parameter(Position = 1, Mandatory = $False, HelpMessage = "Specify to wait for text to finish speaking")]
-        [switch]$pause = $true
-    ) # PARAM BLOCK END
-    # default to no-pause, unless specified
-    $flag = 1 ; if ($pause) { $flag = 2 }  ;
-    $voice = new-Object -com SAPI.spvoice ;
-    $voice.speak($words, [int] $flag) # 2 means wait until speaking is finished to continue
-
-} #*======^ END Function Speak-words ^====== ;
-# 10:29 AM 2/19/2016
-if (!(get-alias -name "speak" -ea 0 )) { Set-Alias -Name 'speak' -Value 'speak-words' ; }
-
-#*------^ Speak-words.ps1 ^------
-
-
 #*------v start-ItunesPlaylist.ps1 v------
 Function start-ItunesPlaylist {
     <#
@@ -1523,7 +1524,7 @@ write-verbose -verbose:$true "killing $($TargAppName)"
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,invoke-Explore,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist,stop-browsers -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers -Alias *
 
 
 
@@ -1531,8 +1532,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUfl7+L5x2VwFkZIQp+aZ2jIV8
-# oyWgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUkTXhv4tkrVzMAeX4GCk4tSe1
+# K+agggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1547,9 +1548,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT1tuRE
-# AlazhNHAFv8ndbb4bT4BkzANBgkqhkiG9w0BAQEFAASBgC+xCsYYsSKU34iAHjQg
-# jOihwchbprruqgRjaCLVlor6C0m8ZnuPI6oAu0iVOTDzeiIKLPe8ncPKSU9vHAX8
-# LueMZyv34Z6jHrFhzSsKSEnQTNDiZqmGHt8gWy8ZLeZU0GNBoXJsw4aDQozMTteH
-# 9zF9qNR3MlHaY5zT0xkDQ3HH
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQfL1bo
+# 8b9C38pIF9E78wDjZaxFOzANBgkqhkiG9w0BAQEFAASBgDcIuzOd4fRlQgk0HSxq
+# wnz6bZLNJ7w8ezeMLQxjfpHzoA+EYp0FUni5m0YNnzVsy6BM1FKxfUkZnPJgKLa+
+# OlbX4e4nwGG3QNJZ1b5tfAxaS7hh2Fkoxr1puGOCRET1kmmCGxVTN9RhrvZcXKm8
+# vkNourcQhdE9j9yKqoP/XQoN
 # SIG # End signature block
