@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 1.0.9.0
+  Version     : 2.0.1.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -64,10 +64,12 @@
   #>
 
 
-$script:ModuleRoot = $PSScriptRoot ;
-$script:ModuleVersion = (Import-PowerShellDataFile -Path (get-childitem $script:moduleroot\*.psd1).fullname).moduleversion ;
+    $script:ModuleRoot = $PSScriptRoot ;
+    $script:ModuleVersion = (Import-PowerShellDataFile -Path (get-childitem $script:moduleroot\*.psd1).fullname).moduleversion ;
+    $runningInVsCode = $env:TERM_PROGRAM -eq 'vscode' ;
 
 #*======v FUNCTIONS v======
+
 
 
 
@@ -76,89 +78,24 @@ function .... { ...; .. }
 
 #*------^ .....ps1 ^------
 
+
 #*------v ....ps1 v------
 function ... { ..; .. }
 
 #*------^ ....ps1 ^------
+
 
 #*------v ...ps1 v------
 function .. { Set-Location .. }
 
 #*------^ ...ps1 ^------
 
+
 #*------v ~.ps1 v------
 function ~ { Push-Location (Get-PSProvider FileSystem).Home }
 
 #*------^ ~.ps1 ^------
 
-#*------v check-ProgramInstalled.ps1 v------
-Function check-ProgramInstalled {
-    <# 
-    .SYNOPSIS
-    check-ProgramInstalled - Checkregistry for installed software (via Uninstall record)
-    .NOTES
-    Version     : 1.0.0
-    Author      : Todd Kadrie
-    Website     :	http://www.toddomation.com
-    Twitter     :	@tostka / http://twitter.com/tostka
-    CreatedDate : 2021-10-04
-    FileName    : check-ProgramInstalled.ps1
-    License     : (none asserted)
-    Copyright   : (none asserted)
-    Github      : https://github.com/tostka/verb-Desktop
-    Tags        : Powershell
-    AddedCredit : Morgan
-    AddedWebsite:	https://morgantechspace.com/2018/02/check-if-software-program-is-installed-powershell.html
-    AddedTwitter:	URL
-    REVISIONS   :
-    # 
-    * - posted version
-    .DESCRIPTION
-    check-ProgramInstalled - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
-    .PARAMETER  Text
-    Text to be overlayed over specified background
-    .PARAMETER  OutFile
-    Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp
-    .PARAMETER  Align
-    Text alignment [Left|Center]
-    .PARAMETER  Theme
-    Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]
-    .PARAMETER  FontName
-    Text Font Name (Defaults Arial) [-FontName Arial]
-    .PARAMETER  FontSize
-    Integer Text Font Size (Defaults 12 point) [9-45]
-    .PARAMETER  UseCurrentWallpaperAsSource
-    Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]
-    .INPUTS
-    None. Does not accepted piped input.
-    .OUTPUTS
-    None. Returns no objects or output.
-    .EXAMPLE
-    if(check-ProgramInstalled -prog Notepad2){"Y"} else { "N" } ; 
-    Check for install of notepad2
-    .LINK
-    https://morgantechspace.com/2018/02/check-if-software-program-is-installed-powershell.html
-    .LINK
-    https://github.com/tostka/verb-Desktop
-    #>
-    [CmdletBinding()]
-    Param(
-        [Parameter(Mandatory=$true,HelpMessage="Name of the program to be checked for[-programNam 'notepad2']")]
-        [string] $programNam
-    ) ; 
-    $verbose = ($VerbosePreference -eq "Continue") ; 
-    $x86_check = ((Get-ChildItem "HKLM:Software\Microsoft\Windows\CurrentVersion\Uninstall") |
-        Where-Object { $_."Name" -like "*$programName*" } ).Length -gt 0;
-    write-verbose "`$x86_check:$([boolean]$x86_check)" ; 
-    if(Test-Path 'HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall'){
-        $x64_check = ((Get-ChildItem "HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall") |
-            Where-Object { $_."Name" -like "*$programName*" } ).Length -gt 0;
-            write-verbose "`$x64_check:$([boolean]$x64_check)" ; 
-    } ; 
-    return $x86_check -OR $x64_check;        
-}
-
-#*------^ check-ProgramInstalled.ps1 ^------
 
 #*------v Clean-Desktop.ps1 v------
 function Clean-Desktop {
@@ -171,8 +108,8 @@ function Clean-Desktop {
         Twitter:	@tostka, http://twitter.com/tostka
         REVISIONS   :
         * 12:56 PM 9/18/2019 added a catch echo to try clean-desktop as SID, and label the attempt
-        * 8:18 AM 8/1/2019 added OD4B redir & a bunch of logic to leave my normal .lnks in place, also added -whatif & -showdebug, for testing, and extra echos.
-        * 10:46 PM 5/31/2019 init vers
+        * 8:18 AM 8/2.0.19 added OD4B redir & a bunch of logic to leave my normal .lnks in place, also added -whatif & -showdebug, for testing, and extra echos.
+        * 10:46 PM 5/32.0.19 init vers
         .DESCRIPTION
         Clean-Desktop.ps1 - Purges all .lnk files from user profile desktop
         .INPUTS
@@ -235,10 +172,104 @@ function Clean-Desktop {
 
 #*------^ Clean-Desktop.ps1 ^------
 
+
+#*------v confirm-GoogleDriveRunning.ps1 v------
+Function confirm-GoogleDriveRunning {
+
+    <# 
+    .SYNOPSIS
+    confirm-GoogleDriveRunning - Confirm/Run Google Drive - Resolve Google Drive letter; test for drive letter present(running): start GD if drive not present (Resolve Google Drive .exe path from default installed Start Mnu .lnk) 
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2022-11-11
+    FileName    : confirm-GoogleDriveRunning.ps1
+    License     : MIT License
+    Copyright   : (c) 2022 Todd Kadrie
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : GoogleDrive
+    AddedCredit : mklement0
+    AddedWebsite:	https://stackoverflow.com/users/45375/mklement0
+    AddedTwitter:	
+    REVISIONS   :
+    # 11:14 AM 11/11/2022 my revisions: added [codewario](https://stackoverflow.com/users/584676/codewario)'s answer to M's question; added .exe resolution via default start mnu Google Drive.lnk expansion. Try catch, whatif, and now outputs boolean to pipeline, for testing 
+    * 11:15 AM 9/1/21 mklement0's posted question code
+    .DESCRIPTION
+    confirm-GoogleDriveRunning - Confirm/Run Google Drive - Resolve Google Drive letter; test for drive letter present(running): start GD if drive not present (Resolve Google Drive .exe path from default installed Start Mnu .lnk) 
+    
+    Expanded version of mklement0's posted concept snippet from stackoverflow question:
+    [powershell - Find the mapped google drive - Stack Overflow - stackoverflow.com/](https://stackoverflow.com/questions/69017164/find-the-mapped-google-drive)
+    Added .exe resolution code; spliced in bender's answer to the original question. 
+    
+    .PARAMETER  Path
+    Path to be overlayed over specified background
+    .PARAMETER Whatif
+    Whatif no-exec test
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    System.Boolean
+    .EXAMPLE
+    PS> if(confirm-GoogleDriveRunning -verbose -whatif){'y'} else { 'n'} ; 
+    Confirm Gdrv running, with verbose and whatif 
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    #[Alias('')]
+    Param(
+        [Parameter(HelpMessage="Whatif Flag  [-whatIf]")]
+        [switch] $whatIf
+    ) ; 
+    write-verbose "Attempt to Resolve Google Drive PSDrive (local drive vs mounted)" ; 
+    Try {
+        If (!($gdrvDrive = Get-PSDrive -PSProvider FileSystem | 
+            Where-Object {$_.Description -eq 'Google Drive' })) {
+            write-verbose "Resolve Google Drive .exe loc from the stock launch .lnk" ; 
+            $gdrvLnk = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Google Drive.lnk" ; 
+            write-verbose "expand shortcut TargetPath" ; 
+            $WScriptShell = New-Object -ComObject WScript.Shell ; 
+            if (Test-Path $gdrvLnk) {
+                $GdfsPath  = $WScriptShell.CreateShortcut((Resolve-Path $gdrvLnk)).targetpath ;
+                if(!$whatif){
+                    write-verbose "Start-Process resolved path:`n$($gdfsPath)`n(30s timeout)" ; 
+                        Start-Process $GdfsPath | Wait-Process -Timeout 30 ;
+                } else { 
+                    write-host "-whatif: skipping run exeution of:`n$($GdfsPath)" ; 
+                } ; 
+            } else {
+                $smsg = "Unable to resolve Google Drive.lnk to an exe path!`n$($gdrvLnk)" ; 
+                write-warning $smsg ; throw $smsg ; 
+            } ; 
+        } else {
+            write-verbose "Google drive present ($($gdrvDrive.Root):), returning `$true to pipeline" ; 
+            $true | write-output ; 
+        } ; 
+    } Catch {
+            $smsg = "Google Drive can't be mapped. Failed to load Gdrv: $($GdfsPath)"
+             write-warning $smsg ; throw $smsg ; 
+             $false | write-output ; 
+    } 
+    Finally {
+        If (!(Get-PSDrive -PSProvider FileSystem | 
+    Where-Object {$_.Description -eq 'Google Drive' })) {
+            $smsg = "Google Drive can't be mapped. Failed to load Gdrv: $($GdfsPath)"
+             write-warning $smsg ; throw $smsg ; 
+             $false | write-output ; 
+        } ;
+    } ;
+}
+
+#*------^ confirm-GoogleDriveRunning.ps1 ^------
+
+
 #*------v c-winsallk.ps1 v------
 function c-winsallk {. C:\usr\work\ps\scripts\close-WinsAll.ps1 -kill  }
 
 #*------^ c-winsallk.ps1 ^------
+
 
 #*------v Define-MoveWindow.ps1 v------
 function Define-MoveWindow {
@@ -256,6 +287,7 @@ bool bRepaint);
 }
 
 #*------^ Define-MoveWindow.ps1 ^------
+
 
 #*------v Go.ps1 v------
 function Go {
@@ -295,25 +327,131 @@ function Go {
 
 #*------^ Go.ps1 ^------
 
+
 #*------v gotoDbox.ps1 v------
 function gotoDbox { set-location c:\usr\home\dropbox }
 
 #*------^ gotoDbox.ps1 ^------
+
 
 #*------v gotoDboxDb.ps1 v------
 function gotoDboxDb { set-location c:\usr\home\dropbox\db }
 
 #*------^ gotoDboxDb.ps1 ^------
 
+
 #*------v gotoDownloads.ps1 v------
 function gotoDownloads { set-location C:\usr\home\ftp }
 
 #*------^ gotoDownloads.ps1 ^------
 
+
 #*------v gotoIncid.ps1 v------
 function gotoIncid { set-location c:\usr\work\incid }
 
 #*------^ gotoIncid.ps1 ^------
+
+
+#*------v invoke-Explore.ps1 v------
+Function invoke-Explore {
+    <# 
+    .SYNOPSIS
+    invoke-Explore - Spawn explorer on designated path (aliased as 'explore')
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2021-10-04
+    FileName    : invoke-Explore.ps1
+    License     : MIT License
+    Copyright   : (c) 2022 Todd Kadrie
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : Powershell,explorer,Filesystem
+    REVISIONS   :
+    # 8:59 AM 8/25/2022 init
+    .DESCRIPTION
+    invoke-Explore - Spawn explorer on designated path
+    .PARAMETER  Path
+    Path to be overlayed over specified background    
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    PS> Explore c:\usr\local\bin\
+    Invoke explorer.exe on specified path
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    [Alias('Explore')]
+    Param(
+        [Parameter(Mandatory=$true,Position = 0,ValueFromPipeline = $true,HelpMessage="Path to be 'explored'[-path 'c:\some\path']")]
+        [ValidateNotNullOrEmpty()]
+        [string]$Path
+    ) ; 
+    if((get-variable -name IsWindows) -AND (-not $IsWindows)){
+        write-warning "Ps `$isWindows:$($isWindows): This funcion is *only* supported on *Windows*" ; 
+        Break ; 
+    } ;
+    write-verbose "invoking explorer with -path:$($path)" ; 
+    $explorer = New-Object -ComObject shell.application ; 
+    $explorer.Explore($path) ; 
+}
+
+#*------^ invoke-Explore.ps1 ^------
+
+
+#*------v invoke-SpeakWords.ps1 v------
+function invoke-speakwords {
+    <#
+    .SYNOPSIS
+    invoke-speakwords - Text2Speech specified words
+    .NOTES
+    Author: Karl Prosser
+    Website:	http://poshcode.org/835
+    REVISIONS   :
+    * 11:20 AM 12/9/2022 it's dumping a 1 into the pipeline, eat the output of $voice.speak; added cmdletbinding & moved alias into the body, instead of post-block; rename compliant verb: speak-words -> invoke-speakwords, alias speak-words
+    * 2:02 PM 4/9/2015 - added to profile
+    .PARAMETER  words
+    Words or phrases to be spoken
+    .PARAMETER  pause
+    switch indicating whether to hold execution during speaking
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    invoke-speakwords "here we go now"  ;
+    .EXAMPLE
+    invoke-speakwords "$([datetime]::now)" ;
+    Speak current date and time
+    .EXAMPLE
+    get-fortune | invoke-speakwords ;
+    Speak output of get-fortune
+    .LINK
+    http://poshcode.org/835
+    #>
+    [CmdletBinding()]
+    [Alias('speak-words','speak')]
+    PARAM(
+        [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Specify text to speak")]
+        [ValidateNotNullOrEmpty()]
+        [string]$words
+        ,
+        [Parameter(Position = 1, Mandatory = $False, HelpMessage = "Specify to wait for text to finish speaking")]
+        [switch]$pause = $true
+    ) # PARAM BLOCK END
+    # default to no-pause, unless specified
+    $flag = 1 ; if ($pause) { $flag = 2 }  ;
+    $voice = new-Object -com SAPI.spvoice ;
+    $voice.speak($words, [int] $flag) | out-null ; # 2 means wait until speaking is finished to continue
+
+}
+
+#*------^ invoke-SpeakWords.ps1 ^------
+
 
 #*------v Move-Window.ps1 v------
 function Move-Window {
@@ -322,6 +460,7 @@ function Move-Window {
 }
 
 #*------^ Move-Window.ps1 ^------
+
 
 #*------v Move-WindowByWindowTitle.ps1 v------
 function Move-WindowByWindowTitle {
@@ -336,6 +475,7 @@ function Move-WindowByWindowTitle {
 }
 
 #*------^ Move-WindowByWindowTitle.ps1 ^------
+
 
 #*------v new-WallpaperStatus.ps1 v------
 Function New-WallpaperStatus {
@@ -776,15 +916,18 @@ Function New-WallpaperStatus {
 
 #*------^ new-WallpaperStatus.ps1 ^------
 
+
 #*------v openInput.ps1 v------
 function openInput { $sExc = $TextEd + " " + (join-path $binpath input.txt); Invoke-Expression $sExc; }
 
 #*------^ openInput.ps1 ^------
 
+
 #*------v openTmpps1.ps1 v------
 function openTmpps1 { $sExc = $TextEd + " C:\tmp\tmp.ps1"; Invoke-Expression $sExc; }
 
 #*------^ openTmpps1.ps1 ^------
+
 
 #*------v Report-URL.ps1 v------
 function Report-URL {
@@ -855,6 +998,7 @@ If (!(Test-Path ALIAS:Rpt-URL)) { new-Alias -Name Rpt-URL -Value report-url}
 
 #*------^ Report-URL.ps1 ^------
 
+
 #*------v restart-Shell.ps1 v------
 function restart-Shell {
     <#
@@ -922,6 +1066,7 @@ function restart-Shell {
 
 #*------^ restart-Shell.ps1 ^------
 
+
 #*------v Set.ps1 v------
 If (Test-Path ALIAS:set) { Remove-Item ALIAS:set } ;
 Function Set {
@@ -981,6 +1126,7 @@ Function Set {
 }
 
 #*------^ Set.ps1 ^------
+
 
 #*------v Set-Wallpaper.ps1 v------
 Function Set-Wallpaper {
@@ -1074,6 +1220,7 @@ Function Set-Wallpaper {
 }
 
 #*------^ Set-Wallpaper.ps1 ^------
+
 
 #*------v show-TrayTip.ps1 v------
 function show-TrayTip {
@@ -1197,53 +1344,6 @@ function show-TrayTip {
 
 #*------^ show-TrayTip.ps1 ^------
 
-#*------v Speak-words.ps1 v------
-function Speak-words {
-    <#
-    .SYNOPSIS
-    speak-words - Text2Speech specified words
-    .NOTES
-    Author: Karl Prosser
-    Website:	http://poshcode.org/835
-    REVISIONS   :
-    * 2:02 PM 4/9/2015 - added to profile
-    .PARAMETER  words
-    Words or phrases to be spoken
-    .PARAMETER  pause
-    switch indicating whether to hold execution during speaking
-    .INPUTS
-    None. Does not accepted piped input.
-    .OUTPUTS
-    None. Returns no objects or output.
-    .EXAMPLE
-    speak-words "here we go now"  ;
-    .EXAMPLE
-    speak-words "$([datetime]::now)" ;
-    Speak current date and time
-    .EXAMPLE
-    get-fortune | speak-words ;
-    Speak output of get-fortune
-    .LINK
-    http://poshcode.org/835
-    #>
-    Param(
-        [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Specify text to speak")]
-        [ValidateNotNullOrEmpty()]
-        [string]$words
-        ,
-        [Parameter(Position = 1, Mandatory = $False, HelpMessage = "Specify to wait for text to finish speaking")]
-        [switch]$pause = $true
-    ) # PARAM BLOCK END
-    # default to no-pause, unless specified
-    $flag = 1 ; if ($pause) { $flag = 2 }  ;
-    $voice = new-Object -com SAPI.spvoice ;
-    $voice.speak($words, [int] $flag) # 2 means wait until speaking is finished to continue
-
-} #*======^ END Function Speak-words ^====== ;
-# 10:29 AM 2/19/2016
-if (!(get-alias -name "speak" -ea 0 )) { Set-Alias -Name 'speak' -Value 'speak-words' ; }
-
-#*------^ Speak-words.ps1 ^------
 
 #*------v start-ItunesPlaylist.ps1 v------
 Function start-ItunesPlaylist {
@@ -1307,16 +1407,133 @@ Function start-ItunesPlaylist {
 
 #*------^ start-ItunesPlaylist.ps1 ^------
 
+
+#*------v stop-browsers.ps1 v------
+Function stop-browsers {
+
+    <# 
+    .SYNOPSIS
+    stop-browsers - Cycle common browser proceses and close/kill them (as browsers frequently ignore close prompts from shell wo explicitly prompts, when trying to shutdown/reboot).
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     :	http://www.toddomation.com
+    Twitter     :	@tostka / http://twitter.com/tostka
+    CreatedDate : 2022-11-14
+    FileName    : stop-browsers.ps1
+    License     : MIT License
+    Copyright   : (c) 2022 Todd Kadrie
+    Github      : https://github.com/tostka/verb-Desktop
+    Tags        : GoogleDrive
+    AddedCredit : mklement0
+    AddedWebsite:	https://stackoverflow.com/users/45375/mklement0
+    AddedTwitter:	
+    REVISIONS   :
+    * 8:26 AM 11/14/2022 init
+    .DESCRIPTION
+    stop-browsers - Cycle common browser proceses and close/kill them (as browsers frequently ignore close prompts from shell wo explicitly prompts, when trying to shutdown/reboot).
+    .PARAMETER Whatif
+    Whatif no-exec test
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    System.Boolean
+    .EXAMPLE
+    PS> if(stop-browsers -verbose -whatif){'y'} else { 'n'} ; 
+    Confirm Gdrv running, with verbose and whatif 
+    .LINK
+    https://github.com/tostka/verb-Desktop
+    #>
+    [CmdletBinding()]
+    [Alias('sbn')]
+    Param(
+        [Parameter(HelpMessage="Whatif Flag  [-whatIf]")]
+        [switch] $whatIf
+    ) ; 
+    BEGIN{
+        $TargAppName="Firefox|Palemoon|Cyberfox|msEdge|Chrome" ;  # descriptive msg text
+        # stop-process names to be killed
+        $rgxPSTargetAppProc="^(firefox|palemoon|Cyberfox|chrome|msedge$)$" ;  
+        # pskill/pslist select-sting pattern targets (as sysinternals don't emit objects, just text)
+        $rgxPSETargetAppProc="(firefox|palemoon|Cyberfox|chrome|msedge)" ;  
+
+    }
+    PROCESS{
+        w-h "Cycle common browser proceses and close/kill them (as browsers frequently ignore close prompts from shell)" ; 
+        [array]$prcs = $prcE = @() ; 
+        Try {
+            write-verbose -verbose:$true "$(get-date -format 'yyyyMMdd-HHmmtt'): --PASS STARTED:$ScriptName --"
+write-verbose -verbose:$true "killing $($TargAppName)"
+
+            $prcs=get-process -ea silentlycontinue| ?{$_.name -match $rgxPSTargetAppProc} | sort name;
+            if($prcs){
+                $smsg = "TARGETS FOUND:`n$(($prcs | group Name | ft -a name,count |out-string).trim())`n" ; 
+                write-host $smsg ; 
+                if($prcs){ 
+                    $prcs | stop-process -verbose -whatif:$($whatif) -erroraction silentlycontinue; 
+                    start-sleep 2 ; 
+                } else {
+                    $smsg = "(no targets found)" ; 
+                    write-host $smsg ; 
+                } ; ; 
+                # anything that survives above, pskill
+                $prcE = pslist | select-string -pattern $rgxPSETargetAppProc ; 
+                if($prcE){
+                    # sysinternals has padded the output from 3 to 7 lines of baloney, including header line
+                    #$prcE = $prcE | Select -Skip 7 |foreach-object{
+                    # prefiltered, doesn't have headers, no need to skip 7
+                    $prcE = $prcE | foreach-object{
+                        $procinfo = $_ -split "\s+" ; 
+                        [pscustomobject][ordered]@{
+                            Name = $procInfo[0..($procInfo.Count -8)] -Join " "; 
+                            Pid = $procInfo[-7].trim()  ; 
+                            Pri = $procInfo[-6].trim() ; 
+                            Thd = $procInfo[-5].trim()  ; 
+                            Hnd = $procInfo[-4].trim() ; 
+                            Priv = $procInfo[-3].trim()      ; 
+                            "CPU Time" = $procInfo[-2].trim()   ; 
+                            "Elapsed Time" = $procInfo[-1].trim()  ; 
+                        }  ;                
+                    } | sort name ; 
+                    foreach($prc in $prcE){
+                        write-verbose "pskill $($prc.pid) ($($prc.name))" ; 
+                        if(!$whatif){
+                        invoke-expression -command "pskill $($prc.pid)"
+                        } else { 
+                            write-host "(-whatif, skipping exec)" ; 
+                        } ; 
+                    } ; 
+                    $smsg = "POST ZOMBIES RESULTS:`n$(($prcE = pslist | select-string -pattern $rgxPSETargetAppProc|out-string).trim())" ; 
+                     write-host -foregroundcolor red $smsg ; 
+                }
+            }
+        } Catch {
+                $smsg = "ERROR!`n$($Error[0])"
+                 write-warning $smsg ; throw $smsg ; 
+                 #$false | write-output ; 
+        } 
+        Finally {
+            
+        } ;
+    }  # PROC-E
+    END{}
+}
+
+#*------^ stop-browsers.ps1 ^------
+
+
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,Speak-words,start-ItunesPlaylist -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers -Alias *
+
+
 
 
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUPmKq6Em19VI82qdloW9hp0Y7
-# 7dagggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUkTXhv4tkrVzMAeX4GCk4tSe1
+# K+agggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1331,9 +1548,9 @@ Export-ModuleMember -Function ....,...,..,~,check-ProgramInstalled,Clean-Desktop
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSb4ZMy
-# KCcOKSXx2lq5O+oZO+VyiTANBgkqhkiG9w0BAQEFAASBgKDtu2OLVV8nF8PrO6gP
-# cAln0ntaHH23m2oYGfGbFbSrD98LTvIAR+Dhwo2Dsup/3U5FuXWuWXh/lO3+i/a+
-# LaxoLjYxfkxmtP3uhzZ9LlcuMLAYUzXc8qtqLKggyemM5f+vecIzC0K1kBNhwQGg
-# wpeQ5SEeXCbGtTxkSzOpDaWh
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQfL1bo
+# 8b9C38pIF9E78wDjZaxFOzANBgkqhkiG9w0BAQEFAASBgDcIuzOd4fRlQgk0HSxq
+# wnz6bZLNJ7w8ezeMLQxjfpHzoA+EYp0FUni5m0YNnzVsy6BM1FKxfUkZnPJgKLa+
+# OlbX4e4nwGG3QNJZ1b5tfAxaS7hh2Fkoxr1puGOCRET1kmmCGxVTN9RhrvZcXKm8
+# vkNourcQhdE9j9yKqoP/XQoN
 # SIG # End signature block

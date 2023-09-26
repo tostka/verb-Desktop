@@ -1,11 +1,11 @@
-﻿# verb-desktop.psm1
+﻿# verb-Desktop.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 2.0.1.0
+  Version     : 3.0.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -108,8 +108,8 @@ function Clean-Desktop {
         Twitter:	@tostka, http://twitter.com/tostka
         REVISIONS   :
         * 12:56 PM 9/18/2019 added a catch echo to try clean-desktop as SID, and label the attempt
-        * 8:18 AM 8/2.0.19 added OD4B redir & a bunch of logic to leave my normal .lnks in place, also added -whatif & -showdebug, for testing, and extra echos.
-        * 10:46 PM 5/32.0.19 init vers
+        * 8:18 AM 8/1/2019 added OD4B redir & a bunch of logic to leave my normal .lnks in place, also added -whatif & -showdebug, for testing, and extra echos.
+        * 10:46 PM 5/31/2019 init vers
         .DESCRIPTION
         Clean-Desktop.ps1 - Purges all .lnk files from user profile desktop
         .INPUTS
@@ -350,6 +350,517 @@ function gotoDownloads { set-location C:\usr\home\ftp }
 function gotoIncid { set-location c:\usr\work\incid }
 
 #*------^ gotoIncid.ps1 ^------
+
+
+#*------v install-ChocoPkg.ps1 v------
+Function Install-ChocoPkg {
+    <#
+.SYNOPSIS
+Install-ChocoPkg - runs $Packages list of choco pkgs through choco upgrade commmand (installs, if not pre-installed), parses choco exit codes and evals status.
+.NOTES
+Version     : 1.0.0
+Author      : Todd Kadrie
+Website     :	http://www.toddomation.com
+Twitter     :	@tostka / http://twitter.com/tostka
+CreatedDate : 2019-03-14
+FileName    : Install-ChocoPkg.ps1
+License     : MIT License
+Copyright   : (c) 2020 Todd Kadrie
+Github      : https://github.com/tostka
+Tags        : Powershell
+AddedCredit : REFERENCE
+AddedWebsite:	URL
+AddedTwitter:	URL
+REVISIONS
+* 12:34 PM 2/21/2023 duped into verb-desktop
+* 2:09 PM 4/21/2020 added Source param (alt sources)
+* 10:33 AM 3/14/2019 swap from 'choco install'/cist -> 'choco upgrade'/cup, also added the choco boxstarter path too long hack
+.DESCRIPTION
+.PARAMETER  Packages
+Array of Chocolatey packages to Install
+.PARAMETER  Source
+Alternate Source [-source WindowsFeature
+.PARAMETER ShowDebug
+Parameter to display Debugging messages [-ShowDebug switch]
+.PARAMETER Whatif
+Parameter to run a Test no-change pass [-Whatif switch]
+.EXAMPLE
+$bRet = Install-ChocoPkg -Packages $pkgs -showdebug:$($showdebug) -whatif:$($whatif) ;
+.LINK
+#>
+    Param(
+        [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Array of Chocolatey packages to Install")]
+        [ValidateNotNullOrEmpty()][array]$Packages,
+        [Parameter(HelpMessage = "Alternate Source [-source WindowsFeature")]
+        [ValidateNotNullOrEmpty()][array]$Source,
+        [Parameter(HelpMessage = "Debugging Flag [-showDebug]")]
+        [switch] $showDebug,
+        [Parameter(HelpMessage = "Whatif Flag  [-whatIf]")]
+        [switch] $whatIf
+    ) # PARAM BLOCK END
+
+    <# underlying Choco docs:
+    Exit Codes
+
+    Exit codes that normally result from running this command.
+
+    Normal:
+    -0: operation was successful, no issues detected
+    --1 or 1: an error has occurred
+
+    Package Exit Codes:
+    -1641: success, reboot initiated
+    -3010: success, reboot required
+    -other (not listed): likely an error has occurred
+
+    In addition to normal exit codes, packages are allowed to exit with their own codes when the feature 'usePackageExitCodes' is turned on. Uninstall command has additional valid exit codes. Available in v0.9.10+.
+
+    Reboot Exit Codes:
+    -350: pending reboot detected, no action has occurred
+    -1604: install suspended, incomplete
+
+    In addition to the above exit codes, you may also see reboot exit codes when the feature 'exitOnRebootDetected' is turned on. It typically requires the feature 'usePackageExitCodes' to also be turned on to work properly. Available in v0.10.12+.
+    -----
+    $chocoMsg = (choco install $myApp -y) -join('')
+
+    if($chocoMsg -match "install of $myApp was successful.") {
+        Write-Host -fo:green 'Success'
+    } else {
+        # handle errors
+    }
+    ----------
+    Use exit codes to determine status.
+    Chocolatey exits with 0 when everything worked appropriately and other exits codes like 1 when things error.
+    There are package specific exit codes that are recommended to be used and reboot indicating exit codes as well.
+    To check exit code when using PowerShell, immediately call $exitCode = $LASTEXITCODE to get the value choco exited with.
+
+    Alternative Sources (-source)
+
+    Available in 0.9.10+.
+    Ruby
+    This specifies the source is Ruby Gems and that we are installing a
+    gem. If you do not have ruby installed prior to running this command,
+    the command will install that first.
+    e.g. choco install compass -source ruby
+    WebPI
+    This specifies the source is Web PI (Web Platform Installer) and that
+    we are installing a WebPI product, such as IISExpress. If you do not
+    have the Web PI command line installed, it will install that first and
+    then the product requested.
+    e.g. choco install IISExpress --source webpi
+    Cygwin
+    This specifies the source is Cygwin and that we are installing a cygwin
+    package, such as bash. If you do not have Cygwin installed, it will
+    install that first and then the product requested.
+    e.g. choco install bash --source cygwin
+    Python
+    This specifies the source is Python and that we are installing a python
+    package, such as Sphinx. If you do not have easy_install and Python
+    installed, it will install those first and then the product requested.
+    e.g. choco install sphinx --source python
+    Windows Features
+    This specifies that the source is a Windows Feature and we should
+    install via the Deployment Image Servicing and Management tool (DISM)
+    on the local machine.
+    e.g. choco install IIS-WebServerRole --source windowsfeatures
+    #>
+
+
+    $ttl = ($Packages | measure).count ;
+    $Procd = 0 ;
+    $smsg = "Installing $($ttl)  Packages:" ;
+    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn
+    foreach ($pkg in $Packages) {
+        $Procd++ ;
+        $error.clear() ;
+        $chocoMsg = $null ;
+        $sBnrS = "#*------v ($($Procd)/$($ttl)):choco upgrade -y $($pkg): v------" ;
+        $smsg = "$($sBnrS)" ;
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn
+        TRY {
+            if (!$whatif) {
+                if (!$Source) {
+                    $chocoMsg = (choco upgrade --cacheLocation="$ChocoCachePath" -y $pkg) -join ('')
+                } else {
+                    $chocoMsg = (choco upgrade --cacheLocation="$ChocoCachePath" --source="$Source" -y $pkg) -join ('')
+                } ;
+                $exitCode = $LASTEXITCODE ;
+            } else {
+                if (!$Source) {
+                    $chocoMsg = (choco upgrade --cacheLocation="$ChocoCachePath" -y $pkg --noop) -join ('')
+                } else {
+                    $chocoMsg = (choco upgrade --cacheLocation="$ChocoCachePath" --source="$Source" -y $pkg --noop) -join ('')
+                } ;
+                $exitCode = $LASTEXITCODE ;
+            }
+        } CATCH {
+            $err = $_ ;
+            $msg = ": Error Details: $($err)";
+            Write-Error "$(get-date -format "HH:mm:ss"): FAILURE!" ;
+            Write-Error "$(get-date -format "HH:mm:ss"): Error in $($err.InvocationInfo.ScriptName)." ;
+            Write-Error "$(get-date -format "HH:mm:ss"): -- Error information" ;
+            Write-Error "$(get-date -format "HH:mm:ss"): Line Number: $($err.InvocationInfo.ScriptLineNumber)" ;
+            Write-Error "$(get-date -format "HH:mm:ss"): Offset: $($err.InvocationInfo.OffsetInLine)" ;
+            Write-Error "$(get-date -format "HH:mm:ss"): Command: $($err.InvocationInfo.MyCommand)" ;
+            Write-Error "$(get-date -format "HH:mm:ss"): Line: $($err.InvocationInfo.Line)" ;
+            #Write-Error "$(get-date -format "HH:mm:ss"): Error Details: $($err)" ;
+            $msg = ": Error Details: $($err)" ;
+            Write-Error  "$(get-date -format "HH:mm:ss"): $($msg)" ;
+            # 1:00 PM 1/23/2015 autorecover from fail, STOP (debug), EXIT (close), or use Continue to move on in loop cycle
+            Continue ;
+        }; # try/catch-E
+
+        switch -Regex ($exitCode) {
+            "0" {
+                # operation was successful, no issues detected
+                $smsg = "$($pkg):`$LASTEXITCODE:$($exitCode):Operation Was Successful, No Issues Detected" ;
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn
+            }
+            "((-)*)1" {
+                # -1/1: an error has occurred
+                $smsg = "$($pkg):`$LASTEXITCODE:$($exitCode):An Error Has Occurred" ;
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error } ; #Error|Warn
+            } ;
+            "1641" {
+                # 1641: success, reboot initiated
+                $smsg = "$($pkg):`$LASTEXITCODE:$($exitCode):Success, Reboot Initiated" ;
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Warn } ; #Error|Warn
+            }
+            "3010" {
+                # 3010: success, reboot required
+                $smsg = "$($pkg):`$LASTEXITCODE:$($exitCode):Success, Reboot Required" ;
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Warn } ; #Error|Warn
+            }
+            "350" {
+                # 350: pending reboot detected, no action has occurred
+                $smsg = "$($pkg):`$LASTEXITCODE:$($exitCode):Pending Reboot Detected, No Action Has Occurred" ;
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Warn } ; #Error|Warn
+
+            }
+            "1604" {
+                # 1604: install suspended, incomplete
+                $smsg = "$($pkg):`$LASTEXITCODE:$($exitCode):Install Suspended, Incomplete" ;
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error } ; #Error|Warn
+            }
+            default {
+                # other (not listed): likely an error has occurred
+                $smsg = "$($pkg):`$LASTEXITCODE:$($exitCode):Unrecognized code - Likely An Error Has Occurred" ;
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error } ; #Error|Warn
+            } ;
+        } ;
+
+        # 8:01 PM 3/18/2019 dump the output:
+        if ($chocoMsg -match "install of $myApp was successful.") {
+            Write-Host -fo:green 'Success' ;
+        } else {
+            # handle errors
+        } ;
+
+        if ($chocoMsg -match "A\spending\ssystem\sreboot\srequest\shas\sbeen\sdetected") {
+            $smsg = "Pending Reboot detected." ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Warn } ; #Error|Warn|Debug
+            $chocoMsg -match "Chocolatey\sv\d{1,}\.\d{1,}\.\d{1,}((\s)*)(.*Upgrading\sthe\sfollowing\spackages\:\w{1,})" ;
+            $OutputSummary = $matches[3] ;
+        } ;
+        if ($chocoMsg -match "\.\w{1,}\s\sis\snot\sinstalled.\sInstalling...") {
+            $smsg = "Installing:$($matches[1])" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn|Debug
+            $chocoMsg -match "Chocolatey\sv\d{1,}\.\d{1,}\.\d{1,}((\s)*)(.*\s\sis\snot\sinstalled\.\sInstalling\.)" ;
+            $OutputSummary = $matches[3] ;
+        } ;
+        if ($chocoMsg -match "\.\w{1,}\sv.*\sis\sthe\slatest\sversion\savailable\sbased\son\syour\ssource\(s\)\.") {
+            $smsg = "Latest version currently installed" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn|Debug
+            $chocoMsg -match "Chocolatey\sv\d{1,}\.\d{1,}\.\d{1,}((\s)*)(.*Chocolatey\supgraded\s\d{1,}/\d{1,}\spackages\.)" ;
+            $OutputSummary = $matches[3] ;
+        } ;
+        if ($chocoMsg -match "Installing\.\.\.\w{1,}\snot\sinstalled\.\sThe\spackage\swas\snot\sfound\swith\sthe\ssource\(s\)\slisted\.") {
+            $smsg = "Installing: Not installed, the pkg was not found with the source(s) listed" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn|Debug
+            $chocoMsg -match "(Chocolatey\supgraded\s\d{1,}/\d{1,}\spackages\.\s\d{1,}\spackages\sfailed\.)" ;
+            $OutputSummary = $matches[1] ;
+        } elseif ($chocoMsg -match "Installing\.\.\.\w{1,}\snot\sinstalled\.") {
+            $smsg = "Installing: Not installed (unknown)" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn|Debug
+            $chocoMsg -match "Chocolatey\supgraded\s\d{1,}\/\d{1,}\spackages.\s\d{1,}\spackages\sfailed\." ;
+            $OutputSummary = $matches[0] ;
+        };
+
+        #$chocoMsg -match "^Chocolatey\sv\d{1,3}\.\d{1,3}\.\d{1,3}((\s)*)(.*(Installing...|Upgrading\sthe\sfollowing\spackages).*\sis\sthe\slatest\sversion\savailable\sbased\son\syour\ssource\(s\).Chocolatey\supgraded\s\d{1,3}\/\d{1,3}\spackages)" | out-null
+        #"^Chocolatey\sv\d{1,3}\.\d{1,3}\.\d{1,3}((\s)*)(.*(Installing...|Upgrading\sthe\sfollowing\spackages))"
+        #"^Chocolatey\sv\d{1,3}\.\d{1,3}\.\d{1,3}\s(.*(Installing...|Upgrading\sthe\sfollowing\spackages))"
+        #"^Chocolatey\sv\d{1,3}\.\d{1,3}\.\d{1,3}\s(.*Installing...)"
+        # "^(Chocolatey\sv\d{1,3}\.\d{1,3}\.\d{1,3}\s.*Installing...)" | out-null ;
+        #$OutputSummary=$matches[3] ;
+        #$matches[1] ;
+
+        if (!(test-path "alias:out-clipboard")) { set-alias -Name out-clipboard -Value "$($env:WINDIR)\System32\clip.exe" };
+        if (!$OutputSummary) {
+            $smsg = "***UNPARSED `$chocoMsg!***`n(copied to cb)" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn|Debug
+            $chocoMsg | out-clipboard ;
+        } ;
+        $smsg = "`n$($pkg):#*---v $($pkg) Output v---`n$($OutputSummary)`n#*---^ $($pkg) Output ^---`n" ;
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn
+
+        $smsg = "$($sBnrS.replace('-v','-^').replace('v-','^-'))" ;
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } ; #Error|Warn
+    } ; # loop-E
+
+}
+
+#*------^ install-ChocoPkg.ps1 ^------
+
+
+#*------v Install-ExePackage.ps1 v------
+function Install-ExePackage {
+	<#
+    .SYNOPSIS
+    Install-ExePackage.ps1 - Install EXE package via start-process
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 203.0.05-0913AM
+    FileName    : Install-ExePackage.ps1
+    License     : MIT License
+    Copyright   : (c) 2020 Todd Kadrie
+    Github      : https://github.com/tostka/verb-XXX
+    Tags        : Powershell,Application,Install
+	AddedCredit : skatterbrainzz
+    AddedWebsite: https://skatterbrainz.wordpress.com/2016/12/19/building-an-sccm-1606-site-server-with-boxstarter-windows-server-2016-sql-server-2016/
+    AddedTwitter: 
+    REVISIONS
+    * 3:13 PM 2/21/2023 added CBH, otb syntax. 
+    * 12/19/2016 skatterbrainzz posted version
+    .DESCRIPTION
+    Install-ExePackage.ps1 - Install EXE package via start-process
+    skatterbrainzz' function for box building, installation of .exe pkgs.
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    Returns either System.Boolean (default) or System.Object (-detail)
+    .EXAMPLE
+	PS>  $pltInstall = @{
+	PS>  	prod    = "Windows Deployment Tools" ; 
+	PS>  	appInst = "$adkSource\adksetup.exe" ; 
+	PS>  	argList = " /Features OptionId.DeploymentTools OptionId.WindowsPreinstallationEnvironment OptionId.ImagingAndConfigurationDesigner OptionId.UserStateMigrationTool /norestart /quiet /ceip off" ; 
+	PS>  } ; 
+	PS>  Install-ExePackage @pltInstall ;
+	Typical Install.
+    .LINK
+    https://github.com/tostka/verb-desktop
+    https://skatterbrainz.wordpress.com/2016/12/19/building-an-sccm-1606-site-server-with-boxstarter-windows-server-2016-sql-server-2016/
+    #>
+    [CmdletBinding()]
+	PARAM(
+		[Parameter(Position=0,HelpMessage="Application Name substring[-ProductName 'Windows Deployment Tools']")]
+		[string]$ProductName, 
+		[Parameter(Position=1,HelpMessage="Application EXE installable[-Install 'path-to\adksetup.exe']")]
+		$Install, 
+		[Parameter(Position=2,HelpMessage="Application Name substring[-Options ' /Features OptionId.DeploymentTools OptionId.WindowsPreinstallationEnvironment OptionId.ImagingAndConfigurationDesigner OptionId.UserStateMigrationTool /norestart /quiet /ceip off']")]
+		$Options
+	) ; 
+	if (Test-AppInstalled "$ProductName") {
+		write-output "info: $ProductName is already installed." ; 
+	}  else {
+		write-output "info: installing $ProductName..." ; 
+		write-output "info: type...... exe" ; 
+		write-output "info: source.... $Install" ; 
+		write-output "info: options... $Options" ; 
+		try {
+			$res = (Start-Process -FilePath "$Install" -ArgumentList "$Options" -Wait -PassThru).ExitCode ; 
+			if ($res -ne 0) {
+				write-output "error: exit code is $res" ; 
+				$Boxstarter.RebootOk = $False ; 
+				break ; 
+			} else {
+				write-output "info: exit code is $res" ; 
+			} ; 
+		}  catch {
+			$ErrorMessage = $_.Exception.Message
+			$FailedItem = $_.Exception.ItemName
+			$Boxstarter.RebootOk = $False ; 
+			write-output "error: installation failed... $ErrorMessage" ; 
+			break ; 
+		} ; 
+		write-output "info: installation successful" ; 
+		if (Test-PendingReboot) { Invoke-Reboot } ; 
+	} ; 
+}
+
+#*------^ Install-ExePackage.ps1 ^------
+
+
+#*------v Install-MsiPackage.ps1 v------
+function Install-MsiPackage {
+	<#
+    .SYNOPSIS
+    Install-MsiPackage.ps1 - Install MSI package via msiexec.exe
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 203.0.05-0913AM
+    FileName    : Install-MsiPackage.ps1
+    License     : MIT License
+    Copyright   : (c) 2020 Todd Kadrie
+    Github      : https://github.com/tostka/verb-XXX
+    Tags        : Powershell,Application,Install
+	AddedCredit : skatterbrainzz
+    AddedWebsite: https://skatterbrainz.wordpress.com/2016/12/19/building-an-sccm-1606-site-server-with-boxstarter-windows-server-2016-sql-server-2016/
+    AddedTwitter: 
+    REVISIONS
+    * 3:13 PM 2/21/2023 added CBH, otb syntax. 
+    * 12/19/2016 skatterbrainzz posted version
+    .DESCRIPTION
+    Install-MsiPackage.ps1 - Install MSI package via msiexec.exe
+    skatterbrainzz' function for box building, installation of msi pkgs.
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    Returns either System.Boolean (default) or System.Object (-detail)
+    .EXAMPLE
+    PS> Install-MsiPackage "Microsoft Deployment Toolkit (6.3.8443.1000)" "$mdtSource\MicrosoftDeploymentToolkit_x64.msi" "";
+    Typical install.
+    .LINK
+    https://github.com/tostka/verb-desktop
+    https://skatterbrainz.wordpress.com/2016/12/19/building-an-sccm-1606-site-server-with-boxstarter-windows-server-2016-sql-server-2016/
+    #>
+    [CmdletBinding()]
+	PARAM(
+		[Parameter(Position=0,HelpMessage="Application Name substring[-ProductName 'Microsoft Deployment Toolkit (6.3.8443.1000)']")]
+		[string]$ProductName, 
+		[Parameter(Position=1,HelpMessage="Application MSI installable[-Install 'path-to\MicrosoftDeploymentToolkit_x64.msi']")]
+		$Install, 
+		[Parameter(Position=2,HelpMessage="Application Name substring[-Options '']")]
+		$Options
+	) ; 
+	if (Test-AppInstalled "$ProductName") {
+		write-output "info: $ProductName is already installed" ; 
+	} else {
+		if (Test-Path "$Install") {
+			write-output "info: installing $ProductName..." ; 
+			write-output "info: type...... msi" ; 
+			write-output "info: package... $Install" ; 
+			write-output "info: options... $Options" ; 
+			$Arg2 = "/i ""$Install"" /qb! /norestart REBOOT=ReallySuppress" ; 
+			if ($Options -ne "") {
+				$Arg2 += " ""$Options""" ; 
+			} ; 
+			TRY {
+				$res = (Start-Process -FilePath "msiexec.exe" -ArgumentList $Arg2 -Wait -Passthru).ExitCode ; 
+				if ($res -ne 0) {
+					write-output "error: exit code is $res" ; 
+					$errmsg = [ComponentModel.Win32Exception] $res ; 
+					write-output "error: $errmsg" ; 
+					$Boxstarter.RebootOk = $False ; 
+					break ; 
+				}  else {
+				  write-output "info: exit code is $res" ; 
+				} ; 
+			}  CATCH {
+				$Boxstarter.RebootOk = $False ; 
+				write-output "error: installation failed!" ; 
+				break ; 
+			} ; 
+			write-output "info: installation successful" ; 
+			if (Test-PendingReboot) { Invoke-Reboot }
+		}  else {
+		  write-output "error: unable to locate $Install" ; 
+		  break ; 
+		} ; 
+	} ; 
+}
+
+#*------^ Install-MsiPackage.ps1 ^------
+
+
+#*------v Install-ServerRoles.ps1 v------
+function Install-ServerRoles {
+	<#
+    .SYNOPSIS
+    Install-ServerRoles.ps1 - Install WindowsFeatures using saved xml file Add Roles and Features Wizard in Server Manager. 
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 203.0.05-0913AM
+    FileName    : Install-ServerRoles.ps1
+    License     : MIT License
+    Copyright   : (c) 2020 Todd Kadrie
+    Github      : https://github.com/tostka/verb-XXX
+    Tags        : Powershell,Application,Install
+	AddedCredit : skatterbrainzz
+    AddedWebsite: https://skatterbrainz.wordpress.com/2016/12/19/building-an-sccm-1606-site-server-with-boxstarter-windows-server-2016-sql-server-2016/
+    AddedTwitter: 
+    REVISIONS
+    * 3:13 PM 2/21/2023 added CBH, otb syntax. 
+    * 12/19/2016 skatterbrainzz posted version
+    .DESCRIPTION
+    Install-ServerRoles.ps1 - Install WindowsFeatures using saved xml file Add Roles and Features Wizard in Server Manager.
+    skatterbrainzz' function for box building, installation of WindowsFeatures.
+    
+    The XMLFile configuration file can be created by clicking Export configuration settings on the Confirm installation selections page of the Add Roles and Features Wizard in Server Manager.
+    .PARAMETER XmlFile
+	Path to xml file created by clicking Export configuration settings on the Confirm installation selections page of the Add Roles and Features Wizard in Server Manager[-XmlFile 'pathto\ServerRoles.xml']"
+	.PARAMETER RoleNames
+	Application Name substring[-RoleNames 'WDS']
+	.PARAMETER sharedSource
+	Path to common install share[-sharedSource '\\server\share\pathto\']
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    Returns either System.Boolean (default) or System.Object (-detail)
+    .EXAMPLE
+    PS> Install-ServerRoles -XmlFile "$scriptsPath\ServerRoles.xml" -SharedSource $SharedSource ;
+    Install saved .xml file of Server Manager Add Roles & Features Wiz Export
+    .EXAMPLE
+    Install-ServerRoles -RoleName "WDS"
+    Install WindowsFeature by name
+    .LINK
+    https://github.com/tostka/verb-desktop
+    https://skatterbrainz.wordpress.com/2016/12/19/building-an-sccm-1606-site-server-with-boxstarter-windows-server-2016-sql-server-2016/
+    #>
+	PARAM(
+		[parameter(Mandatory=$False,Position=0,HelpMessage="Path to xml file created by clicking Export configuration settings on the Confirm installation selections page of the Add Roles and Features Wizard in Server Manager[-XmlFile 'pathto\ServerRoles.xml']")] 
+		[string]$XmlFile = "", 
+		[parameter(Mandatory=$False,Position=1,HelpMessage="Application Name substring[-RoleNames 'WDS']")] 
+		[string[]]$RoleNames = "",
+		[parameter(Mandatory=$False,HelpMessage="Path to common install share[-sharedSource '\\server\share\pathto\']")] 
+		[string]$sharedSource = "\\FS1\Apps\Sources\2016\SXS" 
+	) ; 
+	if ($xmlFile -ne "") {
+		if (Test-Path $xmlFile) {
+			write-output "info: installing server roles and features from config file..." ; 
+			Install-WindowsFeature -ConfigurationFilePath $xmlFile -Source $sharedSource ; 
+			write-output "info: roles and features installation completed." ; 
+		}  else {
+			write-output "error: unable to locate configuration file: $xmlFile" ; 
+			$Boxstarter.RebootOk = $False ; 
+			break ; 
+		} ; 
+	}  else {
+		write-output "info: installing server roles and features..." ; 
+		try {
+			Install-WindowsFeature -Name $RoleNames.Split(",") -IncludeManagementTools -Source $sharedSource -ErrorAction Stop ; 
+		}  catch {
+			$ErrorMessage = $_.Exception.Message
+			$FailedItem = $_.Exception.ItemName
+			$Boxstarter.RebootOk = $False ; 
+			write-output "error: role names...... $RoleNames" ; 
+			write-output "error: config file..... $XmlFile" ; 
+			write-output "error: installation failed... $ErrorMessage" ; 
+			break ; 
+		} ; 
+		Start-Sleep -s 10 ; 
+	} ; 
+}
+
+#*------^ Install-ServerRoles.ps1 ^------
 
 
 #*------v invoke-Explore.ps1 v------
@@ -1010,12 +1521,13 @@ function restart-Shell {
     Website     : http://www.toddomation.com
     Twitter     : @tostka / http://twitter.com/tostka
     CreatedDate : 2020-05-01
-    FileName    : 
+    FileName    : restart-Shell
     License     : MIT License
     Copyright   : (c) 2020 Todd Kadrie
     Github      : https://github.com/tostka
     Tags        : Powershell,Registry,Maintenance
     REVISIONS
+    * 2:12 PM 2/21/2023 added legacy post-filter support (syntax); this is also in verb-io ; 
     * 12:55 PM 5/1/2020 init vers
     .DESCRIPTION
     restart-Shell - Close and restart windows'shell'/desktop explorer process
@@ -1028,9 +1540,9 @@ function restart-Shell {
     System.Object[]
     .EXAMPLE
     restart-Shell -Path 'HKCU:\Control Panel\Desktop' -Name 'AutoColorization' -Value 0
-    Update the desktop AutoColorization property to the value 0 
+    Update the desktop AutoColorization property to the value 0
     .EXAMPLE
-    restart-Shell 
+    restart-Shell
     Close and restart explorer shell
     .EXAMPLE
     restart-Shell -verbose -whatif
@@ -1047,21 +1559,21 @@ function restart-Shell {
     ) ;
     ${CmdletName} = $PSCmdlet.MyInvocation.MyCommand.Name ;
     $PSParameters = New-Object -TypeName PSObject -Property $PSBoundParameters ;
-    $Verbose = ($VerbosePreference -eq 'Continue') ; 
+    $Verbose = ($VerbosePreference -eq 'Continue') ;
     $error.clear() ;
     TRY {
-        Get-Process explorer | ? MainWindowTitle -eq '' | stop-process -Force -whatif:$($whatif); 
-        sleep -sec 2 ; 
-        if(!(Get-Process explorer | ? MainWindowTitle -eq '' )){
+        Get-Process explorer | ?{$_.MainWindowTitle -eq ''} | stop-process -Force -whatif:$($whatif);
+        sleep -sec 2 ;
+        if (-not(Get-Process explorer | ?{$_.MainWindowTitle -eq ''} )) {
             # Only spawn a new explorer if a new 'shell' one didn't auto-load w/in 2secs (generally does on win10 ; avoids opening a spurious new explorer window)
-            start explorer.exe ; 
-        } ; 
-        $true | write-output ; 
+            start explorer.exe ;
+        } ;
+        $true | write-output ;
     } CATCH {
-        $ErrTrpd = $_ ; 
+        $ErrTrpd = $_ ;
         Write-Warning "$(get-date -format 'HH:mm:ss'): Failed processing $($ErrTrpd.Exception.ItemName). `nError Message: $($ErrTrpd.Exception.Message)`nError Details: $($ErrTrpd)" ;
-        $false | write-output ; 
-    } ; 
+        $false | write-output ;
+    } ;
 }
 
 #*------^ restart-Shell.ps1 ^------
@@ -1522,9 +2034,208 @@ write-verbose -verbose:$true "killing $($TargAppName)"
 #*------^ stop-browsers.ps1 ^------
 
 
+#*------v test-InstalledApplication.ps1 v------
+Function test-InstalledApplication {
+    <#
+    .SYNOPSIS
+    test-InstalledApplication.ps1 - Check registry for Installed status of specified application (checks x86 & x64 Uninstall hives, for substring matches on Name)
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 203.0.05-0913AM
+    FileName    : test-InstalledApplication
+    License     : MIT License
+    Copyright   : (c) 2020 Todd Kadrie
+    Github      : https://github.com/tostka/verb-XXX
+    Tags        : Powershell,Application,Install
+    REVISIONS
+    * 2:42 PM 2/21/2023 moved back to verb-desktop, vio is way too cluttered, and these are about system, not IO (with test-installedwindowsfeature)
+    * 10:37 AM 11/11/2022 ren get-InstalledApplication -> test-InstalledApplication (better match for function, default is test -detailed triggers dump back); aliased orig name; also pulling in overlapping verb-desktop:check-ProgramInstalled(), aliased -Name with ported programNam ; CBH added expl output demo
+    * 9:13 AM 4/15/2021 init vers
+    .DESCRIPTION
+    test-InstalledApplication.ps1 - Check registry for Installed status of specified application (checks x86 & x64 Uninstall hives, for substring matches on Name)
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    Returns either System.Boolean (default) or System.Object (-detail)
+    .EXAMPLE
+    PS> if(test-InstalledApplication -name "powershell"){"yes"} else { "no"} ; 
+    yes
+    Default boolean test
+    .EXAMPLE    
+    PS> get-InstalledApplication -Name 'google drive' -detail
+    DisplayName  DisplayVersion InstallLocation                                                      Publisher
+    -----------  -------------- ---------------                                                      ---------
+    Google Drive 63.0.5.0       C:\Program Files\Google\Drive File Stream\63.0.5.0\GoogleDriveFS.exe Google LLC
+    Example returning detail (DisplayName and InstallLocation)
+    .LINK
+    https://github.com/tostka/verb-io
+    #>
+    [CmdletBinding()]
+    [Alias('check-ProgramInstalled','get-InstalledApplication')]
+    PARAM(
+        [Parameter(Position=0,HelpMessage="Application Name substring[-Name Powershell]")]
+        [Alias('programNam')]
+        $Name,
+        [Parameter(HelpMessage="Debugging Flag [-Return detailed object on match]")]
+        [switch] $Detail
+    ) ;
+    $x86Hive = Get-ChildItem 'HKLM:Software\Microsoft\Windows\CurrentVersion\Uninstall' |
+         % { Get-ItemProperty $_.PsPath } | ?{$_.displayname -like "*$($Name)*"} ;
+    write-verbose "`$x86Hive:$([boolean]$x86Hive)" ; 
+    if(Test-Path 'HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall'){
+        #$x64Hive = ((Get-ChildItem "HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall") |
+        #    Where-Object { $_.'Name' -like "*$($Name)*" } ).Length -gt 0;
+        $x64Hive = Get-ChildItem 'HKLM:Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall' |
+            % { Get-ItemProperty $_.PsPath } | ?{$_.displayname -like "*$($Name)*"} ;
+         write-verbose "`$x64Hive:$([boolean]$x64Hive)" ; 
+    }
+    if(!$Detail){
+        # boolean return:
+        ($x86Hive -or $x64Hive) | write-output ; 
+    } else { 
+        $props = 'DisplayName','DisplayVersion','InstallLocation','Publisher' ;
+        $x86Hive | Select $props | write-output ; 
+        $x64Hive | Select $props | write-output ; 
+    } ; 
+}
+
+#*------^ test-InstalledApplication.ps1 ^------
+
+
+#*------v Test-InstalledWindowsFeature.ps1 v------
+function Test-InstalledWindowsFeature {
+	<#
+    .SYNOPSIS
+    Test-InstalledWindowsFeature - Check for Installed status of specified WindowsFeature
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 203.0.05-0913AM
+    FileName    : Test-InstalledWindowsFeature.ps1
+    License     : MIT License
+    Copyright   : (c) 2020 Todd Kadrie
+    Github      : https://github.com/tostka/verb-XXX
+    Tags        : Powershell,Application,Install
+    REVISIONS
+    * 10:37 AM 11/11/2022 init vers
+    .DESCRIPTION
+    Test-InstalledWindowsFeature - Check for Installed status of specified WindowsFeature
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    Returns either System.Boolean
+    .EXAMPLE    
+    PS> Test-InstalledWindowsFeature -FeatureName 'RSAT-AD-Tools'
+    Test for feature installation
+    .LINK
+    https://github.com/tostka/verb-io
+    #>
+	PARAM(
+		[Parameter(Mandatory=$True,HelpMessage="WindowsFeature name to be Tested for installation[-FeatureName RSAT-AD-Tools")]
+		$FeatureName
+	) ; 
+	[boolean]$(Get-WindowsFeature $FeatureName).Installed | write-output ; 
+}
+
+#*------^ Test-InstalledWindowsFeature.ps1 ^------
+
+
+#*------v test-IsWindowsActivated.ps1 v------
+function test-IsWindowsActivated {
+    <#
+    .SYNOPSIS
+    test-IsWindowsActivated - Tests if local machine is properly License Activated.
+    .NOTES
+    Version     : 1.0.0.0
+    Author: Todd Kadrie
+    Website:	http://toddomation.com
+    Twitter:	http://twitter.com/tostka
+    CreatedDate : 2023-02-22
+    FileName    : test-IsWindowsActivated
+    License     : MIT License
+    Copyright   : (c) 2023 Todd Kadrie
+    AddedCredit : FoxDeploy
+    AddedWebsite: https://stackoverflow.com/questions/29368414/need-script-to-find-server-activation-status
+    AddedTwitter: 
+    Github      : https://github.com/tostka/verb-desktop
+    Tags        : Powershell,OS,License,Activiation
+    REVISIONS
+    * 12:06 PM 2/22/2023 init, from canned notes, and FoxDeploy's switchblock code for LicenseStatus values, added ISLicensed to the output. 
+    .DESCRIPTION
+    test-IsWindowsActivated - Tests if local machine is properly License Activated.
+    .PARAMETER  User
+    User security principal (defaults to current user)[-User `$SecPrinobj]
+    .INPUTS
+    Accepts piped input.
+    .OUTPUTS
+    System.Management.Automation.PSCustomObject
+    Returns either System.Boolean (default) or System.Object (-detail)
+    .EXAMPLE
+    PS>  if((test-IsWindowsActivated).IsLicensed){
+    PS>  	write-host "$($env:computername) is Activated/Licensed" ; 
+    PS>  } else { 
+    PS>  	write-warning "$($env:computername) is NOT Activated/Licensed!" ; 
+    PS>  } ; 
+    Test standard windows activation
+    .LINK
+    https://stackoverflow.com/questions/29368414/need-script-to-find-server-activation-status
+    https://github.com/tostka/verb-desktop
+    #>
+    [CmdletBinding()]
+    #[Alias('')]
+    PARAM(
+		[Parameter(Mandatory = $False,Position = 0,ValueFromPipeline = $True, HelpMessage = 'ComputerName to test[-ComputerName ServerName')]
+		[string[]] $ComputerName=$env:COMPUTERNAME,
+		[Parameter(Mandatory = $False,Position = 0,ValueFromPipeline = $True, HelpMessage = 'ComputerName to test[-ComputerName ServerName')]
+		[string] $ProductFilter="Name like 'Windows%'" 
+    ) ;
+    BEGIN{
+		if ($PSCmdlet.MyInvocation.ExpectingInput) {
+			write-verbose "Data received from pipeline input: '$($InputObject)'" ; 
+		} else {
+			#write-verbose "Data received from parameter input: '$($InputObject)'" ; 
+			write-verbose "(non-pipeline - param - input)" ; 
+		} ; 
+    }
+    PROCESS{
+		if(gcm get-ciminstance){
+			$pltGCM=[ordered]@{
+				ComputerName = $ComputerName ;ClassName = 'SoftwareLicensingProduct' ;Filter = $ProductFilter ; 
+			} ; 
+			$status = Get-CimInstance @pltGCM |
+				?{ $_.PartialProductKey } | select Pscomputername,Name,
+					@{Name='LicenseStatus';Exp={
+						switch ($_.LicenseStatus) {
+							0 {'Unlicensed'}
+							1 {'licensed'}
+							2 {'OOBGrace'}
+							3 {'OOTGrace'}
+							4 {'NonGenuineGrace'}
+							5 {'Notification'}
+							6 {'ExtendedGrace'}
+							Default {'Undetected'}
+						} 
+				}},@{name="IsLicensed";expression={ if($_.LicenseStatus -eq 1){$true}else{$false}}} ; 
+			$status | write-output ; 	
+		} else { 
+			$smsg = "MISSING DEPENDANT get-ciminstance CMD!" ; 
+			if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} 
+			else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+		} ; 
+	} ;
+}
+
+#*------^ test-IsWindowsActivated.ps1 ^------
+
+
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated -Alias *
 
 
 
@@ -1532,8 +2243,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUkTXhv4tkrVzMAeX4GCk4tSe1
-# K+agggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXy+B9x+UxYsbajM854s5a7mt
+# lBmgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -1548,9 +2259,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQfL1bo
-# 8b9C38pIF9E78wDjZaxFOzANBgkqhkiG9w0BAQEFAASBgDcIuzOd4fRlQgk0HSxq
-# wnz6bZLNJ7w8ezeMLQxjfpHzoA+EYp0FUni5m0YNnzVsy6BM1FKxfUkZnPJgKLa+
-# OlbX4e4nwGG3QNJZ1b5tfAxaS7hh2Fkoxr1puGOCRET1kmmCGxVTN9RhrvZcXKm8
-# vkNourcQhdE9j9yKqoP/XQoN
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRMRvTk
+# OEToxkTXmPGk9MFrtaIBmjANBgkqhkiG9w0BAQEFAASBgDl91YkRtWNMcgqkCShG
+# zw1sp5HLzujnzMlXCDS4BlqR56xVs/58zgXUkaOGfmvejc7YbjLr0eLnQfJyzUnf
+# 0JQElOGVlONOaR8PJVIKHj4LR5npluLbz4mMLEYdwtjgzhNlyYcuX78Z8tMTiSoj
+# g9yR/VzYeR2b3gaZWDdi3tul
 # SIG # End signature block
