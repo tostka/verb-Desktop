@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 3.0.1.0
+  Version     : 3.0.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -289,6 +289,69 @@ bool bRepaint);
 #*------^ Define-MoveWindow.ps1 ^------
 
 
+#*------v Go.ps1 v------
+function Go {
+    <#
+    .SYNOPSIS
+    Go - CD to common system locations
+    .NOTES
+    # vers: 8:49 AM 3/27/2014 - tuned destinations
+    .EXAMPLE
+    PS C:\> Go <location keyword>
+    .OUTPUTS
+    [none]
+    #>
+    [CmdletBinding()]
+    Param([string] $Location) ; 
+    BEGIN { 
+        $verbose = ($VerbosePreference -eq "Continue") 
+        if ( $GLOBAL:go_locations -eq $null ) {
+            $GLOBAL:go_locations = @{ };
+            #$GLOBAL:go_locations =[Ordered]@{}; # psv3+
+        } 
+    } ;
+    PROCESS {
+        if ($go_locations.ContainsKey($Location)) {
+            #write-output $go_locations[$Location]
+            Set-Location $go_locations[$Location];
+            # 10:37 AM 3/27/2014this lists everything in the dir... NAH!
+            #Get-ChildItem;
+        } else {
+            write-verbose -verbose:$true "---";
+            write-verbose -verbose:$true "The following locations are defined:";
+            write-verbose -verbose:$true $go_locations;
+        } 
+    } ;
+    END {} ;
+}
+
+#*------^ Go.ps1 ^------
+
+
+#*------v gotoDbox.ps1 v------
+function gotoDbox { set-location c:\usr\home\dropbox }
+
+#*------^ gotoDbox.ps1 ^------
+
+
+#*------v gotoDboxDb.ps1 v------
+function gotoDboxDb { set-location c:\usr\home\dropbox\db }
+
+#*------^ gotoDboxDb.ps1 ^------
+
+
+#*------v gotoDownloads.ps1 v------
+function gotoDownloads { set-location C:\usr\home\ftp }
+
+#*------^ gotoDownloads.ps1 ^------
+
+
+#*------v gotoIncid.ps1 v------
+function gotoIncid { set-location c:\usr\work\incid }
+
+#*------^ gotoIncid.ps1 ^------
+
+
 #*------v install-ChocoPkg.ps1 v------
 Function Install-ChocoPkg {
     <#
@@ -559,7 +622,7 @@ function Install-ExePackage {
     Author      : Todd Kadrie
     Website     : http://www.toddomation.com
     Twitter     : @tostka / http://twitter.com/tostka
-    CreatedDate : 20210415-0913AM
+    CreatedDate : 203.0.05-0913AM
     FileName    : Install-ExePackage.ps1
     License     : MIT License
     Copyright   : (c) 2020 Todd Kadrie
@@ -640,7 +703,7 @@ function Install-MsiPackage {
     Author      : Todd Kadrie
     Website     : http://www.toddomation.com
     Twitter     : @tostka / http://twitter.com/tostka
-    CreatedDate : 20210415-0913AM
+    CreatedDate : 203.0.05-0913AM
     FileName    : Install-MsiPackage.ps1
     License     : MIT License
     Copyright   : (c) 2020 Todd Kadrie
@@ -725,7 +788,7 @@ function Install-ServerRoles {
     Author      : Todd Kadrie
     Website     : http://www.toddomation.com
     Twitter     : @tostka / http://twitter.com/tostka
-    CreatedDate : 20210415-0913AM
+    CreatedDate : 203.0.05-0913AM
     FileName    : Install-ServerRoles.ps1
     License     : MIT License
     Copyright   : (c) 2020 Todd Kadrie
@@ -1365,6 +1428,18 @@ Function New-WallpaperStatus {
 #*------^ new-WallpaperStatus.ps1 ^------
 
 
+#*------v openInput.ps1 v------
+function openInput { $sExc = $TextEd + " " + (join-path $binpath input.txt); Invoke-Expression $sExc; }
+
+#*------^ openInput.ps1 ^------
+
+
+#*------v openTmpps1.ps1 v------
+function openTmpps1 { $sExc = $TextEd + " C:\tmp\tmp.ps1"; Invoke-Expression $sExc; }
+
+#*------^ openTmpps1.ps1 ^------
+
+
 #*------v Report-URL.ps1 v------
 function Report-URL {
     <#
@@ -1969,7 +2044,7 @@ Function test-InstalledApplication {
     Author      : Todd Kadrie
     Website     : http://www.toddomation.com
     Twitter     : @tostka / http://twitter.com/tostka
-    CreatedDate : 20210415-0913AM
+    CreatedDate : 203.0.05-0913AM
     FileName    : test-InstalledApplication
     License     : MIT License
     Copyright   : (c) 2020 Todd Kadrie
@@ -2040,7 +2115,7 @@ function Test-InstalledWindowsFeature {
     Author      : Todd Kadrie
     Website     : http://www.toddomation.com
     Twitter     : @tostka / http://twitter.com/tostka
-    CreatedDate : 20210415-0913AM
+    CreatedDate : 203.0.05-0913AM
     FileName    : Test-InstalledWindowsFeature.ps1
     License     : MIT License
     Copyright   : (c) 2020 Todd Kadrie
@@ -2158,102 +2233,9 @@ function test-IsWindowsActivated {
 #*------^ test-IsWindowsActivated.ps1 ^------
 
 
-#*------v Test-IsWindowsTerminal.ps1 v------
-function Test-IsWindowsTerminal {
-    <#
-    .SYNOPSIS
-    Test-IsWindowsTerminal - Tests if the current session is running inside Windows Terminal.
-    .NOTES
-    Version     : 1.0.0.0
-    Author: Mike F. Robbins
-    Website:	https://mikefrobbins.com/
-    Twitter:	@mikefrobbins / https://twitter.com/mikefrobbins
-    CreatedDate : 2023-02-22
-    FileName    : Test-IsWindowsTerminal.ps1
-    License     : (none asserted)
-    Copyright   : (none asserted)
-    AddedCredit : Todd Kadrie
-    AddedWebsite: http://toddomation.com
-    AddedTwitter: tostka / http://twitter.com/tostka
-    Github      : https://github.com/tostka/verb-desktop
-    Tags        : Powershell,WindowsTerminal,Session,Environment,Terminal,Host
-    REVISIONS
-    * 8:27 AM 6/27/2024 added CBH, flattened spaces & syntax
-    5/16/24 MF's posted article. 
-    .DESCRIPTION
-    Test-IsWindowsTerminal - Tests if the current session is running inside Windows Terminal.
-    .INPUTS
-    Does not accept piped input.
-    .OUTPUTS
-    System.Boolean
-    .EXAMPLE
-    PS> if(Test-IsWindowsTerminal){
-    PS>     write-host "$($env:computername) is Activated/Licensed" ; 
-    PS> } else { 
-    PS>     write-warning "$($env:computername) is NOT Activated/Licensed!" ; 
-    PS> } ; 
-    Test WinTerm session
-    .LINK
-    https://gist.github.com/mikefrobbins/2f3085a18f78330e37a5188444e79bc8
-    https://mikefrobbins.com/2024/05/16/detecting-windows-terminal-with-powershell/
-    https://github.com/tostka/verb-desktop
-    #>
-    [CmdletBinding()]
-    #[Alias('')]
-    PARAM ()
-    <# variant approaches
-#-=-=-=-=-=-=-=-=
-# https://github.com/marvhen
-# Checking the parent process doesn't work if WT is the Default Terminal Application, and you launch a console app from a graphical UI app.
-function IsWindowsTerminal ($childProcess) {
-    if (!$childProcess) {
-        return $false
-    } elseif ($childProcess.ProcessName -eq 'WindowsTerminal') {
-        return $true
-    } else {
-        return IsWindowsTerminal -childProcess $childProcess.Parent
-    }
-}
-return IsWindowsTerminal -childProcess (Get-Process -Id $PID)
-#-=-=-=-=-=-=-=-=
-#-=-=-=-=-=-=-=-=
-# https://github.com/oising
-function Test-WindowsTerminal { test-path env:WT_SESSION }
-# or
-if ($env:WT_SESSION) {
-    # yes, windows terminal
-} else {
-    # nope
-} ; 
-#-=-=-=-=-=-=-=-=
-#-=-=-=-=-=-=-=-=
-# [TitoAldarondo](https://github.com/TitoAldarondo)
-#So I too initially headed down the route of checking $Env:WT_SESSION, but quickly realized that this wouldn't work when SSHing to other hosts.
-#-=-=-=-=-=-=-=-=
-    #>
-    if ($PSVersionTable.PSVersion.Major -le 5 -or $IsWindows -eq $true) {
-        $currentPid = $PID
-        # Loop through parent processes to check if Windows Terminal is in the hierarchy
-        while ($currentPid) {
-            try {$process = Get-CimInstance Win32_Process -Filter "ProcessId = $currentPid" -ErrorAction Stop -Verbose:$false}
-            catch {return $false} ; 
-            Write-Verbose -Message "ProcessName: $($process.Name), Id: $($process.ProcessId), ParentId: $($process.ParentProcessId)"
-            if ($process.Name -eq 'WindowsTerminal.exe') {return $true} # if WinTerm
-            else {$currentPid = $process.ParentProcessId}  ; # Move to the parent process
-        }  ; # loop-E
-        return $false  ;  # Return false if Windows Terminal is not found in the hierarchy
-    } else {
-        Write-Verbose -Message 'Exiting due to non-Windows environment' ; 
-        return $false ; 
-    } ; 
-}
-
-#*------^ Test-IsWindowsTerminal.ps1 ^------
-
-
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Go,gotoDbox,gotoDboxDb,gotoDownloads,gotoIncid,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,openInput,openTmpps1,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated -Alias *
 
 
 
@@ -2261,8 +2243,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUseWkUsy35ZZb+xe96Is1HEsO
-# 3OugggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXy+B9x+UxYsbajM854s5a7mt
+# lBmgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -2277,9 +2259,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT7zbXA
-# O6li7MTk2yVHR6xtC0ELRzANBgkqhkiG9w0BAQEFAASBgLUZhl5mnBEL2NqxSQ46
-# TBpH5e5Lp1bnYmAGqBcQsbTq15rh7AWEMxKAhMo4BnVQ9R27x+JutJQdTmemzpRO
-# KK5RtkJoqV7WX9chb2VBkFZDM7TOlQ9M1We/r2n0BQQqaoQ0MMJqw4OKmmdKje3G
-# kHsRl9t5J1gWTpSmobcF/AoY
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRMRvTk
+# OEToxkTXmPGk9MFrtaIBmjANBgkqhkiG9w0BAQEFAASBgDl91YkRtWNMcgqkCShG
+# zw1sp5HLzujnzMlXCDS4BlqR56xVs/58zgXUkaOGfmvejc7YbjLr0eLnQfJyzUnf
+# 0JQElOGVlONOaR8PJVIKHj4LR5npluLbz4mMLEYdwtjgzhNlyYcuX78Z8tMTiSoj
+# g9yR/VzYeR2b3gaZWDdi3tul
 # SIG # End signature block

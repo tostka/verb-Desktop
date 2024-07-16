@@ -1,0 +1,545 @@
+﻿2024-07-12 14:33:01 INFO:  : #*======v VERB-dev.psm1:verb-Desktop v======
+2024-07-12 14:33:04 INFO:  : Run: reset-ModulePublishingDirectory -ModuleName verb-Desktop
+2024-07-12 14:33:04 ##  : 
+#*------v PROCESSING : verb-Desktop v------
+2024-07-12 14:33:04 INFO:  : Pre-purge (CHANGELOG|README)\.md$ Root dir matches from :
+2024-07-12 14:33:05 INFO:  : verb-Desktop resolved $ModPubPath:C:\sc\verb-Desktop\verb-Desktop\
+$ModResPath:C:\sc\verb-Desktop\Resource\
+2024-07-12 14:33:05 INFO:  : verb-Desktop resolved $ModPubPath:C:\sc\verb-Desktop\verb-Desktop\
+$ModResPath:C:\sc\verb-Desktop\Licenses\
+2024-07-12 14:33:05 INFO:  : verb-Desktop resolved $ModPubPath:C:\sc\verb-Desktop\verb-Desktop\
+$ModResPath:C:\sc\verb-Desktop\Docs\
+2024-07-12 14:33:05 INFO:  : ==C:\sc\verb-Desktop\CHANGELOG.md:
+2024-07-12 14:33:05 INFO:  : ==C:\sc\verb-Desktop\README.md:
+2024-07-12 14:33:06 INFO:  : ==C:\sc\verb-Desktop\Docs\Quick-Start-Installation-and-Example.md:
+2024-07-12 14:33:07 ##  : 
+#*------^ PROCESSING : verb-Desktop ^------
+2024-07-12 14:33:07 INFO:  : Run: populate-ModulePublishingDirectory -ModuleName verb-Desktop
+2024-07-12 14:33:07 ##  : 
+#*------v PROCESSING : verb-Desktop v------
+2024-07-12 14:33:07 INFO:  : Locating (CHANGELOG|README)\.md$ Root dir matches from :
+2024-07-12 14:33:08 INFO:  : verb-Desktop resolved $ModPubPath:C:\sc\verb-Desktop\verb-Desktop\
+$ModResPath:C:\sc\verb-Desktop\Resource\
+2024-07-12 14:33:08 INFO:  : verb-Desktop resolved $ModPubPath:C:\sc\verb-Desktop\verb-Desktop\
+$ModResPath:C:\sc\verb-Desktop\Licenses\
+2024-07-12 14:33:09 INFO:  : verb-Desktop resolved $ModPubPath:C:\sc\verb-Desktop\verb-Desktop\
+$ModResPath:C:\sc\verb-Desktop\Docs\
+2024-07-12 14:33:09 INFO:  : copy-item w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+path                           {C:\sc\verb-Desktop\CHANGELOG.md, C:\sc\verb-Desktop\README.md, C:\sc\verb-Desktop\Docs\Quick-Start-Installation-and-Example.md}                                                                        
+destination                    C:\sc\verb-Desktop\verb-Desktop\                                                                                                                                                                        
+force                          True                                                                                                                                                                                                    
+erroraction                    STOP                                                                                                                                                                                                    
+verbose                        False                                                                                                                                                                                                   
+whatif                         False
+--$pltCI.path:
+C:\sc\verb-Desktop\CHANGELOG.md
+C:\sc\verb-Desktop\README.md
+C:\sc\verb-Desktop\Docs\Quick-Start-Installation-and-Example.md
+2024-07-12 14:33:10 ##  : 
+#*------^ PROCESSING : verb-Desktop ^------
+2024-07-12 14:33:10 INFO:  : Validate updated verb-Desktop\verb-Desktop dir contents against Manifest:
+Run: test-modulemanifest -Path C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1
+2024-07-12 14:33:11 INFO:  : NON-Republish pass detected:
+MERGE parm specified as well:`n-Merge Public|Internal|Classes include subdirs module content into updated .psm1
+-Sign updated files.
+-Uninstall/Remove existing profile module
+-Copy new module to profile
+-Confirm: Get-Module -ListAvailable
+-Check/Update existing Psd1 Version
+-Publish-Module
+-Remove existing installed profile module
+-Test Install-Module
+-Test Import-Module
+2024-07-12 14:33:11 INFO:  : -Merge specified...
+2024-07-12 14:33:11 INFO:  : ConvertTo-ModuleMergedTDO w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+ModuleName                     verb-Desktop                                                                                                                                                                                            
+ModuleSourcePath               {c:\sc\verb-Desktop\Public, c:\sc\verb-Desktop\Internal}                                                                                                                                                
+ModuleDestinationPath          c:\sc\verb-Desktop\verb-Desktop                                                                                                                                                                         
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+LogSpec                        {logging, logfile, transcript}                                                                                                                                                                          
+NoAliasExport                                                                                                                                                                                                                          
+ErrorAction                    Stop                                                                                                                                                                                                    
+showdebug                      False                                                                                                                                                                                                   
+whatif                         False
+2024-07-12 14:33:12 INFO:  : ConvertTo-ModuleMergedTDO w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+ModuleName                     verb-Desktop                                                                                                                                                                                            
+ModuleSourcePath               {c:\sc\verb-Desktop\Public, c:\sc\verb-Desktop\Internal}                                                                                                                                                
+ModuleDestinationPath          c:\sc\verb-Desktop\verb-Desktop                                                                                                                                                                         
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+LogSpec                        {logging, logfile, transcript}                                                                                                                                                                          
+NoAliasExport                                                                                                                                                                                                                          
+ErrorAction                    Stop                                                                                                                                                                                                    
+showdebug                      False                                                                                                                                                                                                   
+whatif                         False
+2024-07-12 14:33:13 INFO:  : (NON-dyn psm1 detected - purging existing non-CBH content...)
+2024-07-12 14:33:15 INFO:  : Initialize-PSModuleDirectories w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+ModuleSourcePath               {c:\sc\verb-Desktop\Public, c:\sc\verb-Desktop\Internal}                                                                                                                                                
+ModuleDestinationPath          c:\sc\verb-Desktop\verb-Desktop                                                                                                                                                                         
+ErrorAction                    Stop                                                                                                                                                                                                    
+whatif                         False
+2024-07-12 14:33:15 INFO:  : 
+#*------v (1/2):C:\sc\verb-Desktop\Public v------
+2024-07-12 14:33:16 INFO:  : Processing 28 $ComponentScripts files through Remove-AuthenticodeSignature...
+2024-07-12 14:33:17 INFO:  : Processing (1/28):C:\sc\verb-Desktop\Public\.....ps1...
+2024-07-12 14:33:17 INFO:  : Processing (2/28):C:\sc\verb-Desktop\Public\....ps1...
+2024-07-12 14:33:18 INFO:  : Processing (3/28):C:\sc\verb-Desktop\Public\...ps1...
+2024-07-12 14:33:18 INFO:  : Processing (4/28):C:\sc\verb-Desktop\Public\~.ps1...
+2024-07-12 14:33:19 INFO:  : Processing (5/28):C:\sc\verb-Desktop\Public\Clean-Desktop.ps1...
+2024-07-12 14:33:22 INFO:  : Processing (6/28):C:\sc\verb-Desktop\Public\confirm-GoogleDriveRunning.ps1...
+2024-07-12 14:33:24 INFO:  : Processing (7/28):C:\sc\verb-Desktop\Public\c-winsallk.ps1...
+2024-07-12 14:33:25 INFO:  : Processing (8/28):C:\sc\verb-Desktop\Public\Define-MoveWindow.ps1...
+2024-07-12 14:33:25 INFO:  : Processing (9/28):C:\sc\verb-Desktop\Public\install-ChocoPkg.ps1...
+2024-07-12 14:33:33 INFO:  : Processing (10/28):C:\sc\verb-Desktop\Public\Install-ExePackage.ps1...
+2024-07-12 14:33:34 INFO:  : Processing (11/28):C:\sc\verb-Desktop\Public\Install-MsiPackage.ps1...
+2024-07-12 14:33:35 INFO:  : Processing (12/28):C:\sc\verb-Desktop\Public\Install-ServerRoles.ps1...
+2024-07-12 14:33:36 INFO:  : Processing (13/28):C:\sc\verb-Desktop\Public\invoke-Explore.ps1...
+2024-07-12 14:33:36 INFO:  : Processing (14/28):C:\sc\verb-Desktop\Public\invoke-SpeakWords.ps1...
+2024-07-12 14:33:37 INFO:  : Processing (15/28):C:\sc\verb-Desktop\Public\Move-Window.ps1...
+2024-07-12 14:33:38 INFO:  : Processing (16/28):C:\sc\verb-Desktop\Public\Move-WindowByWindowTitle.ps1...
+2024-07-12 14:33:39 INFO:  : Processing (17/28):C:\sc\verb-Desktop\Public\new-WallpaperStatus.ps1...
+2024-07-12 14:33:52 INFO:  : Processing (18/28):C:\sc\verb-Desktop\Public\Report-URL.ps1...
+2024-07-12 14:33:54 INFO:  : Processing (19/28):C:\sc\verb-Desktop\Public\restart-Shell.ps1...
+2024-07-12 14:33:56 INFO:  : Processing (20/28):C:\sc\verb-Desktop\Public\Set.ps1...
+2024-07-12 14:33:57 INFO:  : Processing (21/28):C:\sc\verb-Desktop\Public\Set-Wallpaper.ps1...
+2024-07-12 14:33:59 INFO:  : Processing (22/28):C:\sc\verb-Desktop\Public\show-TrayTip.ps1...
+2024-07-12 14:34:01 INFO:  : Processing (23/28):C:\sc\verb-Desktop\Public\start-ItunesPlaylist.ps1...
+2024-07-12 14:34:02 INFO:  : Processing (24/28):C:\sc\verb-Desktop\Public\stop-browsers.ps1...
+2024-07-12 14:34:04 INFO:  : Processing (25/28):C:\sc\verb-Desktop\Public\test-InstalledApplication.ps1...
+2024-07-12 14:34:06 INFO:  : Processing (26/28):C:\sc\verb-Desktop\Public\Test-InstalledWindowsFeature.ps1...
+2024-07-12 14:34:07 INFO:  : Processing (27/28):C:\sc\verb-Desktop\Public\test-IsWindowsActivated.ps1...
+2024-07-12 14:34:08 INFO:  : Processing (28/28):C:\sc\verb-Desktop\Public\Test-IsWindowsTerminal.ps1...
+2024-07-12 14:34:10 INFO:  : 
+#*------v (2/2):C:\sc\verb-Desktop\Internal v------
+2024-07-12 14:34:10 INFO:  : Processing 0 $ComponentScripts files through Remove-AuthenticodeSignature...
+2024-07-12 14:34:11 INFO:  : (Updating Psm1 Export-ModuleMember -Function to reflect Public modules)
+2024-07-12 14:34:11 INFO:  : Adding:FooterBlock...
+2024-07-12 14:34:13 INFO:  : confirm-ModuleBuildSync w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+ModPsdPath                     c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP                                                                                                                                                   
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+NoTest                         True                                                                                                                                                                                                    
+whatif                         False                                                                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:14 INFO:  : (test-path confirms $ModPsm1 & $ModTestPs1)
+2024-07-12 14:34:14 INFO:  : Import-PowerShellDataFile w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP                                                                                                                                                   
+ErrorAction                    Stop                                                                                                                                                                                                    
+verbose                        False
+2024-07-12 14:34:15 INFO:  : (resolved Module attributes:
+$ModuleName:	verb-Desktop
+$ModRoot:	c:\sc\verb-Desktop
+$ModPsd1:	c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP
+$ModPsm1:	c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP
+$ModTestPs1:	c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1
+$psd1Vers:	3.1.0
+$psd1guid:	0b3874ca-3dd9-44a0-af97-768d25aa11fb)
+2024-07-12 14:34:15 INFO:  : confirm-ModulePsd1Version w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP                                                                                                                                                   
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+whatif                         False                                                                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:15 WARNING:  : In:c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP
+Version present:(3.1.0)
+*does not* properly match:3.0.1
+FORCING MATCHING UPDATE!
+2024-07-12 14:34:17 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          False
+2024-07-12 14:34:18 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:18 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          True
+2024-07-12 14:34:18 INFO:  : #*======^ confirm-ModulePsd1Version: c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP ^======
+2024-07-12 14:34:19 INFO:  : (confirm-ModulePsd1Version:Success)
+2024-07-12 14:34:19 INFO:  : confirm-ModulePsm1Version w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP                                                                                                                                                   
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+whatif                         False                                                                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:19 WARNING:  : In:c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP
+Version present:(3.0.0)
+*does not* properly match:3.0.1
+FORCING MATCHING UPDATE!
+2024-07-12 14:34:37 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          False
+2024-07-12 14:34:37 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:37 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          True
+2024-07-12 14:34:37 INFO:  : #*======^ confirm-ModulePsm1Version: c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP ^======
+2024-07-12 14:34:37 INFO:  : (confirm-ModulePsm1Version:Success)
+2024-07-12 14:34:38 INFO:  : (-NoTest: skipping confirm-ModuleTestPs1Guid)
+2024-07-12 14:34:38 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Manifest                       c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP                                                                                                                                                   
+Module                         c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP                                                                                                                                                   
+Pester                         (SKIPPED)                                                                                                                                                                                               
+Guid                           (SKIPPED)                                                                                                                                                                                               
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          False
+2024-07-12 14:34:38 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:38 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Manifest                       c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP                                                                                                                                                   
+Module                         c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP                                                                                                                                                   
+Pester                         (SKIPPED)                                                                                                                                                                                               
+Guid                           (SKIPPED)                                                                                                                                                                                               
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          True
+2024-07-12 14:34:38 INFO:  : #*======^ confirm-ModuleBuildSync:  ^======
+2024-07-12 14:34:38 INFO:  : (confirm-ModuleBuildSync:Success)
+2024-07-12 14:34:38 INFO:  : Test-ModuleTMPFiles w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+ModuleNamePSM1Path             c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:39 INFO:  : #*======v Test-ModuleTMPFiles: c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP v======
+2024-07-12 14:34:39 INFO:  : 
+Psm1:c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP
+Psd1:c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1_TMP
+2024-07-12 14:34:39 INFO:  : Test-ModuleManifest:PASSED
+2024-07-12 14:34:39 INFO:  : Creating Testable c:\sc\verb-Desktop\verb-Desktop\9300d797-8af1-4a48-b9bb-0eb2bf521105.psm1
+ to validate c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP will Import-Module
+2024-07-12 14:34:39 INFO:  : Ipmo: PASSED
+2024-07-12 14:34:39 INFO:  : (remove-module -name c:\sc\verb-Desktop\verb-Desktop\9300d797-8af1-4a48-b9bb-0eb2bf521105.psm1 -force)
+2024-07-12 14:34:40 INFO:  : (remove-item -path c:\sc\verb-Desktop\verb-Desktop\9300d797-8af1-4a48-b9bb-0eb2bf521105.psm1 -ErrorAction SilentlyContinue ; 
+2024-07-12 14:34:40 INFO:  : (remove-item -path c:\sc\verb-Desktop\verb-Desktop\9300d797-8af1-4a48-b9bb-0eb2bf521105.psd1 -ErrorAction SilentlyContinue ; 
+2024-07-12 14:34:40 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Manifest                       9300d797-8af1-4a48-b9bb-0eb2bf521105                                                                                                                                                                    
+Module                         9300d797-8af1-4a48-b9bb-0eb2bf521105                                                                                                                                                                    
+Valid                          False
+2024-07-12 14:34:40 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:40 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Manifest                       9300d797-8af1-4a48-b9bb-0eb2bf521105                                                                                                                                                                    
+Module                         9300d797-8af1-4a48-b9bb-0eb2bf521105                                                                                                                                                                    
+Valid                          True
+2024-07-12 14:34:40 INFO:  : #*======^ Test-ModuleTMPFiles: c:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1_TMP ^======
+2024-07-12 14:34:40 INFO:  : #*======^ ConvertTo-ModuleMergedTDO: ^======
+2024-07-12 14:34:40 INFO:  : (Test-ModuleManifest:PASSED)
+2024-07-12 14:34:40 INFO:  : Checking sync of Psd1 module guid to the Pester Test Script: c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1
+2024-07-12 14:34:40 INFO:  : confirm-ModuleBuildSync w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+ModPsdPath                     C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1                                                                                                                                                       
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+whatif                         False                                                                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:41 INFO:  : (test-path confirms $ModPsm1 & $ModTestPs1)
+2024-07-12 14:34:41 INFO:  : Import-PowerShellDataFile w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1                                                                                                                                                       
+ErrorAction                    Stop                                                                                                                                                                                                    
+verbose                        False
+2024-07-12 14:34:41 INFO:  : (resolved Module attributes:
+$ModuleName:	verb-Desktop
+$ModRoot:	c:\sc\verb-Desktop
+$ModPsd1:	C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1
+$ModPsm1:	C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1
+$ModTestPs1:	c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1
+$psd1Vers:	3.0.1
+$psd1guid:	0b3874ca-3dd9-44a0-af97-768d25aa11fb)
+2024-07-12 14:34:41 INFO:  : confirm-ModulePsd1Version w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1                                                                                                                                                       
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+whatif                         False                                                                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:41 INFO:  : (Version already updated to match)
+2024-07-12 14:34:41 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          False
+2024-07-12 14:34:41 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:41 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          True
+2024-07-12 14:34:41 INFO:  : #*======^ confirm-ModulePsd1Version: C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1 ^======
+2024-07-12 14:34:41 INFO:  : (confirm-ModulePsd1Version:Success)
+2024-07-12 14:34:41 INFO:  : confirm-ModulePsm1Version w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1                                                                                                                                                       
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+whatif                         False                                                                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:42 INFO:  : (Version already updated to match)
+2024-07-12 14:34:42 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          False
+2024-07-12 14:34:42 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:42 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          True
+2024-07-12 14:34:42 INFO:  : #*======^ confirm-ModulePsm1Version: C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1 ^======
+2024-07-12 14:34:42 INFO:  : (confirm-ModulePsm1Version:Success)
+2024-07-12 14:34:42 INFO:  : Checking sync of Psd1 module guid to the Pester Test Script: c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1
+2024-07-12 14:34:42 INFO:  : confirm-ModuleTestPs1Guid w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1                                                                                                                                                         
+RequiredGuid                   0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                    
+whatif                         False                                                                                                                                                                                                   
+verbose                        False
+2024-07-12 14:34:42 INFO:  : (Guid  already updated to match)
+2024-07-12 14:34:42 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                    
+Valid                          False
+2024-07-12 14:34:42 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:43 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                    
+Valid                          True
+2024-07-12 14:34:43 INFO:  : (confirm-ModuleTestPs1Guid:Success)
+2024-07-12 14:34:44 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Manifest                       C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1                                                                                                                                                       
+Module                         C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1                                                                                                                                                       
+Pester                         c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1                                                                                                                                                         
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                    
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          False
+2024-07-12 14:34:44 INFO:  : (SET:$objReport.Valid = $true ;)
+2024-07-12 14:34:44 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Manifest                       C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1                                                                                                                                                       
+Module                         C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1                                                                                                                                                       
+Pester                         c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1                                                                                                                                                         
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                    
+Version                        3.0.1                                                                                                                                                                                                   
+Valid                          True
+2024-07-12 14:34:44 INFO:  : #*======^ confirm-ModuleBuildSync:  ^======
+2024-07-12 14:34:45 INFO:  : (confirm-ModuleBuildSync:Success)
+2024-07-12 14:34:48 INFO:  : Signing appropriate files...
+2024-07-12 14:34:49 INFO:  : Sign-file w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+file                           {C:\sc\verb-Desktop\rebuild-module.ps1, C:\sc\verb-Desktop\requirements.psd1, C:\sc\verb-Desktop\Tests\PPoShScriptingStyle.psd1, C:\sc\verb-Desktop\Tests\ToddomationScriptingStyle-medium.psd1...}     
+ErrorAction                    Stop                                                                                                                                                                                                    
+showdebug                      False                                                                                                                                                                                                   
+whatif                         False
+2024-07-12 14:34:50 INFO:  : Removing existing profile verb-Desktop content...
+2024-07-12 14:34:50 INFO:  : Uninstall-ModuleForce w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+ModuleName                     verb-Desktop                                                                                                                                                                                            
+Verbose                        False                                                                                                                                                                                                   
+whatif                         False
+2024-07-12 14:35:25 INFO:  : 
+#*------v Uninstall PSGet Mod:verb-Desktop:v3.0.0 v------
+2024-07-12 14:37:11 INFO:  : 
+#*------^ Uninstall PSGet Mod:verb-Desktop:v3.0.0 ^------
+2024-07-12 14:37:11 INFO:  : (Processing $env:PSModulePath paths, for surviving locked copies of verb-Desktop to *manually* purge...)
+2024-07-12 14:37:11 INFO:  : Checking: verb-Desktop below: C:\Users\kadritss\Documents\WindowsPowerShell\Modules...
+2024-07-12 14:37:12 INFO:  : Checking: verb-Desktop below: C:\ProgramData\Boxstarter...
+2024-07-12 14:37:12 INFO:  : Checking: verb-Desktop below: C:\Program Files\WindowsPowerShell\Modules...
+2024-07-12 14:37:13 INFO:  : Checking: verb-Desktop below: C:\Windows\system32\WindowsPowerShell\v1.0\Modules...
+2024-07-12 14:37:13 INFO:  : Checking: verb-Desktop below: C:\Program Files\Microsoft Message Analyzer\PowerShell\...
+2024-07-12 14:37:13 INFO:  : Copying module to profile (net of .git & .vscode dirs, and backed up content)...
+2024-07-12 14:37:13 INFO:  : $srcFiles:post-filter out:
+\\(Package|Tests|logs)\\|(\.ps[dm]1_(\d+-\d+[AP]M|TMP)|-LOG-BATCH-EXEC-\d+-\d+[AP]M-log\.txt|\\(fingerprint|Psd1filelist))$
+2024-07-12 14:37:14 INFO:  : Discovered mod-copy files ($srcFiles.fullname):w
+C:\sc\verb-Desktop\verb-Desktop\CHANGELOG.md
+C:\sc\verb-Desktop\verb-Desktop\LICENSE.txt
+C:\sc\verb-Desktop\verb-Desktop\Quick-Start-Installation-and-Example.md
+C:\sc\verb-Desktop\verb-Desktop\README.md
+C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1
+C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psm1
+2024-07-12 14:37:14 INFO:  : Non-Pre-existing:$to:C:\Users\kadritss\Documents\WindowsPowerShell\Modules\verb-Desktop\verb-Desktop
+Pre-creating before copy...
+2024-07-12 14:37:14 INFO:  : Mode   LastWriteTime        Length Name        
+----   -------------        ------ ----        
+d----- 7/12/2024 2:37:14 PM        verb-Desktop
+2024-07-12 14:37:15 INFO:  : -Merge:exclude $MergeBuildExcl \\(Public|Internal|External|Private)\\.*.ps1$ files from temp build copy
+2024-07-12 14:37:16 INFO:  : Recursively remove empty subdirs below C:\Users\kadritss\Documents\WindowsPowerShell\Modules\verb-Desktop\verb-Desktop...
+2024-07-12 14:37:35 INFO:  : Move/Flatten Resource etc files into root of temp Build dir...
+2024-07-12 14:40:31 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\verb-Desktop\verb-Desktop COPY of Quick-Start-Installation-and-Example.md
+2024-07-12 14:40:51 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\verb-Desktop\verb-Desktop COPY of CHANGELOG.md
+2024-07-12 14:41:39 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\verb-Desktop\verb-Desktop COPY of LICENSE.txt
+2024-07-12 14:41:48 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\verb-Desktop\verb-Desktop COPY of README.md
+2024-07-12 14:42:25 INFO:  : copy/Flatten Resource etc files into source root c:\sc\verb-Desktop\verb-Desktop dir...
+2024-07-12 14:47:54 INFO:  : Resolved $ModPsdPath:
+C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1
+2024-07-12 14:49:20 INFO:  : 
+==Verifying CU:Mods\verb-Desktop\verb-Desktop\Quick-Start-Installation-and-Example.md:
+2024-07-12 14:49:40 INFO:  : 
+==Verifying CU:Mods\verb-Desktop\verb-Desktop\CHANGELOG.md:
+2024-07-12 14:50:11 INFO:  : 
+==Verifying CU:Mods\verb-Desktop\verb-Desktop\LICENSE.txt:
+2024-07-12 14:51:12 INFO:  : 
+==Verifying CU:Mods\verb-Desktop\verb-Desktop\README.md:
+2024-07-12 14:51:46 INFO:  : Running pre-Publish-Module .psd1 test:
+Test-ModuleManifest -path C:\sc\verb-Desktop\verb-Desktop\verb-Desktop.psd1
+2024-07-12 14:53:18 INFO:  : (Test-ModuleManifest:PASSED)
+2024-07-12 14:53:50 INFO:  : (Profiling Repo: get-PSRepository -name lyncRepo...)
+2024-07-12 14:54:28 INFO:  : 
+Publish-Module w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Name                           verb-Desktop                                                                                                                                                                                            
+Repository                     lyncRepo                                                                                                                                                                                                
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+Verbose                        True                                                                                                                                                                                                    
+ErrorAction                    Stop                                                                                                                                                                                                    
+errorVariable                  pbmo_Err                                                                                                                                                                                                
+whatif                         False
+2024-07-12 15:14:27 WARNING:  :  FOUND $pbmo_Err: import-module HAD ERRORS! (no action, could be non-impacting)
+2024-07-12 15:14:39 WARNING:  :  Publish-Module PBMO UNDEFINED ERROR! System.Management.Automation.StopUpstreamCommandsException: System error.     at Microsoft.PowerShell.Commands.SelectObjectCommand.ProcessRecord()     at System.Management.Automation.CommandProcessor.ProcessRecord() (But PublishModule doesn't bother to return a functional Error object with an Exception, so we can't trust/parse or act on it. Just echo)
+2024-07-12 15:14:49 INFO:  : Waiting for:find-module -name verb-Desktop -Repository lyncRepo ...
+2024-07-12 15:16:45 INFO:  : Install-Module w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Name                           verb-Desktop                                                                                                                                                                                            
+Repository                     lyncRepo                                                                                                                                                                                                
+RequiredVersion                3.0.1                                                                                                                                                                                                   
+scope                          CurrentUser                                                                                                                                                                                             
+force                          True                                                                                                                                                                                                    
+AllowClobber                   True                                                                                                                                                                                                    
+errorVariable                  ismo_Err                                                                                                                                                                                                
+ErrorAction                    Stop                                                                                                                                                                                                    
+whatif                         False
+2024-07-12 15:18:37 INFO:  : Testing Module:Import-Module w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Name                           verb-Desktop                                                                                                                                                                                            
+ErrorAction                    Stop                                                                                                                                                                                                    
+errorVariable                  ipmo_Err                                                                                                                                                                                                
+force                          True                                                                                                                                                                                                    
+verbose                        True
+2024-07-12 15:18:37 INFO:  : Retrieving matching Repo .nupkg file:
+gci \\lynmsv10\lync_fs\scripts\sc\verb-Desktop.3.0.1.nupkgl..
+2024-07-12 15:18:38 INFO:  : Proper updated .nupkg file found:verb-Desktop.3.0.1.nupkg, copying to local Pkg directory.
+2024-07-12 15:18:38 INFO:  : remove-UnneededFileVariants w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           c:\sc\verb-Desktop\Package                                                                                                                                                                              
+Include                        verb-Desktop*.nupkg                                                                                                                                                                                     
+Pattern                                                                                                                                                                                                                                
+FilterOn                       CreationTime                                                                                                                                                                                            
+Keep                           2                                                                                                                                                                                                       
+KeepToday                      True                                                                                                                                                                                                    
+verbose                        True                                                                                                                                                                                                    
+whatif                         False
+2024-07-12 15:18:39 INFO:  : remove-UnneededFileVariants w
+Name                           Value                                                                                                                                                                                                   
+----                           -----                                                                                                                                                                                                   
+Path                           c:\sc\verb-Desktop\Tests                                                                                                                                                                                
+Include                        ScriptAnalyzer-Results-*.xml                                                                                                                                                                            
+Pattern                                                                                                                                                                                                                                
+FilterOn                       CreationTime                                                                                                                                                                                            
+Keep                           4                                                                                                                                                                                                       
+KeepToday                      True                                                                                                                                                                                                    
+verbose                        True                                                                                                                                                                                                    
+whatif                         False
+2024-07-12 15:18:39 INFO:  : -RunTest specified: Running Pester Test script:
+c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1
+
+2024-07-12 15:26:18 INFO:  : 
+---------------------------------------------------------------------------------
+Processing completed: verb-Desktop :: c:\sc\verb-Desktop
+- Script is currently installed (from PsRep: with scope:CurrentUser, under TORO\kadritss profile
+
+- To update other scopes/accounts on same machine, or install on other machines:
+    1. Uninstall current module copies:
+
+        Uninstall-Module -Name verb-Desktop) -AllVersion -whatif ;
+
+    2. Install the current version (or higher) from the Repo:lyncRepo:
+
+        install-Module -name verb-Desktop -Repository lyncRepo -MinimumVersion 3.0.1 -scope currentuser -whatif ;
+
+    3. Reimport the module with -force, to ensure the current installed verison is loaded:
+
+        import-Module -name verb-Desktop -force -verbose ;
+
+#-=-Stacked list: Unwrap to create a 1-liner for the above: CURRENTUSER =-=-=-=-=-=-=
+$whatif=$false ; $tMod = 'verb-Desktop' ; $tVer = '3.0.1' ;  $tScop = 'CurrentUser' ;
+TRY {
+Remove-Module -Name $tmod -ea 0 ;
+Uninstall-Module -Name $tmod -AllVersion -whatif:$($whatif) ;
+install-Module -name $tmod -Repository 'lyncRepo' -MinimumVersion $tVer -scope $tScop -AllowClobber -whatif:$($whatif) ;
+import-Module -name $tmod -force -verbose ;
+} CATCH {
+Write-Warning "Failed processing $($_.Exception.ItemName). 
+Error Message: $($_.Exception.Message)
+Error Details: $($_)" ; Break ;
+} ;
+#-=-=-=-=-=-=-=-=
+#-=-Stacked list: Unwrap to create a 1-liner for the above: ALLUSERS =-=-=-=-=-=-=
+$whatif=$false ; $tMod = 'verb-Desktop' ; $tVer = '3.0.1' ;  $tScop = 'AllUsers' ;
+TRY {
+Remove-Module -Name $tmod -ea 0 ;
+Uninstall-Module -Name $tmod -AllVersion -whatif:$($whatif) ;
+install-Module -name $tmod -Repository 'lyncRepo' -MinimumVersion $tVer -scope $tScop -AllowClobber -whatif:$($whatif) ;
+import-Module -name $tmod -force -verbose ;
+} CATCH {
+Write-Warning "Failed processing $($_.Exception.ItemName). 
+Error Message: $($_.Exception.Message)
+Error Details: $($_)" ; Break ;
+} ;
+#-=-=-=-=-=-=-=-=
+
+- You may also want to run the configured Pester Tests of the new script:
+
+        . c:\sc\verb-Desktop\Tests\verb-Desktop.tests.ps1
+
+Full Processing Details can be found in:
+
+c:\scripts\logs\update-NewModule-verb-Desktop-LOG-BATCH-EXEC-20240712-1433PM-log.txt
+
+---------------------------------------------------------------------------------
+
+2024-07-12 15:26:18 INFO:  : 
+(Most recent processing log can be found at:c:\sc\verb-Desktop\update-NewModule-verb-Desktop-LOG-BATCH-EXEC-20240712-1433PM-log.txt)
+(perm copy stored at:c:\scripts\logs\update-NewModule-verb-Desktop-LOG-BATCH-EXEC-20240712-1433PM-log.txt
