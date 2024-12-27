@@ -1,11 +1,11 @@
-﻿# verb-Desktop.psm1
+﻿# verb-desktop.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 3.0.1.0
+  Version     : 4.0.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -287,6 +287,53 @@ bool bRepaint);
 }
 
 #*------^ Define-MoveWindow.ps1 ^------
+
+
+#*------v get-processTitled.ps1 v------
+Function get-processTitled {
+    <#
+    .SYNOPSIS
+    get-processTitled.ps1 - Postfilter get-process, to display only processes with a MainWindowTitle
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 2024-12-09
+    FileName    : get-processTitled
+    License     : MIT License
+    Copyright   : (c) 2024 Todd Kadrie
+    Github      : https://github.com/tostka/verb-desktop
+    Tags        : Powershell,Process,Management,Reporting
+    REVISIONS
+    * 3:44 PM 12/9/2024init vers
+    .DESCRIPTION
+    get-processTitled.ps1 - Postfilter get-process, to display only processes with a MainWindowTitle
+    Handy for tracking down the single *hung* powershell_ise instance, based on it's Titlebar contents (to targeted kill the problem; leaving the others to continue running).
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    System.Object process to pipeline
+    .EXAMPLE
+    PS> get-processTitled ; 
+
+      ProcessName       Id MainWindowTitle
+      -----------       -- ---------------
+      explorer        5960 D:\scripts\logs
+      powershell     12352 PS ADMIN - TORO - EMSt
+      powershell_ise 12244 PS ADMIN - TORO -
+    
+    Default usage & output 
+    .LINK
+    https://github.com/tostka/verb-desktop
+    #>
+    [CmdletBinding()]
+    #[Alias('','')]
+    PARAM() ;
+    get-process | ?{$_.mainwindowtitle} | sort processname,mainwindowtitle,id | select-object processname,id,mainwindowtitle | write-output 
+}
+
+#*------^ get-processTitled.ps1 ^------
 
 
 #*------v install-ChocoPkg.ps1 v------
@@ -2253,7 +2300,7 @@ if ($env:WT_SESSION) {
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal -Alias *
 
 
 
@@ -2261,8 +2308,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUseWkUsy35ZZb+xe96Is1HEsO
-# 3OugggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUl2xG8FUhsVm65pbOBL/zDVzI
+# cV+gggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -2277,9 +2324,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT7zbXA
-# O6li7MTk2yVHR6xtC0ELRzANBgkqhkiG9w0BAQEFAASBgLUZhl5mnBEL2NqxSQ46
-# TBpH5e5Lp1bnYmAGqBcQsbTq15rh7AWEMxKAhMo4BnVQ9R27x+JutJQdTmemzpRO
-# KK5RtkJoqV7WX9chb2VBkFZDM7TOlQ9M1We/r2n0BQQqaoQ0MMJqw4OKmmdKje3G
-# kHsRl9t5J1gWTpSmobcF/AoY
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRZUBZw
+# cxeDfg1JmNckuEbkWq6WBzANBgkqhkiG9w0BAQEFAASBgIU9UJQKDCAgGfOiOYkJ
+# JJVT7hHEtLSpSJvj43ywiJlg7WfEtYXeSbOPwGkNYmaLpG3264X/pQX0ioYvUosG
+# 4obw9cUScAO7XGcWXxqp11SSes8NHrPWlE/OyAofXCg/rqazduaummqHqadFg3sF
+# H8JknruQBiZL4vUNabHCYKPC
 # SIG # End signature block
