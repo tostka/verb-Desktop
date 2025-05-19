@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 4.0.0.0
+  Version     : 4.1.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -2298,9 +2298,56 @@ if ($env:WT_SESSION) {
 #*------^ Test-IsWindowsTerminal.ps1 ^------
 
 
+#*------v update-Environment.ps1 v------
+function update-Environment {
+    <#
+    .SYNOPSIS
+    update-Environment - Refresh environment variables from the registry for powershell.exe. (wraps choco's refreshenv -> chocolateyProfile\Update-SessionEnvironment)
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 20250303-1230PM
+    FileName    : update-Environment
+    License     : MIT License
+    Copyright   : (c) 2024 Todd Kadrie
+    Github      : https://github.com/tostka/verb-dev
+    Tags        : Powershell,ISE,development,debugging,backup
+    REVISIONS
+	* 12:30 PM 3/3/2025 init
+    .DESCRIPTION
+    update-Environment - Refresh environment variables from the registry for powershell.exe. (wraps choco's refreshenv -> chocolateyProfile\Update-SessionEnvironment)
+
+	Simple easily recalled mnenomic verb-noun wrapper for chocolatey's native 'refreshenv' command (which is an alias of  chocolateyProfile\Update-SessionEnvironment)
+	
+    .EXAMPLE
+    PS> update-Environment ;
+    
+		Refreshing environment variables from the registry for powershell.exe. Please wait...
+		Finished		
+
+    Update powershell session enivronment variables
+    .LINK
+    https://github.com/tostka/verb-desktop
+    #>
+    [CmdletBinding()]
+    #[Alias('')]
+    PARAM() ;
+	#if(-not (get-module chocolateyprofile -list )){
+	if(-not (get-command Update-SessionEnvironment) -AND -not (get-command choco.exe)){
+		throw "Missing dependant module!" ; 
+	} else {
+		Update-SessionEnvironment -verbose; 
+	}; 
+}
+
+#*------^ update-Environment.ps1 ^------
+
+
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,update-Environment -Alias *
 
 
 

@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 4.0.0.0
+  Version     : 4.1.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -2298,9 +2298,56 @@ if ($env:WT_SESSION) {
 #*------^ Test-IsWindowsTerminal.ps1 ^------
 
 
+#*------v update-Environment.ps1 v------
+function update-Environment {
+    <#
+    .SYNOPSIS
+    update-Environment - Refresh environment variables from the registry for powershell.exe. (wraps choco's refreshenv -> chocolateyProfile\Update-SessionEnvironment)
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 20250303-1230PM
+    FileName    : update-Environment
+    License     : MIT License
+    Copyright   : (c) 2024 Todd Kadrie
+    Github      : https://github.com/tostka/verb-dev
+    Tags        : Powershell,ISE,development,debugging,backup
+    REVISIONS
+	* 12:30 PM 3/3/2025 init
+    .DESCRIPTION
+    update-Environment - Refresh environment variables from the registry for powershell.exe. (wraps choco's refreshenv -> chocolateyProfile\Update-SessionEnvironment)
+
+	Simple easily recalled mnenomic verb-noun wrapper for chocolatey's native 'refreshenv' command (which is an alias of  chocolateyProfile\Update-SessionEnvironment)
+	
+    .EXAMPLE
+    PS> update-Environment ;
+    
+		Refreshing environment variables from the registry for powershell.exe. Please wait...
+		Finished		
+
+    Update powershell session enivronment variables
+    .LINK
+    https://github.com/tostka/verb-desktop
+    #>
+    [CmdletBinding()]
+    #[Alias('')]
+    PARAM() ;
+	#if(-not (get-module chocolateyprofile -list )){
+	if(-not (get-command Update-SessionEnvironment) -AND -not (get-command choco.exe)){
+		throw "Missing dependant module!" ; 
+	} else {
+		Update-SessionEnvironment -verbose; 
+	}; 
+}
+
+#*------^ update-Environment.ps1 ^------
+
+
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,update-Environment -Alias *
 
 
 
@@ -2308,8 +2355,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUl2xG8FUhsVm65pbOBL/zDVzI
-# cV+gggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuC4GAuPsZDdop4TKdorHrKYH
+# pKygggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -2324,9 +2371,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRZUBZw
-# cxeDfg1JmNckuEbkWq6WBzANBgkqhkiG9w0BAQEFAASBgIU9UJQKDCAgGfOiOYkJ
-# JJVT7hHEtLSpSJvj43ywiJlg7WfEtYXeSbOPwGkNYmaLpG3264X/pQX0ioYvUosG
-# 4obw9cUScAO7XGcWXxqp11SSes8NHrPWlE/OyAofXCg/rqazduaummqHqadFg3sF
-# H8JknruQBiZL4vUNabHCYKPC
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQvqJRV
+# +RxtFS97A/4lEmDNSz606zANBgkqhkiG9w0BAQEFAASBgK+9MX5FCeYlofiKSl/B
+# in3fnqQi5rbrFRxkT9Qn8GS/NkIBdWnn4/7d7mAMvfow2Xm9yeGs99xkWgOistze
+# JgWW05dxcAtyEwGhQGa85X0ZNp8iBb/sX1XfCLI8g/u1FoX2iwQo0U9mpsLCSFNx
+# zAJxdOqjJ5toOGtQD8kIWzO2
 # SIG # End signature block
