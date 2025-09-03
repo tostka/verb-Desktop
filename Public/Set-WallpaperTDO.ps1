@@ -1,13 +1,16 @@
-﻿#*------v Function Set-Wallpaper v------
-Function Set-Wallpaper {
+﻿# Set-WallpaperTDO.ps1
+
+#region SET_WALLPAPERTDO ; #*------v Set-WallpaperTDO v------
+Function Set-WallpaperTDO {
     <# 
     .SYNOPSIS
-    Set-Wallpaper - Set specified file as desktop wallpaper
+    Set-WallpaperTDO - Set specified file as desktop wallpaper
     .NOTES
     Author: _Emin_
     Tweaked/Updated by: Todd Kadrie
     Website:	https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
     REVISIONS   :
+    * 4:08 PM 9/3/2025 update name to new tagged standard: ren Set-Wallpaper => Set-WallpaperTDO (alias orig name)
     * 9:12 AM 6/27/2016 TSK reformatted & added pshelp
     * September 5, 2014 - posted version
     .DESCRIPTION
@@ -20,12 +23,13 @@ Function Set-Wallpaper {
     .OUTPUTS
     None. Returns no objects or output.
     .EXAMPLE
-    Set-Wallpaper -Path $WallPaper.FullName -Style Fill ;
+    Set-WallpaperTDO -Path $WallPaper.FullName -Style Fill ;
     Set wallpaper file to fill screen
     .LINK
     https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
     #>
     [CmdletBinding()]
+    [Alias('Set-Wallpaper')]
     Param(
         [Parameter(Mandatory=$true)]$Path,
         [ValidateSet('Center','Stretch','Fill','Tile','Fit')]
@@ -87,4 +91,5 @@ Function Set-Wallpaper {
         } ; 
      
     [Wallpaper.Setter]::SetWallpaper( $Path, $Style ) ; 
-} ; #*------^ END Function Set-Wallpaper ^------
+} ; 
+#endregion SET_WALLPAPERTDO ; #*------^ END Set-WallpaperTDO ^------

@@ -1,15 +1,17 @@
-﻿#*------v Function New-WallpaperStatus v------
-Function New-WallpaperStatus {
+﻿# New-WallpaperStatusTDO.ps1
+
+#*------v Function New-WallpaperStatusTDO v------
+Function New-WallpaperStatusTDO {
     <# 
     .SYNOPSIS
-    New-WallpaperStatus - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
+    New-WallpaperStatusTDO - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
     .NOTES
     Version     : 1.0.4
     Author      : Todd Kadrie
     Website     :	http://www.toddomation.com
     Twitter     :	@tostka / http://twitter.com/tostka
     CreatedDate : 2020-06-27
-    FileName    : New-WallpaperStatus.ps1
+    FileName    : New-WallpaperStatusTDO.ps1
     License     : (none asserted)
     Copyright   : (none asserted)
     Github      : https://github.com/tostka/verb-Desktop
@@ -18,7 +20,8 @@ Function New-WallpaperStatus {
     AddedWebsite:	https://p0w3rsh3ll.wordpress.com/
     AddedTwitter:	URL
     REVISIONS   :
-    # 10:46 AM 7/29/2021 ren'd New-WallpaperStatus -> New-WallpaperStatus (stuck orig in Alias); added updated Win10 PS console color scheme colors to themes list (they're precurated 'suitable' colors) ; 
+    * 4:08 PM 9/3/2025 update name to new tagged standard: ren Set-Wallpaper => Set-WallpaperTDO (alias orig name)
+    # 10:46 AM 7/29/2021 ren'd New-BGinfo -> New-WallpaperStatus (stuck orig in Alias); added updated Win10 PS console color scheme colors to themes list (they're precurated 'suitable' colors) ; 
         added $FS3 3rd size, revised FS1 (+1 point of -FontSize), FS2 (-1); added verbose support & echos ; revised CBH (expanded Notes tags)
     # 11:42 AM 7/28/2021 added Violet & Yellow themes, test for $env:userdomain -like '*lab*' to set violet, expanded CBH example
     # # 8:51 AM 6/28/2016 fixed ampm -uformat
@@ -36,7 +39,7 @@ Function New-WallpaperStatus {
     * 9:12 AM 6/27/2016 TSK reformatted, added pshelp
     * September 5, 2014 - posted version
     .DESCRIPTION
-    New-WallpaperStatus - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
+    New-WallpaperStatusTDO - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
     .PARAMETER  Text
     Text to be overlayed over specified background
     .PARAMETER  OutFile
@@ -65,7 +68,7 @@ Function New-WallpaperStatus {
        FontName = "courier new" ;
        UseCurrentWallpaperAsSource = $false ;
     } ; 
-    $WallPaper = New-WallpaperStatus @BGInfo ;
+    $WallPaper = New-WallpaperStatusTDO @BGInfo ;
     Generate a wallpaper from  a splat of parameters
     .EXAMPLE
     Set-Wallpaper -Path "C:\Windows\Web\Wallpaper\Windows\img0.jpg" -Style Fill ; 
@@ -76,25 +79,25 @@ Function New-WallpaperStatus {
     https://github.com/tostka/verb-Desktop
     #>
     [CmdletBinding()]
-    [Alias('New-BGinfo')]
+    [Alias('New-BGinfo','New-WallpaperStatus')]
     Param(
         [Parameter(Mandatory=$true,HelpMessage="Text to be overlayed over specified background[-text 'line1`nline2']")]
-        [string] $Text,
+            [string] $Text,
         [Parameter(HelpMessage="Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp[-OutFile c:\path-to\image.jpg]")]
-        [string] $OutFile= "$($($env:temp))\BGInfo.bmp",
+            [string] $OutFile= "$($($env:temp))\BGInfo.bmp",
         [Parameter(HelpMessage="Text alignment [Left|Center][-Align Left]")]
-        [ValidateSet("Left","Center")]
-        [string]$Align="Center",
+            [ValidateSet("Left","Center")]
+            [string]$Align="Center",
         [Parameter(HelpMessage="Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]")]
-        [ValidateSet("Current","BrightBlue","Blue","DarkBlue","DarkWhite","Grey","LightGrey","BrightBlack","Black","BrightRed","Red","DarkRed","Purple","BrightYellow","Yellow","DarkYellow","BrightGreen","DarkGreen","BrightCyan","DarkCyan","BrightMagenta","DarkMagenta")]
-        [string]$Theme="Current",
+            [ValidateSet("Current","BrightBlue","Blue","DarkBlue","DarkWhite","Grey","LightGrey","BrightBlack","Black","BrightRed","Red","DarkRed","Purple","BrightYellow","Yellow","DarkYellow","BrightGreen","DarkGreen","BrightCyan","DarkCyan","BrightMagenta","DarkMagenta")]
+            [string]$Theme="Current",
         [Parameter(HelpMessage="Text Font Name (Defaults Arial) [-FontName 'courier new']")]
-        [string]$FontName="Arial",
+            [string]$FontName="Arial",
         [Parameter(HelpMessage="Integer Text Font Size (Defaults 8 point) [9-45][-FontSize 12]")]
-        [ValidateRange(9,45)]
-        [int32]$FontSize = 8,
+            [ValidateRange(9,45)]
+            [int32]$FontSize = 8,
         [Parameter(HelpMessage="Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]")]
-        [switch]$UseCurrentWallpaperAsSource
+            [switch]$UseCurrentWallpaperAsSource
     ) ; 
     BEGIN {
         $verbose = ($VerbosePreference -eq "Continue") ; 
@@ -433,4 +436,4 @@ Function New-WallpaperStatus {
             break ; 
         } ; 
     } ;  # END-E
-} #*------^ END Function New-WallpaperStatus ^------
+} #*------^ END Function New-WallpaperStatusTDO ^------
