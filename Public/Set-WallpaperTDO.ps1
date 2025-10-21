@@ -1,7 +1,8 @@
 ﻿# Set-WallpaperTDO.ps1
 
-    #region SET_WALLPAPERTDO ; #*------v Set-WallpaperTDO v------
-    Function Set-WallpaperTDO {
+
+#region SET_WALLPAPERTDO ; #*------v Set-WallpaperTDO v------
+Function Set-WallpaperTDO {
         <# 
         .SYNOPSIS
         Set-WallpaperTDO - Set specified file as desktop wallpaper
@@ -10,8 +11,8 @@
         Author      : Todd Kadrie
         Website     : http://www.toddomation.com
         Twitter     : @tostka / http://twitter.com/tostka
-        CreatedDate : 2025-
-        FileName    : VERB-NOUN.ps1
+        CreatedDate : 2016-06-27
+        FileName    : Set-WallpaperTDO.ps1
         License     : MIT License
         Copyright   : (c) 2025 Todd Kadrie
         Github      : https://github.com/tostka/verb-desktop
@@ -20,6 +21,7 @@
         AddedWebsite: https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
         AddedTwitter: URL
         REVISIONS   :
+        * 11:13 AM 9/29/2025 rplc verb-noun -> Set-WallpaperTDO
         * 2:59 PM 9/4/2025 strongly type params, add parameter tags and helpmessage, update CBH
         * 4:08 PM 9/3/2025 update name to new tagged standard: ren Set-Wallpaper => Set-WallpaperTDO (alias orig name)
         * 9:12 AM 6/27/2016 TSK reformatted & added pshelp
@@ -110,5 +112,6 @@
             } ; 
      
         [Wallpaper.Setter]::SetWallpaper( $Path, $Style ) ; 
-    } ; 
-    #endregion SET_WALLPAPERTDO ; #*------^ END Set-WallpaperTDO ^------
+    }
+#endregion SET_WALLPAPERTDO ; #*------^ END Set-WallpaperTDO ^------
+

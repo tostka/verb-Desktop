@@ -69,7 +69,7 @@ Description = 'Powershell Desktop generic functions module'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('....','...','..','~','Clean-Desktop','confirm-GoogleDriveRunning','c-winsallk','Define-MoveWindow','Disable-AutoLogonTDO','Disable-OpenFileSecurityWarningTDO','Disable-UACTDO','Enable-AutoLogonTDO','Enable-OpenFileSecurityWarningTDO','Enable-RunOnceTDO','Enable-UACTDO','get-localNicsTDO','Get-MyPackageTDO','get-OSFullVersionTDO','get-processTitled','Install-ChocoPkg','Install-ExePackage','Install-MsiPackage','Install-MyPackageTDO','Install-ServerRoles','invoke-Explore','Invoke-ExtractTDO','Invoke-ProcessTDO','invoke-speakwords','Move-Window','Move-WindowByWindowTitle','New-WallpaperStatusTDO','Report-URL','Reset-CurrentWallpaperTDO','restart-Shell','Set','Set-WallpaperTDO','show-TrayTip','start-ItunesPlaylist','stop-browsers','test-InstalledApplication','Test-InstalledWindowsFeature','test-IsWindowsActivated','Test-IsWindowsTerminal','Test-MyPackageTDO','update-Environment')
+FunctionsToExport = @('....','...','..','~','Clean-Desktop','confirm-GoogleDriveRunning','c-winsallk','Define-MoveWindow','get-processTitled','Install-ChocoPkg','Install-ExePackage','Install-MsiPackage','Install-ServerRoles','invoke-Explore','invoke-speakwords','Move-Window','Move-WindowByWindowTitle','New-WallpaperStatus','Report-URL','restart-Shell','Set','Set-Wallpaper','show-TrayTip','start-ItunesPlaylist','stop-browsers','test-InstalledApplication','Test-InstalledWindowsFeature','test-IsWindowsActivated','Test-IsWindowsTerminal','update-Environment')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'
@@ -126,8 +126,8 @@ PrivateData = @{
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUOo/hvMvfDypsdUH6Vt645VZf
-# QdKgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUBsOIbQ6VrjH/aQb7+zkCZKLl
+# LFegggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -142,9 +142,9 @@ PrivateData = @{
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQ23V/Z
-# khuc9FcR9w8O5GVfrh7/ADANBgkqhkiG9w0BAQEFAASBgARV7FnF1Df9PCXG+W0O
-# RagYDLwBWXKUEgnqRCrgBZ9TZ8rMLIL16VYfh1OxMZzhWwmR75vb2Fk80MZ/OFJD
-# dJ6pXQ+lagWxBtx6ARvCba6AKPvpQG+12B5l9uru8PrKGckIifAQviqkLTn5crse
-# Z2Zd7t4R25XipRAAUbQCUGDP
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQ7kMuR
+# /8s8lGc+xEFaozZXcpaskDANBgkqhkiG9w0BAQEFAASBgK72IZQhO/GO/z2wubKF
+# qEFCHokPKStdBL/qwhO6+tfPCruBvfO2pJF48fylq1p1/rkUEg9T44UsGIDJ9jit
+# 3jCQ3U0m0kKsxAIjfgFt6Pwrou3OGQvGfR7eCTgj8Xm7Q4J73+LWgwnQi6QchK3l
+# cLgXQ8e6kgXf0UL1fv5HFhOx
 # SIG # End signature block

@@ -1,7 +1,8 @@
 ﻿# New-WallpaperStatusTDO.ps1
 
+
 #region NEW_WALLPAPERSTATUSTDO ; #*------v New-WallpaperStatusTDO v------
-    Function New-WallpaperStatusTDO {
+Function New-WallpaperStatusTDO {
         <# 
         .SYNOPSIS
         New-WallpaperStatusTDO - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
@@ -57,22 +58,16 @@
         .INPUTS
         None. Does not accepted piped input.
         .OUTPUTS
-        None. Returns no objects or output.
+        None. Returns no objects or output.        
         .EXAMPLE
-        Powershell.exe -noprofile -command "& {c:\scripts\set-AdminBG.ps1 }" ; 
-        To launch on startup: Put above into C:\Users\LOGON\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\AdminBG.lnk file
-        .EXAMPLE
-        $BGInfo = @{
-           Text  = $t ;
-           Theme = "Black" ;
-           FontName = "courier new" ;
-           UseCurrentWallpaperAsSource = $false ;
-        } ; 
-        $WallPaper = New-WallpaperStatusTDO @BGInfo ;
-        Generate a wallpaper from  a splat of parameters
-        .EXAMPLE
-        Set-Wallpaper -Path "C:\Windows\Web\Wallpaper\Windows\img0.jpg" -Style Fill ; 
-        To Restore the default VM wallpaper (e.g. generally the Windows OS default)
+        PS> $BGInfo = @{
+        PS>     Text  = $t ;
+        PS>     Theme = "Black" ;
+        PS>     FontName = "courier new" ;
+        PS>     UseCurrentWallpaperAsSource = $false ;
+        PS> } ; 
+        PS> $WallPaper = New-WallpaperStatusTDO @BGInfo ;
+        Generate a wallpaper from  a splat of parameters        
         .LINK
         https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
         .LINK
@@ -436,7 +431,6 @@
                 break ; 
             } ; 
         } ;  # END-E
-    } 
-    #endregion NEW_WALLPAPERSTATUSTDO ; #*------^ END New-WallpaperStatusTDO ^------
+    }
+#endregion NEW_WALLPAPERSTATUSTDO ; #*------^ END New-WallpaperStatusTDO ^------
 
-    #region SET_WALLPAPERTDO ; #*------v Set-WallpaperTDO v------

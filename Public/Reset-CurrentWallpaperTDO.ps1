@@ -1,7 +1,8 @@
-# Reset-CurrentWallpaperTDO.ps1
+﻿# Reset-CurrentWallpaperTDO.ps1
 
-    #region RESET_CURRENTWALLPAPERTDO ; #*------v Reset-CurrentWallpaperTDO v------
-    Function Reset-CurrentWallpaperTDO {
+
+#region RESET_CURRENTWALLPAPERTDO ; #*------v Reset-CurrentWallpaperTDO v------
+Function Reset-CurrentWallpaperTDO {
         <#
         .SYNOPSIS
         Reset-CurrentWallpaperTDO - Tests for, and clears any configured HKCU:\Control Panel\Desktop WallPaper Value to $NULL, and refreshes the desktop
@@ -20,13 +21,14 @@
         AddedWebsite:	URL
         AddedTwitter:	URL
         REVISIONS
+        * 11:17 AM 9/29/2025 CBH: corrected output spec to None.
         * 4:06 PM 9/3/2025 init
         .DESCRIPTION
         Reset-CurrentWallpaperTDO - Tests for, and clears any configured HKCU:\Control Panel\Desktop WallPaper Value to $NULL, and refreshes the desktop
         .OUTPUT
-        System.Boolean Returns True if it found the key populated, and cleared it. Returns False if no change was made.
+        None
         .EXAMPLE
-        PS> $result = Reset-CurrentWallpaperTDO 
+        PS> Reset-CurrentWallpaperTDO 
         Demo call
         .LINK
         https://github.com/tostka/verb-desktop
@@ -61,5 +63,6 @@
                 } ;
             } ; 
         }
-    } ; 
-    #endregion RESET_CURRENTWALLPAPERTDO ; #*------^ END Reset-CurrentWallpaperTDO ^------
+    }
+#endregion RESET_CURRENTWALLPAPERTDO ; #*------^ END Reset-CurrentWallpaperTDO ^------
+

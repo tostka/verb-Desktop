@@ -5,7 +5,7 @@
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 4.1.0.0
+  Version     : 4.2.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -287,6 +287,1073 @@ bool bRepaint);
 }
 
 #*------^ Define-MoveWindow.ps1 ^------
+
+
+#*------v Disable-AutoLogonTDO.ps1 v------
+function Disable-AutoLogonTDO{
+        <#
+        .SYNOPSIS
+        Disable-AutoLogonTDO - Deconfigures autologon of the specified credential, after reboots (reverses Enable-AutoLogon821))
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250917-0114PM
+        FileName    : Disable-AutoLogonTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-desktop
+        Tags        : Powershell,ActiveDirectory,Forest,Domain
+        AddedCredit : Michel de Rooij / michel@eightwone.com
+        AddedWebsite: http://eightwone.com
+        AddedTwitter: URL        
+        REVISIONS
+        * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
+            remove the write-my*() support (defer to native w-l support)
+        * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
+        .DESCRIPTION
+        Disable-AutoLogonTDO - Deconfigures autologon of the specified credential, after reboots (reverses Enable-AutoLogon821))
+        .PARAMETER Credential
+        Use specific Credentials[-Credentials [credential object]
+        .OUTPUTS
+        None
+        .EXAMPLE ; 
+        PS> Disable-AutoLogon
+        .LINK
+        https://github.org/tostka/verb-Desktop/
+        #>
+        [CmdletBinding()]
+        [alias('Disable-AutoLogon821')]
+        PARAM() ;
+        $smsg = 'Disabling Automatic Logon'
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        #Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name AutoAdminLogon -ErrorAction SilentlyContinue| out-null
+        $pltrvIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' ;
+            Name = "AutoAdminLogon" ;          
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ; 
+        #Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name DefaultUserName -ErrorAction SilentlyContinue| out-null
+        $pltrvIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' ;
+            Name = "DefaultUserName" ;
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        # Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name DefaultPassword -ErrorAction SilentlyContinue| out-null
+        $pltrvIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' ;
+            Name = "DefaultPassword" ;       
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;
+    }
+
+#*------^ Disable-AutoLogonTDO.ps1 ^------
+
+
+#*------v Disable-OpenFileSecurityWarningTDO.ps1 v------
+function Disable-OpenFileSecurityWarningTDO{
+        <#
+        .SYNOPSIS
+        Disable-OpenFileSecurityWarningTDO - Suppresses Open File - Security Warning popup prompts
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250917-0114PM
+        FileName    : Disable-OpenFileSecurityWarningTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-io
+        Tags        : Powershell,ActiveDirectory,Forest,Domain
+        AddedCredit : Michel de Rooij / michel@eightwone.com
+        AddedWebsite: http://eightwone.com
+        AddedTwitter: URL        
+        REVISIONS
+        * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
+            remove the write-my*() support (defer to native w-l support)
+        * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
+        .DESCRIPTION
+        Disable-OpenFileSecurityWarningTDO - Suppresses Open File - Security Warning popup prompts        
+        .OUTPUTS
+        None
+        .EXAMPLE ; 
+        PS> Disable-OpenFileSecurityWarning
+        .LINK
+        https://github.org/tostka/verb-Desktop/
+        #>
+        [CmdletBinding()]
+        [alias('Disable-OpenFileSecurityWarning821')]
+        PARAM() ;
+        $smsg = 'Disabling File Security Warning dialog'
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        # New-Item -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' -ErrorAction SilentlyContinue |out-null
+        $pltnItm=[ordered]@{
+            Path = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' ;                       
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-Item w`n$(($pltnItm|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-Item @pltnItm | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        #New-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' -name 'LowRiskFileTypes' -value '.exe;.msp;.msu;.msi' -ErrorAction SilentlyContinue |out-null
+        $pltnIP=[ordered]@{
+            Path = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' ;
+            Name = "LowRiskFileTypes" ;
+            Value = '.exe;.msp;.msu;.msi' ;            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        #New-Item -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' -ErrorAction SilentlyContinue |out-null
+        $pltnItm=[ordered]@{
+            Path = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' ;                       
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-Item w`n$(($pltnItm|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-Item @pltnItm | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        #New-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' -name 'SaveZoneInformation' -value 1 -ErrorAction SilentlyContinue |out-null
+        $pltnIP=[ordered]@{
+            Path = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' ;
+            Name = "SaveZoneInformation" ;
+            Value = 1 ;            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        # Remove-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' -Name 'LowRiskFileTypes' -ErrorAction SilentlyContinue
+        $pltrvIP=[ordered]@{
+            Path = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' ;   
+            Name = 'LowRiskFileTypes' ;
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;
+        # Remove-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' -Name 'SaveZoneInformation' -ErrorAction SilentlyContinue
+        $pltrvIP=[ordered]@{
+            Path = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' ;   
+            Name = 'SaveZoneInformation' ; 
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;
+    }
+
+#*------^ Disable-OpenFileSecurityWarningTDO.ps1 ^------
+
+
+#*------v Disable-UACTDO.ps1 v------
+function Disable-UACTDO{
+        <#
+        .SYNOPSIS
+        Disable-UACTDO - Disables User Account Control
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250917-0114PM
+        FileName    : Disable-UACTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-io
+        Tags        : Powershell,ActiveDirectory,Forest,Domain
+        AddedCredit : Michel de Rooij / michel@eightwone.com
+        AddedWebsite: http://eightwone.com
+        AddedTwitter: URL        
+        REVISIONS
+        * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
+            remove the write-my*() support (defer to native w-l support)
+        * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
+        .DESCRIPTION
+        Disable-UACTDO - Disables User Account Control        
+        .OUTPUTS
+        None
+        .EXAMPLE ; 
+        PS> Disable-UAC
+        .LINK
+        https://github.org/tostka/verb-Desktop/
+        #>
+        [CmdletBinding()]
+        [alias('Disable-UAC821')]
+        PARAM( ) ;
+        $smsg = 'Disabling User Account Control'
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        #New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name EnableLUA -Value 0 -ErrorAction SilentlyContinue| out-null
+        $pltnIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' ;
+            Name = "EnableLUA" ;
+            Value = 0            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;     
+    }
+
+#*------^ Disable-UACTDO.ps1 ^------
+
+
+#*------v Enable-AutoLogonTDO.ps1 v------
+function Enable-AutoLogonTDO{
+        <#
+        .SYNOPSIS
+        Enable-AutoLogonTDO - Configures autologon of the specified credential, after reboots (reverse with Disable-OpenFileSecurityWarningTDO)
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250917-0114PM
+        FileName    : Enable-AutoLogonTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-desktop
+        Tags        : Powershell,ActiveDirectory,Forest,Domain
+        AddedCredit : Michel de Rooij / michel@eightwone.com
+        AddedWebsite: http://eightwone.com
+        AddedTwitter: URL        
+        REVISIONS
+        * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
+            remove the write-my*() support (defer to native w-l support)
+        * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
+        .DESCRIPTION
+        Enable-AutoLogonTDO - Configures autologon of the specified credential, after reboots (reverse with Disable-OpenFileSecurityWarningTDO)
+        .PARAMETER Credential
+        Use specific Credentials[-Credentials [credential object]
+        .OUTPUTS
+        None
+        .EXAMPLE ; 
+        PS> Enable-AutoLogon
+        .LINK
+        https://github.org/tostka/verb-Desktop/
+        #>
+        [CmdletBinding()]
+        [alias('Enable-AutoLogon821')]
+        PARAM(
+            [Parameter(Mandatory = $false, HelpMessage = "Use specific Credentials[-Credentials [credential object]")]
+                [System.Management.Automation.PSCredential]$Credential
+         ) ;
+        $smsg = 'Enabling Automatic Logon'
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        #$PlainTextPassword= [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR( (ConvertTo-SecureString $State['AdminPassword']) ))
+        #$PlainTextAccount= $State['AdminAccount']
+        $PlainTextAccount= $Credential.UserName ; 
+        $PlainTextPassword= $Credential.GetNetworkCredential().Password  ;
+        #New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name AutoAdminLogon -Value 1 -ErrorAction SilentlyContinue| out-null
+        $pltnIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' ;
+            Name = "AutoAdminLogon" ;
+            Value = 1 ;            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        #New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name DefaultUserName -Value $PlainTextAccount -ErrorAction SilentlyContinue| out-null
+        $pltnIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' ;
+            Name = "DefaultUserName" ;
+            Value = $PlainTextAccount ;            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        # New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name DefaultPassword -Value $PlainTextPassword -ErrorAction SilentlyContinue| out-null 
+        $pltnIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' ;
+            Name = "DefaultPassword" ;
+            Value = $PlainTextPassword ;            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;
+    }
+
+#*------^ Enable-AutoLogonTDO.ps1 ^------
+
+
+#*------v Enable-OpenFileSecurityWarningTDO.ps1 v------
+function Enable-OpenFileSecurityWarningTDO{
+        <#
+        .SYNOPSIS
+        Enable-OpenFileSecurityWarningTDO - Restores Open File - Security Warning popup prompts.
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250917-0114PM
+        FileName    : Enable-OpenFileSecurityWarningTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-io
+        Tags        : Powershell,ActiveDirectory,Forest,Domain
+        AddedCredit : Michel de Rooij / michel@eightwone.com
+        AddedWebsite: http://eightwone.com
+        AddedTwitter: URL        
+        REVISIONS
+        * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
+            remove the write-my*() support (defer to native w-l support)
+        * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
+        .DESCRIPTION
+        Enable-OpenFileSecurityWarningTDO - Restores Open File - Security Warning popup prompts.
+
+        Re-enables default behavior for popups like:
+        ```text
+        Title: Open File - Security Warning
+        [app icon]
+        Name: d:\programs...\xxx.exe
+        Publisher: Unknown Publisher
+        Type: Application
+        From: d:\programs...\xxx.exe
+        [Run] [Cancel]
+        [ ] Always ask before opening this file
+        [x shield icon] This file does not have a valid digital signature that verifies its
+        publisher. You should only run software form publishers you trust. 
+        ```
+        Effectively clears added entries from the LowRiskFileTypes reg key, used after completion of build/updates.        
+
+        .OUTPUTS
+        None
+        .EXAMPLE ; 
+        PS> Enable-OpenFileSecurityWarning
+        .LINK
+        https://github.org/tostka/verb-Desktop/
+        #>
+        [CmdletBinding()]
+        [alias('Enable-OpenFileSecurityWarning821')]
+        PARAM() ;
+        $smsg = "Enabling File Security Warning dialog"
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        #Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' -Name 'LowRiskFileTypes' -ErrorAction SilentlyContinue
+        $pltrvIP=[ordered]@{
+            Path = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' ;
+            Name = "LowRiskFileTypes" ;          
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ; 
+        #Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' -Name 'SaveZoneInformation' -ErrorAction SilentlyContinue
+        $pltrvIP=[ordered]@{
+            Path = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' ;
+            Name = "SaveZoneInformation" ;
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;  
+        # Remove-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' -Name 'LowRiskFileTypes' -ErrorAction SilentlyContinue
+        $pltrvIP=[ordered]@{
+            Path = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations' ;
+            Name = "LowRiskFileTypes" ;       
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;
+        #Remove-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' -Name 'SaveZoneInformation' -ErrorAction SilentlyContinue
+        $pltrvIP=[ordered]@{
+            Path = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments' ;
+            Name = "SaveZoneInformation" ;       
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "Remove-ItemProperty w`n$(($pltrvIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            Remove-ItemProperty @pltrvIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;
+    }
+
+#*------^ Enable-OpenFileSecurityWarningTDO.ps1 ^------
+
+
+#*------v Enable-RunOnceTDO.ps1 v------
+function Enable-RunOnceTDO{
+        <#
+        .SYNOPSIS
+        Enable-RunOnceTDO - Configures specified ScriptFullname powershell script into the local RunOnce registrykey (will autorun one time, on next startup)
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250917-0114PM
+        FileName    : Enable-RunOnceTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-io
+        Tags        : Powershell,ActiveDirectory,Forest,Domain
+        AddedCredit : Michel de Rooij / michel@eightwone.com
+        AddedWebsite: http://eightwone.com
+        AddedTwitter: URL        
+        REVISIONS
+        * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
+            add splatting on the new-itemprop, to store the settings being set;  
+            remove the write-my*() support (defer to native w-l support)
+        * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
+        .DESCRIPTION
+        Enable-RunOnceTDO - Configures specified ScriptFullname powershell script into the local RunOnce registrykey (will autorun one time, on next startup)
+        .PARAMETER ScriptFullName
+        Powershell script fullpath to be run at next startup   
+        .PARAMETER Arguments
+        String of commandline Arguments to be used with specified ScriptFullName
+        .INPUTS
+        None, no piped input.
+        .OUTPUTS
+        None
+        .EXAMPLE ; 
+        PS> Enable-RunOnce -ScriptFullName c:\pathto\scripttorun.ps1 -Arguments $Arguments
+        .LINK
+        https://github.org/tostka/verb-Network/
+        #>
+        [CmdletBinding()]
+        [alias('Enable-RunOnce821')]
+        PARAM(
+            [Parameter(HelpMessage = "Powershell script fullpath to be run at next startup")]
+                [system.io.fileinfo]$ScriptFullName,
+            [Parameter(HelpMessage = "String of commandline Arguments to be used with specified ScriptFullName")]
+                [string]$Arguments
+        ) ;
+        $smsg = "Set script to run once after reboot" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        <# 
+        ### powershell.exe commandline params:
+        -NoProfile
+        This is a parameter that starts a PowerShell session without loading the user's PowerShell profile scripts ($PROFILE). A profile script is a file that runs automatically when a new PowerShell session is started to customize the environment.
+            Purpose: Ensures a clean, consistent PowerShell environment, which is especially useful for automated tasks, scripts, or troubleshooting.
+            Command example: powershell.exe -NoProfile
+        -ExecutionPolicy
+        This is a parameter that sets the execution policy for a specific PowerShell session. The execution policy is a safety feature that controls the conditions under which PowerShell loads configuration files and runs scripts.
+            Purpose: Temporarily overrides the system's configured execution policy for a single session.
+            Command example: powershell.exe -ExecutionPolicy Bypass
+            Important note: The -ExecutionPolicy parameter for powershell.exe only affects the current session and does not change the permanent system setting.
+        -Command
+        This parameter instructs PowerShell to run specific commands or scripts and then exit the session, unless the -NoExit parameter is also used.
+            Purpose: Execute commands directly from the command line without having to open an interactive PowerShell session.
+            Command example: powershell.exe -Command "& {Get-Process}"
+            Usage: For complex commands or script blocks, enclose them in curly braces {}. For simple commands or scripts, you can pass them as a string.
+        InstallPath
+        This term refers to the location where PowerShell stores modules and is not a command-line argument for powershell.exe. You can find these paths by checking the $env:PSModulePath environment variable.
+            Default module paths on Windows:
+                All users: %ProgramFiles%\PowerShell\Modules (for PowerShell 7) or %ProgramFiles%\WindowsPowerShell\Modules (for Windows PowerShell 5.1).
+                Current user: $HOME\Documents\PowerShell\Modules (for PowerShell 7) or $HOME\Documents\WindowsPowerShell\Modules (for Windows PowerShell 5.1).
+        #>
+        <# If just running script, no params, use -file:        
+        –noprofile –executionpolicy bypass –file "pathtoscript.ps1" ;
+
+        #If need passed in params use -command and '&' invoke :
+        Add argument (optional): 
+        –noprofile –executionpolicy bypass  -Command "& c:\scripts\hello.ps1 -a 2 -b 3"
+        Use nested quote/single-quotes if needed to accom spaces in parms/paths 
+        –noprofile –executionpolicy bypass  -Command "& 'c:\path with spaces\hello.ps1' -a 2 -b 3 -c 'param with spaces'" 
+        -noprofile -executionpolicy Unrestricted -Command "& c:\scripts\monitor-ADAccountLock.ps1 -NoLoop -verbose"
+        #>
+        $cmdline = "'$($ScriptFullName.fullname)'" ;         
+        #$RunOnce= "$PSHome\powershell.exe -NoProfile -ExecutionPolicy Unrestricted -Command `"& `'$ScriptFullName.fullname`' -InstallPath `'$InstallPath`'`""
+        # -installpath above is the 'arguments' on the specified runonce command/script, not a required parameter of powershell
+        if($Arguments){
+            #$RunOnce= "$PSHome\powershell.exe -NoProfile -ExecutionPolicy Unrestricted -Command `"& `'$ScriptFullName.fullname`' $($Arguments)`""
+            $cmdline += " $($Arguments) " ; 
+            $RunOnce= "$PSHome\powershell.exe -NoProfile -ExecutionPolicy Unrestricted -Command $($cmdline)" ; 
+        } else { 
+            $RunOnce= "$PSHome\powershell.exe -NoProfile -ExecutionPolicy Unrestricted -File $($cmdline)" ; 
+        }
+        $smsg = "RunOnce: $RunOnce"
+        if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+            if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+        } ;
+        # scriptname specs the key name below RunOnce, it's an arbitrary identifer for the runonce target: split the $ScriptFullName  to get the value dyn
+        #New-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name "$ScriptName"  -Value "$RunOnce" -ErrorAction SilentlyContinue| out-null        
+        # flip to asplat        
+        $pltnIP=[ordered]@{
+            Path = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce' ;
+            Name = "$(split-path $ScriptFullName.fullname -leaf)" ;
+            Value = "$RunOnce"            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;     
+    }
+
+#*------^ Enable-RunOnceTDO.ps1 ^------
+
+
+#*------v Enable-UACTDO.ps1 v------
+function Enable-UACTDO{
+        <#
+        .SYNOPSIS
+        Enable-UACTDO - Enables User Account Control
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250917-0114PM
+        FileName    : Enable-UACTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-desktop
+        Tags        : Powershell,ActiveDirectory,Forest,Domain
+        AddedCredit : Michel de Rooij / michel@eightwone.com
+        AddedWebsite: http://eightwone.com
+        AddedTwitter: URL        
+        REVISIONS
+        * 4:41 PM 10/6/2025 fixed comment brackets ; 
+        * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
+            remove the write-my*() support (defer to native w-l support)
+        * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
+        .DESCRIPTION
+        Enable-UACTDO - Enables User Account Control
+        .OUTPUTS
+        None
+        .EXAMPLE ; 
+        PS> Enable-UAC
+        .LINK
+        https://github.org/tostka/verb-Desktop/
+        #>
+        [CmdletBinding()]
+        [alias('Enable-UAC821')]
+        PARAM( ) ;
+        $smsg = 'Enabling User Account Control'
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        #New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name EnableLUA -Value 1 -ErrorAction SilentlyContinue| out-null
+        $pltnIP=[ordered]@{
+            Path = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' ;
+            Name = "EnableLUA" ;
+            Value = 1 ;            
+            erroraction = 'SilentlyContinue' ; 
+        } ;        
+        $smsg = "New-ItemProperty w`n$(($pltnIP|out-string).trim())" ; 
+        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+        TRY{
+            New-ItemProperty @pltnIP | out-null ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+        } ;     
+    }
+
+#*------^ Enable-UACTDO.ps1 ^------
+
+
+#*------v get-localNicsTDO.ps1 v------
+function get-localNicsTDO {
+        <#
+        .SYNOPSIS
+        get-localNicsTDO - Quick summary of local Drives, encapsulates highlights of Get-NetAdapter, get-netipaddress & Get-NetIPInterface. 
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 2025-07-17
+        FileName    : get-localNicsTDO.ps1
+        License     : MIT License
+        Copyright   : (c) 2025 Todd Kadrie
+        Github      : https://github.com/tostka/verb-network
+        Tags        : Powershell
+        AddedCredit : REFERENCE
+        AddedWebsite: URL
+        AddedTwitter: URL
+        REVISIONS
+        * 10:06 AM 8/14/2025 add: -NoAutoIP & -NoDhcp params, to exclude wo need to postfilter ;  ren: show-localNicsTDO -> get-localNicsTDO, alias orig name
+        * 3:40 PM 8/13/2025 init, added to xopBuildLibary.ps1 & verb-network
+        .DESCRIPTION
+        get-localNicsTDO - Quick summary of local Drives, encapsulates highlights of Get-NetAdapter, get-netipaddress & Get-NetIPInterface. 
+
+        Returns PSCustomObject array with following properties:
+
+            A typical Static IPv4 Nic:
+
+            Name                 : Ethernet
+            Status               : Up
+            LinkSpeed            : 10 Gbps
+            MediaType            : 802.3
+            MediaConnectionState : Connected
+            ifIndex              : 2
+            ifDesc               : vmxnet3 Ethernet Adapter
+            ipAddress            : 123.456.9.6
+            ipInterfaceIndex     : 2
+            ipInterfaceAlias     : Ethernet
+            ipAddressFamily      : IPv4
+            ipType               : Unicast
+            ipPrefixLength       : 24
+            ipiInterfaceMetric   : 15
+            isDHCP               : False
+            isAutoIPRange        : False
+
+            A typcial unconfigured DHCP nic defaulting to APIPA auto-ip.
+
+            Name                 : Ethernet1
+            Status               : Up
+            LinkSpeed            : 10 Gbps
+            MediaType            : 802.3
+            MediaConnectionState : Connected
+            ifIndex              : 4
+            ifDesc               : vmxnet3 Ethernet Adapter #2
+            ipAddress            : 169.254.167.181
+            ipInterfaceIndex     : 4
+            ipInterfaceAlias     : Ethernet1
+            ipAddressFamily      : IPv4
+            ipType               : Unicast
+            ipPrefixLength       : 16
+            ipiInterfaceMetric   : 15
+            isDHCP               : True
+            isAutoIPRange        : True
+
+            - isAutoIPRange reflects a simple regex test of ipAddress against '^169\.254\.' 
+                (the Automatic Private IP Addressing (APIPA) range 169.254.0.1 to 169.254.255.254).
+            - ipiInterfaceMetric (from Get-NetIPInterface) can be used to resolve binding order: Lower metric is prioritized (e.g. lower is higher in the binding order).
+
+        .PARAMETER NoAutoIP
+        Switch to exclude APIPA auto-assigned IP nics (unconfigured)
+        .PARAMETER NoDHCP
+        Switch to exclude DHCP-enabled nics (static-IP only returned)
+        .INPUTS
+        None. Does not accepted piped input.
+        .OUTPUTS
+        System.Object[] summary properties
+        .EXAMPLE
+        PS> $localNics = get-localNicsTDO | ?{-not $_.isAutoIPRange} ; 
+        PS> $localNics  ; 
+        
+            Name                 : Ethernet
+            Status               : Up
+            LinkSpeed            : 10 Gbps
+            MediaType            : 802.3
+            MediaConnectionState : Connected
+            ifIndex              : 2
+            ifDesc               : vmxnet3 Ethernet Adapter
+            ipAddress            : 123.456.9.6
+            ipInterfaceIndex     : 2
+            ipInterfaceAlias     : Ethernet
+            ipAddressFamily      : IPv4
+            ipType               : Unicast
+            ipPrefixLength       : 24
+            ipiInterfaceMetric   : 15
+            isDHCP               : False
+            isAutoIPRange        : False
+         
+        Demo typical pass, with postfilter to exclude isAutoIPRange nics (APIPA, e.g. unconfigured, non-Static/non-DHCP)
+        .EXAMPLE
+        PS> $localNics = get-localNicsTDO -NoAutoIP -NoDHCP} ; 
+        PS> $localNics  ; 
+        
+            Name                 : Ethernet
+            Status               : Up
+            LinkSpeed            : 10 Gbps
+            MediaType            : 802.3
+            MediaConnectionState : Connected
+            ifIndex              : 2
+            ifDesc               : vmxnet3 Ethernet Adapter
+            ipAddress            : 123.456.9.6
+            ipInterfaceIndex     : 2
+            ipInterfaceAlias     : Ethernet
+            ipAddressFamily      : IPv4
+            ipType               : Unicast
+            ipPrefixLength       : 24
+            ipiInterfaceMetric   : 15
+            isDHCP               : False
+            isAutoIPRange        : False
+         
+        Demo typical pass, using -NoAutoIP & -NoDhcp (vs post filtering in frst demo)
+        .LINK
+        https://github.com/tostka/verb-network
+        #>
+        [CmdletBinding()]
+        [Alias('show-localNicsTDO','get-localNics')]
+        PARAM(
+            [Parameter(Mandatory = $false, HelpMessage = "Switch to exclude APIPA auto-assigned IP nics (unconfigured)")]
+                [switch]$NoAutoIP,
+            [Parameter(Mandatory = $false, HelpMessage = "Switch to exclude DHCP-enabled nics (static-IP only returned)")]
+                [switch]$NoDHCP
+        );
+        TRY{
+            $nicsActive = Get-NetAdapter | ?{$_.Status -eq 'Up' -AND $_.MediaConnectionState -eq 'Connected'}; 
+            $nics = @() ; 
+            $nicsActive | foreach-object{        
+                $thisnic = $_ ; 
+                $nicInfo = [ordered]@{                    
+                    Name = $thisnic.Name ;  # Ethernet
+                    Status = $thisnic.Status ; # Up
+                    LinkSpeed = $thisnic.LinkSpeed ; # 10 Gbps
+                    MediaType = $thisnic.MediaType ; # 802.3
+                    MediaConnectionState = $thisnic.MediaConnectionState ; # Connected
+                    ifIndex = $thisnic.ifIndex ; # 2
+                    ifDesc = $thisnic.ifDesc ; # vmxnet3 Ethernet Adapter    
+                    ipAddress = $null ; # 123.456.9.6
+                    ipInterfaceIndex = $null ; # 2
+                    ipInterfaceAlias = $null ; # Ethernet
+                    ipAddressFamily = $null ; # IPv4
+                    ipType = $null ; # Unicast
+                    ipPrefixLength = $null ; # 24
+                    ipiInterfaceMetric = $null ; 
+                    isDHCP = $null ; 
+                    isAutoIPRange = $false ; 
+                } ; 
+                if($ipInfo = $thisnic | get-netipaddress){
+                    $nicInfo.ipAddress = $ipInfo.ipAddress ; # 123.456.9.6
+                    if($nicInfo.ipAddress -match '^169\.254\.'){
+                        $nicInfo.isAutoIPRange = $true ;
+                        $smsg = "NIC:$($nicInfo.name) is unused APIPA/AutoIP'd!: $($nicInfo.ipAddress)" ;
+                        if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;                
+                        } ;
+                    } ; 
+                    $nicInfo.ipInterfaceIndex =$ipInfo.InterfaceIndex ; # 2
+                    $nicInfo.ipInterfaceAlias =$ipInfo.InterfaceAlias ; # Ethernet
+                    $nicInfo.ipAddressFamily =$ipInfo.AddressFamily ; # IPv4
+                    $nicInfo.ipType =$ipInfo.Type ; # Unicast
+                    $nicInfo.ipPrefixLength =$ipInfo.PrefixLength ; # 24
+                    if($ipBindInfo = $thisnic | Get-NetIPInterface |?{$_.ConnectionState -eq 'Connected'}){
+                        $nicInfo.ipiInterfaceMetric = $ipBindInfo.InterfaceMetric ; 
+                        $nicInfo.isDHCP = [boolean]($ipBindInfo.dhcp -eq 'Enabled')
+                    } else { write-warning "No Get-NetIPInterface data returned" } 
+                } else { write-warning "No get-netipaddress data returned" } ; 
+                $nics += @([pscustomobject]$nicInfo)
+            } ; 
+            if($NoAutoIP){
+                $nics = $nics |?{-not $_.isAutoIPRange} ; 
+            }
+            if($NoDhcp){
+                $nics = $nics |?{-not $_.isDHCP} ; 
+            } ; 
+            $nics | write-output ; 
+        } CATCH {
+            $ErrTrapd=$Error[0] ;
+            $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+            if(gcm Write-MyWarning -ea 0){Write-MyWarning $smsg } else {
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+            } ;
+        } ; 
+    }
+
+#*------^ get-localNicsTDO.ps1 ^------
+
+
+#*------v Get-MyPackageTDO.ps1 v------
+Function Get-MyPackageTDO () {
+            <#
+            .SYNOPSIS
+            Get-MyPackageTDO - Given 1) an installable's downloaded source Url, 2) the matching downloaded installable FileName, and 3) the Path that the download should be findable within: This tests for a pre-downloaded Filename at the InstallPath specified, and if not found, downloads the specified URL (via Start-BitsTransfer), to the InstallPath\Filename. 
+            .NOTES
+            Version     : 0.0.1
+            Author      : Todd Kadrie
+            Website     : http://www.toddomation.com
+            Twitter     : @tostka / http://twitter.com/tostka
+            CreatedDate : 2025-08-15
+            FileName    : Get-MyPackageTDO.ps1
+            License     : (none asserted)
+            Copyright   : (none asserted)
+            Github      : https://github.com/tostka/verb-IO
+            Tags        : Powershell,FileSystem,Backup,Development,Build,Staging
+            AddedCredit :  Michel de Rooij / michel@eightwone.com
+            AddedWebsite: https://eightwone.com / https://github.com/michelderooij/Install-Exchange15
+            AddedTwitter: URL
+            REVISIONS
+            * 11:34 AM 8/15/2025 ren: Get-MyPackage -> Get-MyPackageTDO and alias the orig name;  add: CBH, fleshed out Parameter specs into formal well specified block. Added variety of working examples, for reuse adding future patches/packages to the mix.
+            * 821's posted copy w/in install-Exchange15.ps1: Version 4.13, July 17th, 2025 821 install-Exchange15.ps1 func
+            .DESCRIPTION
+            Get-MyPackageTDO - Given 1) an installable's downloaded source Url, 2) the matching downloaded installable FileName, and 3) the Path that the download should be findable within: This tests for a pre-downloaded Filename at the InstallPath specified, and if not found, downloads the specified URL (via Start-BitsTransfer), to the InstallPath\Filename. 
+
+            .INPUTS
+            None. Does not accepted piped input.(.NET types, can add description)
+            .OUTPUTS            
+            System.Boolean
+            .PARAMETER Package
+            Microsoft's description for the update (used to echo status updates to log & console)[-Package 'Hotfix Update for Exchange Server 2016 CU23 HU16']
+            .PARAMETER URL
+            Microsoft's direct download URL for direct download, if local copy is unavailable (unprompted, no confirm prompt; may need to research into scripting & desktop automation cites to find the working url)[-URL 'https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe']
+            .PARAMETER FileName
+            Microsoft's filename for the downloaded file (used to check for local copy and avoid redownload)[-FileName 'Exchange2016-KB5057653-x64-en.exe']
+            .PARAMETER InstallPath
+            Parent directory path containing target .msu|.msi|.msp|.exe etc [-InstallPath c:\pathto\]
+            .EXAMPLE
+            PS> Get-MyPackageTDO -Package "Microsoft .NET Framework 4.8.1" -FileName "NDP481-x86-x64-AllOS-ENU.exe" '' -FileName "NDP481-x86-x64-AllOS-ENU.exe" -InstallPath $RunFrom
+            Demo Test of .NET Framework 4.8.1 package             
+            .LINK
+            https://github.com/michelderooij/Install-Exchange15
+            .LINK
+            https://github.com/tostka/verb-io
+            .LINK
+            https://github.com/tostka/powershellbb/
+            #>
+            [CmdletBinding()]
+            [Alias('Get-MyPackage')]
+            PARAM ( 
+                [Parameter(Position=0, HelpMessage="Microsoft's description for the update (used to echo status updates to log & console)[-Package 'Hotfix Update for Exchange Server 2016 CU23 HU16']")]
+                    [string]$Package, 
+                [Parameter(Position=1, HelpMessage="Microsoft's direct download URL for direct download, if local copy is unavailable (unprompted, no confirm prompt; may need to research into scripting & desktop automation cites to find the working url)[-URL 'https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe']")]
+                    [String]$URL, 
+                [Parameter(Position=2, HelpMessage="Microsoft's filename for the downloaded file (used to check for local copy and avoid redownload)[-FileName 'Exchange2016-KB5057653-x64-en.exe']")]
+                    [String]$FileName, 
+                [Parameter(Position=3, HelpMessage="Parent directory path containing target .msu|.msi|.msp|.exe etc [-InstallPath c:\pathto\]")]
+                    [String]$InstallPath
+            )
+            $res= $true
+            If( -not( Test-Path $(Join-Path $InstallPath $Filename))) {
+                If( $URL) {
+                    $smsg = "Package $Package not found, downloading to $FileName"
+                    if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    } ;
+                    Try{
+                        $smsg = "Source: $URL"
+                        if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                            if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                        } ;
+                        Start-BitsTransfer -Source $URL -Destination $(Join-Path $InstallPath $Filename)
+                    }
+                    Catch{
+                        $smsg = "Problem downloading package from URL"
+                        if(gcm Write-MyError -ea 0){Write-MyError $smsg } else {
+                            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error} else{ write-ERROR "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                        } ;
+                        $res= $false
+                    }
+                }
+                Else {
+                    $smsg = "$FileName not present, skipping"
+                    if(gcm Write-MyWarning -ea 0){Write-MyWarning $smsg } else {
+                        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    } ;
+                    $res= $false
+                }
+            }
+            Else {
+                $smsg = "Located $Package ($InstallPath\$FileName)"
+                if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                    if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                } ;
+            }
+            Return $res
+        }
+
+#*------^ Get-MyPackageTDO.ps1 ^------
+
+
+#*------v get-OSFullVersionTDO.ps1 v------
+Function get-OSFullVersionTDO {
+        <#
+        .SYNOPSIS
+        get-OSFullVersionTDO - local OS Semantic Version number n.n.n.n, via get-cimInstance/get-WMIObject
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 20250929-1026AM
+        FileName    : get-OSFullVersionTDO.ps1
+        License     : MIT License
+        Copyright   : (c) 2025 Todd Kadrie
+        Github      : https://github.com/tostka/verb-desktop
+        Tags        : Powershell,Storage,Drive,Drivespace
+        AddedCredit : 
+        AddedWebsite: 
+        AddedTwitter: 
+        REVISIONS
+        * 12:12 PM 10/6/2025 add -MajorVersion & MinorVersion to return those sub-strings (support queries for the values in isolation); updated logic for the variant outputs.
+        * 11:26 AM 9/29/2025 port from install-Exchnage15-TTC.ps1 into vdesk
+        .DESCRIPTION
+        get-OSFullVersionTDO - local OS Semantic Version number n.n.n.n, via get-cimInstance/get-WMIObject
+       .PARAMETER MajorVersion
+       Switch to return solely the MajorVersion value
+       .PARAMETER MinorVersion        
+        Switch to return solely the MinorVersion value
+        .INPUTS
+        None, no piped input.
+        .OUTPUTS
+        String Semantic Version
+        .EXAMPLE
+        PS> $OSSemVers = get-OSFullVersionTDO; 
+        PS> $OSSemVers ; 
+        
+            10.0.19045          
+        
+        Demo call
+        .EXAMPLE
+        PS> if(get-variable -name State){
+        PS>     $State['MajorSetupVersion'] = get-OSFullVersionTDO -MajorVersion ;
+        PS>     $State['MinorSetupVersion'] = get-OSFullVersionTDO -MinorVersion ;
+        PS> } else{
+        PS>     #$SetupVersion = Get-FileVersionTDO $CabExSetup.fullname ;
+        PS>     $MajorSetupVersion = get-OSFullVersionTDO -MajorVersion ;
+        PS>     $MinorSetupVersion = get-OSFullVersionTDO -MinorVersion ;
+        PS> } ; 
+        Demo use of the -MajorVersion & -MinorVersion params
+        .LINK
+        https://github.org/tostka/verb-desktop/
+        #>
+        [CmdletBinding()]
+        [alias('get-OSFullVersion')]
+        PARAM(
+            [Parameter(HelpMessage = "Switch to return solely the MajorVersion value[-MajorVersion]")]
+                [switch]$MajorVersion,
+            [Parameter(HelpMessage = "Switch to return solely the MinorVersion value[-MinorVersion]")]
+                [switch]$MinorVersion
+        ) ; 
+        if($MajorVersion -AND $MinorVersion){
+            $smsg = "*BOTH* -MajorVersion & -MinorVersion SPECIFIED: SPECIFY ONE OR THE OTHER!" ; 
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} 
+            else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
+            BREAK ; 
+        } ; 
+        if (get-command get-ciminstance -ea 0) {
+            $OS = Get-ciminstance -class  Win32_OperatingSystem ; 
+        } else {
+            $OS = Get-WmiObject Win32_OperatingSystem ; 
+        } ;
+        $MajorOSVersion= [string]($OS| Select-Object @{n="Major";e={($_.Version.Split(".")[0]+"."+$_.Version.Split(".")[1])}}).Major ; 
+        $MinorOSVersion= [string]($OS| Select-Object @{n="Minor";e={($_.Version.Split(".")[2])}}).Minor ; 
+        $FullOSVersion= ('{0}.{1}' -f $MajorOSVersion, $MinorOSVersion) ;
+        if($MajorVersion){
+            $smsg = "-MajorVersion: returning to pipeline $($MajorVersion)" ;
+            if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+            } ;
+            $MajorVersion | write-output 
+        } elseif($MinorVersion){
+            $MinorOSVersion | write-output ; 
+            $smsg = "-MinorOSVersion: returning to pipeline $($MinorOSVersion)" ;
+            if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+            } ;
+        }else{ 
+            $smsg = "Returning FullOSVersionto pipeline $($FullOSVersion)" ;
+            if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+            } ;
+            $FullOSVersion | write-output  ;
+        }
+    }
+
+#*------^ get-OSFullVersionTDO.ps1 ^------
 
 
 #*------v get-processTitled.ps1 v------
@@ -762,6 +1829,297 @@ function Install-MsiPackage {
 #*------^ Install-MsiPackage.ps1 ^------
 
 
+#*------v Install-MyPackageTDO.ps1 v------
+Function Install-MyPackageTDO {
+            <#
+            .SYNOPSIS
+            Install-MyPackageTDO - MS patch/update installer, wraps Invoke-Process
+            .NOTES
+            Version     : 0.0.1
+            Author      : Todd Kadrie
+            Website     : http://www.toddomation.com
+            Twitter     : @tostka / http://twitter.com/tostka
+            CreatedDate : 2025-08-14
+            FileName    : Install-MyPackageTDO.ps1
+            License     : MIT License
+            Copyright   : (c) 2025 Todd Kadrie
+            Github      : https://github.com/tostka/verb-XXX
+            Tags        : Powershell,FileSystem,Backup,Development,Build,Staging
+            AddedCredit :  Michel de Rooij / michel@eightwone.com
+            AddedWebsite: eightwone.com
+            AddedTwitter: URL
+            REVISIONS
+            * 10:48 AM 10/6/2025 reworked demos; add var code for lack of $State[]; add alias Install-MyPackage
+            * 12:06 PM 10/2/2025 ren Install-MyPackage -> Install-MyPackageTDO, alias original & 821 variant
+            *11:15 AM 8/15/2025 add:explicit Position tags to params (PS default assumes in decl order, this codifies); fixed CBH param specs errors; brought in deferring $script varis from source; add: optional -FilePath, to backfill where $script scope $State['InstallPath'] isn't populated.
+            * 5:17 PM 8/14/2025 add: CBH, fleshed out Parameter specs into formal well specified block. Added variety of working examples, for reuse adding future patches/packages to the mix.
+            * 821's posted copy w/in install-Exchange15.ps1: Version 4.13, July 17th, 2025 821 install-Exchange15.ps1 func
+            .DESCRIPTION
+            Install-MyPackageTDO - MS patch/update installer, wraps Invoke-Process: Deps: Test-MyPackage, Get-MyPackage, Invoke-Extract, Write-MyOutput, Write-MyError, Write-MyVerbose'
+
+            Tweaked variant of 821's function from his Install-Exchange15.ps1 script.
+            
+            ## DEMO update for a new package:
+
+            # add the Exchange 2016 HU16 hotfix, sample at D:\cab\Ex2016CU23HU16-KB5057653\Exchange2016-KB5057653-x64-en.exe
+
+            1. -PackageID: KBnnnnnn number - this is used by Test-MyPackage to do an HKLM reg install search, to verify install/pre-install. 
+            2. -Package: Descriptive string from the KB doc article (used to echo/log status info).
+            3. -FileName: copy the leaf filename to the filename spec;
+            4. -OnlineURL: Hunt up an actual non-interactive download url from a scripting DSC/system automation forum or site. 
+                (Doesn't work: find the spec page for it, click through the MSdownload link and grab the link on the download btn)
+            5. -Arguments: suitable native install arguments supported by the package download (see other examples, or the package silent/passive installation docs).
+            6. -NoDownload: seldom used, simply overrules existing package filename test, attempts to run the install direct from the download OnlineUrl (does not skip downloading, in spite of the name)  
+            7. -FilePath: is an optional fall back outside of install-Exchange15.ps1 use, where InstallPath, $State['InstallPath'] is used as the RunFrom. 
+                This is the directory the install package download is hosted from (or will be downloaded to).
+              
+            ```powershell
+            PS> $PresenceKey= Test-MyPackage $PackageID ; 
+            ```
+            Test that checks for target kbnnnnn/guid
+
+            [Download the package now](https://www.microsoft.com/download/details.aspx?familyID=1dcdfa24-ef09-483e-871e-28e699c7327c)
+            => [Download](https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe)
+           
+            Raw download redirs into a form as: [Download](https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe)
+            THATS the dl url, use it.
+
+            ### Constructed call for the above:
+            ```powershell
+            PS> Install-MyPackageTDO -PackageID 'KB5057653' -Package 'Hotfix Update for Exchange Server 2016 CU23 HU16' -FileName 'Exchange2016-KB5057653-x64-en.exe' -OnlineURL 'https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe' -Arguments ('/passive')
+            ```
+
+            ###Splatted call
+            ```powershell
+            $pltisPkg=[ordered]@{
+                PackageID = 'KB5057653' ;
+                Package = 'Hotfix Update for Exchange Server 2016 CU23 HU16' ;
+                FileName = 'Exchange2016-KB5057653-x64-en.exe' ;
+                OnlineURL = 'https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe' ;
+                Arguments = ('/passive') ; 
+            } ;
+            $smsg = "Install-MyPackageTDO w`n$(($pltisPkg|out-string).trim())" ; 
+            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Info } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+            Install-MyPackageTDO @pltisPkg ; 
+            ```
+
+            .INPUTS
+            None. Does not accepted piped input.(.NET types, can add description)
+            .OUTPUTS
+            None. Returns no objects or output (.NET types)
+            
+            .PARAMETER PackageID
+            Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]
+            .PARAMETER Package
+            Microsoft's description for the update (used to echo status updates to log & console)[-Package 'Hotfix Update for Exchange Server 2016 CU23 HU16']            
+            .PARAMETER FileName
+            Filename of target .msu|.msi|.msp|.exe etc [-FileName 'some.exe']
+            .PARAMETER Arguments
+            Suitable native .msu|.msi|.msp|.exe package parameters for a silent/passive install etc (those supported by the patch itself) [-Arguments ('/passive')]
+            .PARAMETER NoDownload
+            Switch to suppress download behavior (Doesn't suppress the download, assumes there's no downlaoded local copy: split-paths the -OnlineURL parent into a RunFrom to be Invoke-Process() installed)[-FilePath c:\pathto\]  
+            PARAMETER .FilePath
+            Optional: Parent directory path containing target file to be installed (install-Exchange15.ps1 defaults to `$State['InstallPath'])[-FilePath c:\pathto\]
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "-" -Package "Microsoft .NET Framework 4.8.1" -FileName "NDP481-x86-x64-AllOS-ENU.exe" -OnlineURL "https://download.microsoft.com/download/4/b/2/cd00d4ed-ebdd-49ee-8a33-eabc3d1030e3/NDP481-x86-x64-AllOS-ENU.exe" -Arguments ("/q", "/norestart")            
+            Demo install of .NET Framework 4.8.1
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "KB3206632" -Package "Cumulative Update for Windows Server 2016 for x64-based Systems" -FileName "windows10.0-kb3206632-x64_b2e20b7e1aa65288007de21e88cd21c3ffb05110.msu" -OnlineURL "http://download.windowsupdate.com/d/msdownload/update/software/secu/2016/12/windows10.0-kb3206632-x64_b2e20b7e1aa65288007de21e88cd21c3ffb05110.msu" -Arguments ("/quiet", "/norestart")
+            Demo install of Cumulative Update for Windows Server 2016 kb3206632 OS patch 
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "" -Package "Visual C++ 2012 Redistributable" -FileName "vcredist_x64_2012.exe" -OnlineURL "https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe" -Arguments ("/install", "/quiet", "/norestart")
+            Demo install of Visual C++ 2012 Redistributable
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "" -Package "Visual C++ 2013 Redistributable" -FileName "vcredist_x64_2013.exe" -OnlineURL "https://aka.ms/highdpimfc2013x64enu" -Arguments ("/install", "/quiet", "/norestart")
+            Demo install of Visual C++ 2013 Redistributable
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "{9BCA2118-F753-4A1E-BCF3-5A820729965C}" -Package "URL Rewrite Module 2.1" -FileName "rewrite_amd64_en-US.msi" -OnlineURL "https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi" -Arguments ("/quiet", "/norestart")
+            Demo install of URL Rewrite Module 2.1
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" -Package "Unified Communications Managed API 4.0 Runtime (Core)" -FileName "Setup.exe" (Join-Path -Path $State['SourcePath'] -ChildPath 'UcmaRedist\Setup.exe') -OnlineURL "" -Arguments ("/passive", "/norestart") -NoDownload
+            Demo install of Unified Communications Managed API 4.0 Runtime (Core) (from the unpacked Exchange setup ISO, blank -OnlineURL)
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" -Package "Unified Communications Managed API 4.0 Runtime" -FileName "UcmaRuntimeSetup.exe" -OnlineURL "https://download.microsoft.com/download/2/C/4/2C47A5C1-A1F3-4843-B9FE-84C0032C61EC/UcmaRuntimeSetup.exe" -Arguments ("/passive", "/norestart")
+            Demo install of Unified Communications Managed API 4.0 Runtime
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID "" -Package "Microsoft Edge Enterprise x64" -FileName "MicrosoftEdgeEnterpriseX64.msi" -OnlineURL "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/35f200dc-46f7-46fc-8f97-f29bf1babe1e/MicrosoftEdgeEnterpriseX64.msi" -Arguments @("/quiet", "/norestart") -NoDownload:$false
+            Demo install of Microsoft Edge Enterprise x64
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID 'KB5049233' -Package 'Security Update For Exchange Server 2019 CU14 SU3 V2' -FileName 'Exchange2019-KB5049233-x64-en.exe' 'https://download.microsoft.com/download/8/0/b/80b356e4-f7b1-4e11-9586-d3132a7a2fc3/Exchange2019-KB5049233-x64-en.exe' -Arguments ('/passive')
+            Demo install of Security Update For Exchange Server 2019 CU14 SU3 V2
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID 'KB5049233' -Package 'Security Update For Exchange Server 2019 CU13 SU7 V2' -FileName 'Exchange2019-KB5049233-x64-en.exe' -OnlineURL 'https://download.microsoft.com/download/4/e/5/4e5cbbcc-5894-457d-88c4-c0b2ff7f208f/Exchange2019-KB5049233-x64-en.exe' -Arguments ('/passive')
+            Demo install of Security Update For Exchange Server 2019 CU13 SU7 V2
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID 'KB5049233' -Package 'Security Update For Exchange Server 2016 CU23 SU14 V2' -FileName 'Exchange2016-KB5049233-x64-en.exe' -OnlineURL 'https://download.microsoft.com/download/0/9/9/0998c26c-8eb6-403a-b97a-ae44c4db5e20/Exchange2016-KB5049233-x64-en.exe' -Arguments ('/passive')
+            Demo install of Security Update For Exchange Server 2016 CU23 SU14 V2
+            .EXAMPLE
+            PS> Install-MyPackageTDO -PackageID 'KB5057653' -Package 'Hotfix Update for Exchange Server 2016 CU23 HU16' -FileName 'Exchange2016-KB5057653-x64-en.exe' -OnlineURL 'https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe' -Arguments ('/passive')
+            Demo install of Hotfix Update for Exchange Server 2016 CU23 HU16
+            .LINK
+            https://github.com/tostka/verb-dev
+            .LINK
+            https://github.com/tostka/powershellbb/
+            #>
+            [CmdletBinding()]
+            [Alias('Install-MyPackage')]
+            PARAM ( 
+                [Parameter(Position=0, HelpMessage="Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]")]
+                    [String]$PackageID, 
+                [Parameter(Position=1, HelpMessage="Microsoft's description for the update (used to echo status updates to log & console)[-Package 'Hotfix Update for Exchange Server 2016 CU23 HU16']")]
+                    [string]$Package, 
+                [Parameter(Position=2, HelpMessage="Microsoft's filename for the downloaded file (used to check for local copy and avoid redownload)[-FileName 'Exchange2016-KB5057653-x64-en.exe']")]
+                    [String]$FileName, 
+                [Parameter(Position=3, HelpMessage="Microsoft's direct download URL for direct download, if local copy is unavailable (unprompted, no confirm prompt; may need to research into scripting & desktop automation cites to find the working url)[-OnlineURL 'https://download.microsoft.com/download/1dcdfa24-ef09-483e-871e-28e699c7327c/Exchange2016-KB5057653-x64-en.exe']")]
+                    [String]$OnlineURL, 
+                [Parameter(Position=4, HelpMessage="Suitable native .msu|.msi|.msp|.exe package parameters for a silent/passive install etc (those supported by the patch itself) [-Arguments ('/passive')]")]
+                    [array]$Arguments, 
+                [Parameter(Position=5, HelpMessage="Switch to suppress download behavior (Doesn't suppress the download, assumes there's no downlaoded local copy: split-paths the -OnlineURL parent into a RunFrom to be Invoke-Process() installed)[-FilePath c:\pathto\]")]
+                    [switch]$NoDownload,
+                [Parameter(Position=6, HelpMessage="Optional: Parent directory path containing target file to be installed (install-Exchange15.ps1 defaults to `$State['InstallPath'])[-FilePath c:\pathto\]")]
+                    [string]$FilePath
+            )
+            # dependant constants            
+            if(-not $ERR_PROBLEMPACKAGESETUP){$ERR_PROBLEMPACKAGESETUP        = 1121} ; 
+            if(-not $ERR_PROBLEMPACKAGEDL){$ERR_PROBLEMPACKAGEDL           = 1120};
+            if(-not $ERR_PROBLEMPACKAGEEXTRACT){$ERR_PROBLEMPACKAGEEXTRACT      = 1122};
+                        
+            If( $PackageID) {
+                $smsg = "Processing $Package ($PackageID)"
+                if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success
+                } ;
+                # pretest for installation: 
+                $PresenceKey= Test-MyPackage $PackageID
+            }
+            Else {
+                # Just install, don't detect
+                $smsg = "Processing $Package"
+                if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success
+                } ;
+                $PresenceKey= $false
+            }
+            #$RunFrom= $State['InstallPath']
+            # $State['InstallPath'] is a hashtable configured by install-Exchange15-TTC.ps1. In it's absence, fall back to local -FilePath.
+            if($State['InstallPath']){
+                $RunFrom= $State['InstallPath']
+            }elseif($FilePath){
+                $RunFrom = $FilePath
+            }else{
+                $smsg = "Neither `$State['InstallPath'] found, nor -FilePath specified!`nPlease specify at least one of the two!"
+                $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+                if(gcm Write-MyError -ea 0){Write-MyError $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error} else{ write-ERROR "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                } ;
+                Exit "No RunFrom/InstallPath/FilePath specified" ; 
+            }
+            If( -not( $PresenceKey )){
+
+                If( $FileName.contains('|')) {
+                    # Filename contains filename (dl) and package name (after extraction)
+                    $PackageFile= ($FileName.Split('|'))[1]
+                    $FileName= ($FileName.Split('|'))[0]
+                    If( -not( Get-MyPackage $Package '' $FileName $RunFrom)) {
+                        # Download & Extract
+                        If( -not( Get-MyPackage $Package $OnlineURL $PackageFile $RunFrom)) {
+                            $smsg = "Problem downloading/accessing $Package"
+                            if(gcm Write-MyError -ea 0){Write-MyError $smsg } else {
+                                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error} else{ write-ERROR "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                            } ;
+                            Exit $ERR_PROBLEMPACKAGEDL
+                        }
+                        $smsg = "Extracting Hotfix Package $Package"
+                        if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                            #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success
+                        } ;
+                        Invoke-ExtractTDO $RunFrom $PackageFile
+
+                        If( -not( Get-MyPackage $Package $OnlineURL $PackageFile $RunFrom)) {
+                            $smsg = "Problem downloading/accessing $Package"
+                            if(gcm Write-MyError -ea 0){Write-MyError $smsg } else {
+                                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error} else{ write-ERROR "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                            } ;
+                            Exit $ERR_PROBLEMPACKAGEEXTRACT
+                        }
+                    }
+                }
+                Else {
+                    If( $NoDownload) {
+                        $RunFrom= Split-Path -Path $OnlineURL -Parent
+                        $smsg = "Will run $FileName straight from $RunFrom"
+                        if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                            if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                        } ;
+
+                    }
+                    If( -not( Get-MyPackage $Package $OnlineURL $FileName $RunFrom)) {
+                        $smsg = "Problem downloading/accessing $Package"
+                        if(gcm Write-MyError -ea 0){Write-MyError $smsg } else {
+                            if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error} else{ write-ERROR "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                        } ;
+                        Exit $ERR_PROBLEMPACKAGEDL
+                    }
+                }
+
+                $smsg = "Installing $Package from $RunFrom"
+                if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success
+                } ;
+                $rval= Invoke-ProcessTDO $RunFrom $FileName $Arguments
+
+                If( $PackageID) {
+                    $PresenceKey= Test-MyPackage $PackageID
+                }
+                Else {
+                    # Don't check post-installation
+                    $PresenceKey= $true
+                }
+                If( ( @(3010,-2145124329) -contains $rval) -or $PresenceKey)  {
+                    switch ( $rval) {
+                        3010: {
+                            $smsg = "Installation $Package successful, reboot required"
+                            if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                            } ;
+                        }
+                        -2145124329: {
+                            $smsg = "$Package not applicable or blocked - ignoring"
+                            if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                            } ;
+                        }
+                        default: {
+                            $smsg = "Installation $Package successful"
+                            if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                            } ;
+                        }
+                    }
+                }
+                Else {
+                    $smsg = "Problem installing $Package - For fixes, check $($ENV:WINDIR)\WindowsUpdate.log; For .NET Framework issues, check 'Microsoft .NET Framework 4 Setup' HTML document in $($ENV:TEMP)"
+                    if(gcm Write-MyError -ea 0){Write-MyError $smsg } else {
+                        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level Error} else{ write-ERROR "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    } ;
+                    Exit $ERR_PROBLEMPACKAGESETUP
+                }
+            }
+            Else {
+                $smsg = "$Package already installed"
+                if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                    if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                } ;
+            }
+        }
+
+#*------^ Install-MyPackageTDO.ps1 ^------
+
+
 #*------v Install-ServerRoles.ps1 v------
 function Install-ServerRoles {
 	<#
@@ -898,6 +2256,282 @@ Function invoke-Explore {
 #*------^ invoke-Explore.ps1 ^------
 
 
+#*------v Invoke-ExtractTDO.ps1 v------
+Function Invoke-ExtractTDO {
+            <#
+            .SYNOPSIS
+            Invoke-ExtractTDO - Given 1) an installable's downloaded source Url, 2) the matching downloaded installable FileName, and 3) the Path that the download should be findable within: This tests for a pre-downloaded Filename at the InstallPath specified, and if not found, downloads the specified URL (via Start-BitsTransfer), to the InstallPath\Filename. 
+            .NOTES
+            Version     : 0.0.1
+            Author      : Todd Kadrie
+            Website     : http://www.toddomation.com
+            Twitter     : @tostka / http://twitter.com/tostka
+            CreatedDate : 2025-08-15
+            FileName    : Invoke-ExtractTDO.ps1
+            License     : (none asserted)
+            Copyright   : (none asserted)
+            Github      : https://github.com/tostka/verb-IO
+            Tags        : Powershell,FileSystem,Backup,Development,Build,Staging
+            AddedCredit :  Michel de Rooij / michel@eightwone.com
+            AddedWebsite: https://eightwone.com / https://github.com/michelderooij/Install-Exchange15
+            AddedTwitter: URL
+            REVISIONS
+            * 11:34 AM 8/15/2025 ren: Invoke-Extract -> Invoke-ExtractTDO and alias the orig name;  add: CBH, fleshed out Parameter specs into formal well specified block. Added variety of working examples, for reuse adding future patches/packages to the mix.
+            * 821's posted copy w/in install-Exchange15.ps1: Version 4.13, July 17th, 2025 821 install-Exchange15.ps1 func
+            .DESCRIPTION
+            Invoke-ExtractTDO - Given 1) an installable's downloaded source Url, 2) the matching downloaded installable FileName, and 3) the Path that the download should be findable within: This tests for a pre-downloaded Filename at the InstallPath specified, and if not found, downloads the specified URL (via Start-BitsTransfer), to the InstallPath\Filename. 
+
+            .INPUTS
+            None. Does not accepted piped input.(.NET types, can add description)
+            .OUTPUTS            
+            System.Boolean
+            .PARAMETER FilePath
+            Parent directory path containing target file to be extracted [-FilePath c:\pathto\]
+            .PARAMETER FileName
+            Filename for the file to be extracted[-FileName 'Exchange2016-KB5057653-x64-en.exe']        
+            .EXAMPLE
+            PS> Invoke-ExtractTDO -FilePath $RunFrom -FileName $PackageFile
+            Demo Test use 
+            .LINK
+            https://github.com/michelderooij/Install-Exchange15
+            .LINK
+            https://github.com/tostka/verb-io
+            .LINK
+            https://github.com/tostka/powershellbb/
+            #>
+            [CmdletBinding()]
+            [Alias('Invoke-Extract')]
+            PARAM(
+                [Parameter(Position=0, HelpMessage="Parent directory path containing target file to be extracted [-FilePath c:\pathto\]")]
+                    $FilePath,
+                [Parameter(Position=1, HelpMessage="Filename for the file to be extracted[-FileName 'Exchange2016-KB5057653-x64-en.exe']")]
+                    [String]$FileName
+            ) 
+            $smsg = "Extracting $FilePath\$FileName to $FilePath"
+            if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+            } ;
+            If( Test-Path $(Join-Path $FilePath $Filename)) {
+                $TempNam= "$(Join-Path $FilePath $Filename).zip"
+                Copy-Item $(Join-Path $FilePath $Filename) "$TempNam" -Force
+                $shellApplication = new-object -com shell.application
+                $zipPackage = $shellApplication.NameSpace( $TempNam)
+                $destFolder = $shellApplication.NameSpace( $FilePath)
+                $destFolder.CopyHere( $zipPackage.Items(), 0x10)
+                Remove-Item $TempNam
+            }
+            Else {
+                $smsg = "$FilePath\$FileName not found"
+                if(gcm Write-MyWarning -ea 0){Write-MyWarning $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                } ;
+            }
+        }
+
+#*------^ Invoke-ExtractTDO.ps1 ^------
+
+
+#*------v Invoke-ProcessTDO.ps1 v------
+Function Invoke-ProcessTDO {
+        <#
+        .SYNOPSIS
+        Invoke-ProcessTDO - Start-Process wrapper that runs 'MSU|MSI|MSP|EXE' etc files with command line parameters, and returns Exitcode (and captured stdOut/stdErr, with -Passthru parameter)
+        .NOTES
+        Version     : 0.0.1
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 2025-08-14
+        FileName    : Invoke-ProcessTDO
+        License     : MIT License
+        Copyright   : (c) 2025 Todd Kadrie
+        Github      : https://github.com/tostka/verb-XXX
+        Tags        : Powershell,FileSystem,Backup,Development,Build,Staging
+        AddedCredit :  Michel de Rooij / michel@eightwone.com
+        AddedWebsite: eightwone.com
+        AddedTwitter: URL
+        REVISIONS
+        * 2:41 PM 8/15/2025 added dotcrawl when non-verbose ; 
+            flipped Start-Process -NoNewWindow (still pops win) to -WindowStyle Hidden (work around bug dur to use with -redir's)
+            updated wlt to support wlty's; added to xopBuildLibrary.ps1, set xopBuildLibarary\Invoke-Process821() to defer to this if pre-loaded.
+        * 3:37 PM 8/14/2025 ren Invoke-Process821 -> Invoke-ProcessTDO (substantial upgraded code), aliased orig name ; 
+            added updated CBH demo; add: -silent param;  
+            add: CBH; -PassThru param (make it return output of underlying cmd), which returns a SytstemObject summary with ExitCode, StdOut, StdErr & process Handle.
+        * MdR's posted Version 4.13, July 17th, 2025 of install-Exchange15.ps1
+        .DESCRIPTION
+        Invoke-ProcessTDO - Start-Process wrapper that runs 'MSU|MSI|MSP|EXE' etc files with command line parameters, and returns Exitcode (and captured stdOut/stdErr, with -Passthru parameter)
+        .INPUTS
+        None. Does not accepted piped input.(.NET types, can add description)
+        .OUTPUTS
+        None. Returns no objects or output (.NET types)
+        System.Boolean
+        [| get-member the output to see what .NET obj TypeName is returned, to use here]
+        .EXAMPLE
+        PS> Invoke-ProcessTDO -whatif -verbose
+        EXSAMPLEOUTPUT
+        Run with whatif & verbose
+        .EXAMPLE
+        PS> Invoke-ProcessTDO
+        EXSAMPLEOUTPUT
+        EXDESCRIPTION
+        .LINK
+        https://github.com/tostka/verb-dev
+        .LINK
+        https://github.com/tostka/powershellbb/
+        .PARAMETER FilePath
+        Parent directory path containing target .msu|.msi|.msp|.exe etc [-FilePath c:\pathto\]
+        .PARAMETER FileName
+        Filename of target .msu|.msi|.msp|.exe etc [-FileName 'some.exe']
+        .PARAMETER ArgumentList
+        Array of arguments to used with target file [-ArgumentList @('/mode:RecoverServer', '/DoNotStartTransport', '/InstallWindowsComponents')]
+        .PARAMETER PassThru
+        Switch parameter to capture and return output & StdErr (rather than ErrorCode returned)
+        .PARAMETER Silent
+        Switch parameter to suppress all output but StdErr        
+        .EXAMPLE
+        PS> $Params= '/mode:RecoverServer', $State['IAcceptSwitch'], '/DoNotStartTransport', '/InstallWindowsComponents'
+        PS> $Params+= "/TargetDir:`"$($State['TargetPath'])`""
+        PS> $res= Invoke-ProcessTDO $State['SourcePath'] 'setup.exe' $Params
+        PS> If( $res -ne 0 -or -not( Get-ItemProperty -Path $PresenceKey -Name InstallDate -ErrorAction SilentlyContinue)){
+        PS>     Write-MyError 'Exchange Setup exited with non-zero value or Install info missing from registry: Please consult the Exchange setup log, i.e. C:\ExchangeSetupLogs\ExchangeSetup.log'
+        PS>     Exit $ERR_PROBLEMEXCHANGESETUP
+        PS> }
+        Demo running an Exchange Setup.exe pass.
+        .EXAMPLE
+        PS> $RunFrom= Split-Path -Path $OnlineURL -Parent
+        PS> Write-MyVerbose "Will run $FileName straight from $RunFrom"
+        PS> Write-MyOutput "Installing $Package from $RunFrom"
+        PS> $rval= Invoke-ProcessTDO $RunFrom $FileName $Arguments
+        Demos executing a URL to run a package from download
+        .EXAMPLE
+        PS> $xCopyEXE = (get-command xcopy.exe -EA STOP).source ; 
+        PS> write-verbose "Params below specify: /D: copy newer files only; /Y: suppress overrwrite prompt; /F echoes full source & dest path while copying
+        PS> $xCopyParams= @('/D','/Y','/F') ; 
+        PS> $sourceFile = (Join-Path $sourceDir $fileName )
+        PS> $destFile = (Join-Path $destDir $fileName ) ;
+        PS> $Params = @() ; 
+        PS> $Params = @($sQot + $sourceFile + $sQot) ;
+        PS> write-verbose "xcopy foible: prompts 'directory or file?', unless destination file spec ends in '*' char" ;      
+        PS> $Params += @($sQot + "$($destFile)*" + $sQot) ; 
+        PS> $Params = $(@($Params);@($xCopyParams)) ; 
+        PS> if($whatif){$Params += @('/L')} ; 
+        PS> $res= Invoke-ProcessTDO -FilePath (split-path $xCopyEXE) -FileName (split-path $xCopyEXE -Leaf) -ArgumentList $Params -PassThru; 
+        PS> if($res.stdOut -match "0\sFile\(s\)"){
+        PS>     $smsg = "(ExitCode:$($res.exitCode): no-updated copy:$($sourceFile):stdOut: $($res.stdOut))" ;
+        PS>     write-verbose $smsg ;
+        PS> } else {
+        PS>     $smsg = "ExitCode:$($res.exitCode): UPDATED COPY: $($sourceFile) => $($destFile):stdOut: $($res.stdOut)" ;
+        PS>     write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" 
+        PS> } ; 
+        PS> if($res.StdErr){
+        PS>     $smsg = "A StandardError output was returned:`nSTDERR:$($res.StdErr)" ;
+        PS>     write-WARNING $smsg ; 
+        PS> } ; 
+        Demo using this to execute an xcopy copy process and return results 
+        #>
+        [CmdletBinding()]
+        [Alias('Invoke-Process')]
+        PARAM(
+                [Parameter(HelpMessage="Parent directory path containing target .msu|.msi|.msp|.exe etc [-FilePath c:\pathto\]")]
+                    $FilePath,
+                [Parameter(HelpMessage="Filename of target .msu|.msi|.msp|.exe etc [-FileName 'some.exe']")]
+                    $FileName,
+                [Parameter(HelpMessage="Array of arguments to used with target file [-ArgumentList @('/mode:RecoverServer', '/DoNotStartTransport', '/InstallWindowsComponents')]")]
+                    $ArgumentList,
+                [Parameter(HelpMessage="Switch parameter to capture and return output & StdErr (rather than ErrorCode returned)")]
+                    [switch]$PassThru,
+                [Parameter(HelpMessage="Switch parameter to suppress all output but StdErr")]
+                    [switch]$Silent
+        )
+        $rval= 0
+        $FullName= Join-Path $FilePath $FileName
+        If( Test-Path $FullName) {
+            Switch( ([io.fileinfo]$Filename).extension.ToUpper()) {
+                '.MSU' {
+                    $ArgumentList+= @( $FullName)
+                    $ArgumentList+= @( '/f')
+                    $Cmd= "$env:SystemRoot\System32\WUSA.EXE"
+                }
+                '.MSI' {
+                    $ArgumentList+= @( '/i')
+                    $ArgumentList+= @( $FullName)
+                    $Cmd= "MSIEXEC.EXE"
+                }
+                '.MSP' {
+                    $ArgumentList+= @( '/update')
+                    $ArgumentList+= @( $FullName)
+                    $Cmd= 'MSIEXEC.EXE'
+                }
+                default {
+                    $Cmd= $FullName
+                }
+            }
+            $smsg = "Executing $Cmd $($ArgumentList -Join ' ')"
+            if($Silent){}elseif(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+            } ;
+            if($PassThru){
+                $soutf= [System.IO.Path]::GetTempFileName()
+                $serrf= [System.IO.Path]::GetTempFileName() 
+                #$process = Start-Process -FilePath $Cmd -ArgumentList $ArgumentList -NoNewWindow -PassThru -Wait  -RedirectStandardOutput $soutf -RedirectStandardError $serrf  ; 
+                # 2:21 PM 8/15/2025 getting popups even with -noNewWindow, reportedly bug with redirect use, shift to -WindowStyle Hidden as a workaround (offscreen)                
+                $process = Start-Process -FilePath $Cmd -ArgumentList $ArgumentList -WindowStyle Hidden -PassThru -Wait  -RedirectStandardOutput $soutf -RedirectStandardError $serrf  ; 
+                $oRet = [ordered]@{
+                    handle = $process.handle 
+                    ExitCode = $process.ExitCode ; 
+                    StdOut = $null ; 
+                    StdErr = $null ; 
+                } ; 
+                if((get-childitem $soutf).length) { 
+                    $oRet.stdOut = (gc $soutf) | out-string ; 
+                    remove-item $soutf ;
+                } ;
+                if((get-childitem $serrf).length) { 
+                    $oRet.StdErr = (gc $serrf) | out-string ; 
+                    remove-item $serrf ;
+                } ;
+                $smsg = "Process exited with code $($oRet.ExitCode)" ; 
+                if($Silent){}elseif(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success
+                } ;                         
+                $rval = $oRet ; 
+            }else{
+                $rval=( Start-Process -FilePath $Cmd -ArgumentList $ArgumentList -NoNewWindow -PassThru -Wait).Exitcode
+                $smsg = "Process exited with code $rval"
+                if($Silent){}elseif(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success
+                } ; 
+                #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success       
+            } ; 
+            if($Silent){}elseif(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+            } ;
+        } Else {
+            $smsg = "$FullName not found"
+            if(gcm Write-MyWarning -ea 0){Write-MyWarning $smsg } else {
+                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent}
+                else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+            } ;
+            $rval= -1
+        }
+        switch ($rval.gettype().fullname){
+            'System.Int32'{
+                return $rval
+            }
+            'System.String'{
+                return $rval
+            }
+            'System.Collections.Specialized.OrderedDictionary'{
+                return [pscustomobject]$rval 
+            }
+        }
+    }
+
+#*------^ Invoke-ProcessTDO.ps1 ^------
+
+
 #*------v invoke-SpeakWords.ps1 v------
 function invoke-speakwords {
     <#
@@ -972,444 +2606,439 @@ function Move-WindowByWindowTitle {
 #*------^ Move-WindowByWindowTitle.ps1 ^------
 
 
-#*------v new-WallpaperStatus.ps1 v------
-Function New-WallpaperStatus {
-    <# 
-    .SYNOPSIS
-    New-WallpaperStatus - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
-    .NOTES
-    Version     : 1.0.4
-    Author      : Todd Kadrie
-    Website     :	http://www.toddomation.com
-    Twitter     :	@tostka / http://twitter.com/tostka
-    CreatedDate : 2020-06-27
-    FileName    : New-WallpaperStatus.ps1
-    License     : (none asserted)
-    Copyright   : (none asserted)
-    Github      : https://github.com/tostka/verb-Desktop
-    Tags        : Powershell
-    AddedCredit : _Emin_
-    AddedWebsite:	https://p0w3rsh3ll.wordpress.com/
-    AddedTwitter:	URL
-    REVISIONS   :
-    # 10:46 AM 7/29/2021 ren'd New-WallpaperStatus -> New-WallpaperStatus (stuck orig in Alias); added updated Win10 PS console color scheme colors to themes list (they're precurated 'suitable' colors) ; 
-        added $FS3 3rd size, revised FS1 (+1 point of -FontSize), FS2 (-1); added verbose support & echos ; revised CBH (expanded Notes tags)
-    # 11:42 AM 7/28/2021 added Violet & Yellow themes, test for $env:userdomain -like '*lab*' to set violet, expanded CBH example
-    # # 8:51 AM 6/28/2016 fixed ampm -uformat
-    # 11:14 AM 6/27/2016: added get-LocalDiskFreeSpace, local-only version (for BGInfo) drops server specs and reporting, and sorts on Name/driveletter
-    # 1:43 PM 6/27/2016 ln159 psv2 is crapping out here, Primary needs to be tested $primary -eq $true for psv2
-    # 12:29 PM 6/27/2016 params Psv2 Mandatory requires =$true
-    # 12:21 PM 6/27/2016 submain: BGInfo: switch font to courier new
-    # 11:27 AM 6/27/2016  submain: switched AMPM fmt to T
-    # 11:24 AM 6/27/2016  submain: added | out-string | out-default to the drive info
-    # 11:23 AM 6/27/2016 submain: added timestamp and drivespace report
-    * 11:00 AM 6/27/2016 extended to accommodate & detect and redadmin the exchangeadmin acct as well
-    * 10:56 AM 6/27/2016 reflects additions (Current theme)from cemaphore's comments & sample @ http://pastebin.com/Fva47UKT
-		along with the Red Admin Theme I added, and code to detect ucadmin/exchangeadmin 
-		# 10:48 AM 6/27/2016 tweak the uptime fmt:
-    * 9:12 AM 6/27/2016 TSK reformatted, added pshelp
-    * September 5, 2014 - posted version
-    .DESCRIPTION
-    New-WallpaperStatus - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
-    .PARAMETER  Text
-    Text to be overlayed over specified background
-    .PARAMETER  OutFile
-    Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp
-    .PARAMETER  Align
-    Text alignment [Left|Center]
-    .PARAMETER  Theme
-    Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]
-    .PARAMETER  FontName
-    Text Font Name (Defaults Arial) [-FontName Arial]
-    .PARAMETER  FontSize
-    Integer Text Font Size (Defaults 12 point) [9-45]
-    .PARAMETER  UseCurrentWallpaperAsSource
-    Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]
-    .INPUTS
-    None. Does not accepted piped input.
-    .OUTPUTS
-    None. Returns no objects or output.
-    .EXAMPLE
-    Powershell.exe -noprofile -command "& {c:\scripts\set-AdminBG.ps1 }" ; 
-    To launch on startup: Put above into C:\Users\LOGON\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\AdminBG.lnk file
-    .EXAMPLE
-    $BGInfo = @{
-       Text  = $t ;
-       Theme = "Black" ;
-       FontName = "courier new" ;
-       UseCurrentWallpaperAsSource = $false ;
-    } ; 
-    $WallPaper = New-WallpaperStatus @BGInfo ;
-    Generate a wallpaper from  a splat of parameters
-    .EXAMPLE
-    Set-Wallpaper -Path "C:\Windows\Web\Wallpaper\Windows\img0.jpg" -Style Fill ; 
-    To Restore the default VM wallpaper (e.g. generally the Windows OS default)
-    .LINK
-    https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
-    .LINK
-    https://github.com/tostka/verb-Desktop
-    #>
-    [CmdletBinding()]
-    [Alias('New-BGinfo')]
-    Param(
-        [Parameter(Mandatory=$true,HelpMessage="Text to be overlayed over specified background[-text 'line1`nline2']")]
-        [string] $Text,
-        [Parameter(HelpMessage="Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp[-OutFile c:\path-to\image.jpg]")]
-        [string] $OutFile= "$($($env:temp))\BGInfo.bmp",
-        [Parameter(HelpMessage="Text alignment [Left|Center][-Align Left]")]
-        [ValidateSet("Left","Center")]
-        [string]$Align="Center",
-        [Parameter(HelpMessage="Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]")]
-        [ValidateSet("Current","BrightBlue","Blue","DarkBlue","DarkWhite","Grey","LightGrey","BrightBlack","Black","BrightRed","Red","DarkRed","Purple","BrightYellow","Yellow","DarkYellow","BrightGreen","DarkGreen","BrightCyan","DarkCyan","BrightMagenta","DarkMagenta")]
-        [string]$Theme="Current",
-        [Parameter(HelpMessage="Text Font Name (Defaults Arial) [-FontName 'courier new']")]
-        [string]$FontName="Arial",
-        [Parameter(HelpMessage="Integer Text Font Size (Defaults 8 point) [9-45][-FontSize 12]")]
-        [ValidateRange(9,45)]
-        [int32]$FontSize = 8,
-        [Parameter(HelpMessage="Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]")]
-        [switch]$UseCurrentWallpaperAsSource
-    ) ; 
-    BEGIN {
-        $verbose = ($VerbosePreference -eq "Continue") ; 
-        # 9:59 AM 6/27/2016 add cmaphore's detection of Current Theme
-        # Enumerate current wallpaper now, so we can decide whether it's a solid colour or not
-        try {
-            $wpath = (Get-ItemProperty 'HKCU:\Control Panel\Desktop' -Name WallPaper -ErrorAction Stop).WallPaper
-            if ($wpath.Length -eq 0) {
-                # Solid colour used
+#*------v New-WallpaperStatusTDO.ps1 v------
+Function New-WallpaperStatusTDO {
+        <# 
+        .SYNOPSIS
+        New-WallpaperStatusTDO - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
+        .NOTES
+        Version     : 1.0.4
+        Author      : Todd Kadrie
+        Website     :	http://www.toddomation.com
+        Twitter     :	@tostka / http://twitter.com/tostka
+        CreatedDate : 2020-06-27
+        FileName    : New-WallpaperStatusTDO.ps1
+        License     : (none asserted)
+        Copyright   : (none asserted)
+        Github      : https://github.com/tostka/verb-Desktop
+        Tags        : Powershell
+        AddedCredit : _Emin_
+        AddedWebsite:	https://p0w3rsh3ll.wordpress.com/
+        AddedTwitter:	URL
+        REVISIONS   :
+        * 4:08 PM 9/3/2025 update name to new tagged standard: ren Set-Wallpaper => Set-WallpaperTDO (alias orig name)
+        # 10:46 AM 7/29/2021 ren'd New-BGinfo -> New-WallpaperStatus (stuck orig in Alias); added updated Win10 PS console color scheme colors to themes list (they're precurated 'suitable' colors) ; 
+            added $FS3 3rd size, revised FS1 (+1 point of -FontSize), FS2 (-1); added verbose support & echos ; revised CBH (expanded Notes tags)
+        # 11:42 AM 7/28/2021 added Violet & Yellow themes, test for $env:userdomain -like '*lab*' to set violet, expanded CBH example
+        # # 8:51 AM 6/28/2016 fixed ampm -uformat
+        # 11:14 AM 6/27/2016: added get-LocalDiskFreeSpace, local-only version (for BGInfo) drops server specs and reporting, and sorts on Name/driveletter
+        # 1:43 PM 6/27/2016 ln159 psv2 is crapping out here, Primary needs to be tested $primary -eq $true for psv2
+        # 12:29 PM 6/27/2016 params Psv2 Mandatory requires =$true
+        # 12:21 PM 6/27/2016 submain: BGInfo: switch font to courier new
+        # 11:27 AM 6/27/2016  submain: switched AMPM fmt to T
+        # 11:24 AM 6/27/2016  submain: added | out-string | out-default to the drive info
+        # 11:23 AM 6/27/2016 submain: added timestamp and drivespace report
+        * 11:00 AM 6/27/2016 extended to accommodate & detect and redadmin the exchangeadmin acct as well
+        * 10:56 AM 6/27/2016 reflects additions (Current theme)from cemaphore's comments & sample @ http://pastebin.com/Fva47UKT
+		    along with the Red Admin Theme I added, and code to detect ucadmin/exchangeadmin 
+		    # 10:48 AM 6/27/2016 tweak the uptime fmt:
+        * 9:12 AM 6/27/2016 TSK reformatted, added pshelp
+        * September 5, 2014 - posted version
+        .DESCRIPTION
+        New-WallpaperStatusTDO - Create desktop wallpaper with specified text overlaid over specified image or background color (PS Bginfo.exe alternative)
+        .PARAMETER  Text
+        Text to be overlayed over specified background
+        .PARAMETER  OutFile
+        Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp
+        .PARAMETER  Align
+        Text alignment [Left|Center]
+        .PARAMETER  Theme
+        Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]
+        .PARAMETER  FontName
+        Text Font Name (Defaults Arial) [-FontName Arial]
+        .PARAMETER  FontSize
+        Integer Text Font Size (Defaults 12 point) [9-45]
+        .PARAMETER  UseCurrentWallpaperAsSource
+        Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]
+        .INPUTS
+        None. Does not accepted piped input.
+        .OUTPUTS
+        None. Returns no objects or output.        
+        .EXAMPLE
+        PS> $BGInfo = @{
+        PS>     Text  = $t ;
+        PS>     Theme = "Black" ;
+        PS>     FontName = "courier new" ;
+        PS>     UseCurrentWallpaperAsSource = $false ;
+        PS> } ; 
+        PS> $WallPaper = New-WallpaperStatusTDO @BGInfo ;
+        Generate a wallpaper from  a splat of parameters        
+        .LINK
+        https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
+        .LINK
+        https://github.com/tostka/verb-Desktop
+        #>
+        [CmdletBinding()]
+        [Alias('New-BGinfo','New-WallpaperStatus')]
+        Param(
+            [Parameter(Mandatory=$true,HelpMessage="Text to be overlayed over specified background[-text 'line1`nline2']")]
+                [string] $Text,
+            [Parameter(HelpMessage="Output file to be created (and then assigned separately to the desktop). Defaults to c:\temp\BGInfo.bmp[-OutFile c:\path-to\image.jpg]")]
+                [string] $OutFile= "$($($env:temp))\BGInfo.bmp",
+            [Parameter(HelpMessage="Text alignment [Left|Center][-Align Left]")]
+                [ValidateSet("Left","Center")]
+                [string]$Align="Center",
+            [Parameter(HelpMessage="Desktop Color theme (defaults Current [Current|BrightBlue|Blue|DarkBlue|DarkWhite|Grey|LightGrey|BrightBlack|Black|BrightRed|Red|DarkRed|Purple|BrightYellow|Yellow|DarkYellow|BrightGreen|DarkGreen|BrightCyan|DarkCyan|BrightMagenta|DarkMagenta])[-Theme Red]")]
+                [ValidateSet("Current","BrightBlue","Blue","DarkBlue","DarkWhite","Grey","LightGrey","BrightBlack","Black","BrightRed","Red","DarkRed","Purple","BrightYellow","Yellow","DarkYellow","BrightGreen","DarkGreen","BrightCyan","DarkCyan","BrightMagenta","DarkMagenta")]
+                [string]$Theme="Current",
+            [Parameter(HelpMessage="Text Font Name (Defaults Arial) [-FontName 'courier new']")]
+                [string]$FontName="Arial",
+            [Parameter(HelpMessage="Integer Text Font Size (Defaults 8 point) [9-45][-FontSize 12]")]
+                [ValidateRange(9,45)]
+                [int32]$FontSize = 8,
+            [Parameter(HelpMessage="Switch Param that specifies to recycle existing wallpaper [-UseCurrentWallpaperAsSource]")]
+                [switch]$UseCurrentWallpaperAsSource
+        ) ; 
+        BEGIN {
+            $verbose = ($VerbosePreference -eq "Continue") ; 
+            # 9:59 AM 6/27/2016 add cmaphore's detection of Current Theme
+            # Enumerate current wallpaper now, so we can decide whether it's a solid colour or not
+            try {
+                $wpath = (Get-ItemProperty 'HKCU:\Control Panel\Desktop' -Name WallPaper -ErrorAction Stop).WallPaper
+                if ($wpath.Length -eq 0) {
+                    # Solid colour used
+                    $UseCurrentWallpaperAsSource = $false ; 
+                    $Theme = "Current" ; 
+                } ; 
+            } catch {
                 $UseCurrentWallpaperAsSource = $false ; 
                 $Theme = "Current" ; 
             } ; 
-        } catch {
-            $UseCurrentWallpaperAsSource = $false ; 
-            $Theme = "Current" ; 
-        } ; 
-        # standardize colors (for easy uese in font colors as well as bg) - lifted many of these from updated Powershell console color scheme specs.
-        $cBrightBlue = @(59,120,255) ;
-        $cBlue = @(58,110,165) ; # default win desktop blue
-        $cDarkBlue = @(0,55,218) ; 
-        $cDarkWhite = @(204,204,204) ; 
-        $cGrey = @(77,77,77) ; 
-        $cLightGrey = @(176,176,176) ; 
-        $cBrightBlack = @(118,118,118) ; 
-        $cBlack = @(12,12,12) ; 
-        $cBrightRed = @(231,72,86) ; 
-        $cRed = @(184,40,50) ; 
-        $cDarkRed = @(197,15,31) ; 
-        $cPurple = @(192,32,214) ; 
-        $cBrightYellow = @(249,241,165) ; 
-        $cYellow = @(255,185,0) ; 
-        $cDarkYellow = @(193,156,0) ; 
-        $cBrightGreen = @(22,198,12) ; 
-        $cDarkGreen = @(19,161,14) ; 
-        $cBrightCyan = @(97,214,214) ; 
-        $cDarkCyan = @(58,150,221) ; 
-        $cBrightMagenta = @(180,0,158) ; 
-        $cDarkMagenta = @(136,23,152) ; 
-        $cWhite = @(242,242,242) ;
-        $cDefaultWhite = @(254,253,254) ; 
-        $cMedGrey = @(185,190,188) ; 
+            # standardize colors (for easy uese in font colors as well as bg) - lifted many of these from updated Powershell console color scheme specs.
+            $cBrightBlue = @(59,120,255) ;
+            $cBlue = @(58,110,165) ; # default win desktop blue
+            $cDarkBlue = @(0,55,218) ; 
+            $cDarkWhite = @(204,204,204) ; 
+            $cGrey = @(77,77,77) ; 
+            $cLightGrey = @(176,176,176) ; 
+            $cBrightBlack = @(118,118,118) ; 
+            $cBlack = @(12,12,12) ; 
+            $cBrightRed = @(231,72,86) ; 
+            $cRed = @(184,40,50) ; 
+            $cDarkRed = @(197,15,31) ; 
+            $cPurple = @(192,32,214) ; 
+            $cBrightYellow = @(249,241,165) ; 
+            $cYellow = @(255,185,0) ; 
+            $cDarkYellow = @(193,156,0) ; 
+            $cBrightGreen = @(22,198,12) ; 
+            $cDarkGreen = @(19,161,14) ; 
+            $cBrightCyan = @(97,214,214) ; 
+            $cDarkCyan = @(58,150,221) ; 
+            $cBrightMagenta = @(180,0,158) ; 
+            $cDarkMagenta = @(136,23,152) ; 
+            $cWhite = @(242,242,242) ;
+            $cDefaultWhite = @(254,253,254) ; 
+            $cMedGrey = @(185,190,188) ; 
         
         
-        Switch ($Theme) {
-            # revised the stock colors to reflect PSConsole's revised color scheme [Updating the Windows Console Colors | Windows Command Line - devblogs.microsoft.com/](https://devblogs.microsoft.com/commandline/updating-the-windows-console-colors/)
-            # 9:42 AM 6/27/2016 add cmaphore's idea of a 'Current' theme switch case, pulling current background color $RGB, and defaulting if not set
-            # $FC1 is used for the first line of any text ; $FC2 is used for the remaining lines of text
-            Current {
-                $RGB = (Get-ItemProperty 'HKCU:\Control Panel\Colors' -ErrorAction Stop).BackGround ; 
-                if ($RGB.Length -eq 0) {
-                    $Theme = "Black" ; # Default to Black and don't break the switch
-                } else {
-                    $BG = $RGB -split " " ; 
+            Switch ($Theme) {
+                # revised the stock colors to reflect PSConsole's revised color scheme [Updating the Windows Console Colors | Windows Command Line - devblogs.microsoft.com/](https://devblogs.microsoft.com/commandline/updating-the-windows-console-colors/)
+                # 9:42 AM 6/27/2016 add cmaphore's idea of a 'Current' theme switch case, pulling current background color $RGB, and defaulting if not set
+                # $FC1 is used for the first line of any text ; $FC2 is used for the remaining lines of text
+                Current {
+                    $RGB = (Get-ItemProperty 'HKCU:\Control Panel\Colors' -ErrorAction Stop).BackGround ; 
+                    if ($RGB.Length -eq 0) {
+                        $Theme = "Black" ; # Default to Black and don't break the switch
+                    } else {
+                        $BG = $RGB -split " " ; 
+                        $FC1 = $FC2 = $cWhite ; 
+                        $FS1=$FS2=$FontSize ; 
+                        break ; 
+                    } ; 
+                } ; 
+                BrightBlue { 
+                    $BG = $cBlue ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cMedGrey ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                    break ; 
+                } ; 
+                Blue { # default win desktop blue 
+                    $BG = $cBlue ; 
+                    $FC1 = $cDefaultWhite ; 
+                    $FC2 = $cMedGrey ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                    break ; 
+                } ; 
+                DarkBlue { # 
+                    $BG = $cDarkBlue ; 
+                    $FC1 = $cDefaultWhite ; 
+                    $FC2 = $cMedGrey ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                    break ; 
+                } ; 
+                DarkWhite {
+                    $BG = $cDarkWhite ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cBlack ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                    break ; 
+                } ; 
+                Grey {
+                    $BG = $cGrey ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                    break ; 
+                } ; 
+                LightGrey {
+                    $BG = $cLightGrey ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cBlack ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                    break ; 
+                } ; 
+                BrightBlack {
+                    $BG = $cBrightBlack; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite  ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                Black {
+                    $BG = $cBlack ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                BrightRed {
+                    $BG = $cBrightRed ; 
                     $FC1 = $FC2 = $cWhite ; 
-                    $FS1=$FS2=$FontSize ; 
-                    break ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
                 } ; 
-            } ; 
-            BrightBlue { 
-                $BG = $cBlue ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cMedGrey ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-                break ; 
-            } ; 
-            Blue { # default win desktop blue 
-                $BG = $cBlue ; 
-                $FC1 = $cDefaultWhite ; 
-                $FC2 = $cMedGrey ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-                break ; 
-            } ; 
-            DarkBlue { # 
-                $BG = $cDarkBlue ; 
-                $FC1 = $cDefaultWhite ; 
-                $FC2 = $cMedGrey ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-                break ; 
-            } ; 
-            DarkWhite {
-                $BG = $cDarkWhite ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cBlack ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-                break ; 
-            } ; 
-            Grey {
-                $BG = $cGrey ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-                break ; 
-            } ; 
-            LightGrey {
-                $BG = $cLightGrey ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cBlack ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-                break ; 
-            } ; 
-            BrightBlack {
-                $BG = $cBrightBlack; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite  ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            Black {
-                $BG = $cBlack ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            BrightRed {
-                $BG = $cBrightRed ; 
-                $FC1 = $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            Red {
-                $BG = $cRed ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            DarkRed {
-                $BG = $cDarkRed ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            Purple {
-                $BG = $cPurple ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            BrightYellow {
-                $BG = $cBrightYellow ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            Yellow {
-                $BG = $cYellow ; 
-                $FC1 = $cDarkBlue ; 
-                $FC2 = $cBlack ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            DarkYellow {
-                $BG = $cDarkYellow ; 
-                $FC1 = $cDarkBlue ; 
-                $FC2 = $cBlack ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            BrightGreen {
-                $BG = $cBrightGreen ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            DarkGreen {
-                $BG = $cDarkGreen ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            BrightCyan {
-                $BG = $cBrightCyan ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            DarkCyan {
-                $BG = $cDarkCyan ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            BrightMagenta {
-                $BG = $cBrightMagenta ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-            DarkMagenta {
-                $BG = $cDarkMagenta ; 
-                $FC1 = $cYellow ; 
-                $FC2 = $cWhite ; 
-                $FS1 = $FontSize+1 ; 
-                $FS2 = $FontSize-1 ; 
-                $FS3 = $FontSize-2 ; 
-            } ; 
-        } ;  # swtch-E
+                Red {
+                    $BG = $cRed ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                DarkRed {
+                    $BG = $cDarkRed ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                Purple {
+                    $BG = $cPurple ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                BrightYellow {
+                    $BG = $cBrightYellow ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                Yellow {
+                    $BG = $cYellow ; 
+                    $FC1 = $cDarkBlue ; 
+                    $FC2 = $cBlack ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                DarkYellow {
+                    $BG = $cDarkYellow ; 
+                    $FC1 = $cDarkBlue ; 
+                    $FC2 = $cBlack ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                BrightGreen {
+                    $BG = $cBrightGreen ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                DarkGreen {
+                    $BG = $cDarkGreen ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                BrightCyan {
+                    $BG = $cBrightCyan ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                DarkCyan {
+                    $BG = $cDarkCyan ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                BrightMagenta {
+                    $BG = $cBrightMagenta ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+                DarkMagenta {
+                    $BG = $cDarkMagenta ; 
+                    $FC1 = $cYellow ; 
+                    $FC2 = $cWhite ; 
+                    $FS1 = $FontSize+1 ; 
+                    $FS2 = $FontSize-1 ; 
+                    $FS3 = $FontSize-2 ; 
+                } ; 
+            } ;  # swtch-E
           
-        Try {
-            [system.reflection.assembly]::loadWithPartialName('system.drawing.imaging') | out-null ; 
-            [system.reflection.assembly]::loadWithPartialName('system.windows.forms') | out-null ; 
-            # Draw string > alignement
-            $sFormat = new-object system.drawing.stringformat
-            Switch ($Align) {
-                Center {
-                    $sFormat.Alignment = [system.drawing.StringAlignment]::Center ; 
-                    $sFormat.LineAlignment = [system.drawing.StringAlignment]::Center ; 
-                    break ; 
-                } ; 
-                Left {
-                    $sFormat.Alignment = [system.drawing.StringAlignment]::Center ; 
-                    $sFormat.LineAlignment = [system.drawing.StringAlignment]::Near ; 
-                } ; 
-            } ;  
+            Try {
+                [system.reflection.assembly]::loadWithPartialName('system.drawing.imaging') | out-null ; 
+                [system.reflection.assembly]::loadWithPartialName('system.windows.forms') | out-null ; 
+                # Draw string > alignement
+                $sFormat = new-object system.drawing.stringformat
+                Switch ($Align) {
+                    Center {
+                        $sFormat.Alignment = [system.drawing.StringAlignment]::Center ; 
+                        $sFormat.LineAlignment = [system.drawing.StringAlignment]::Center ; 
+                        break ; 
+                    } ; 
+                    Left {
+                        $sFormat.Alignment = [system.drawing.StringAlignment]::Center ; 
+                        $sFormat.LineAlignment = [system.drawing.StringAlignment]::Near ; 
+                    } ; 
+                } ;  
      
-            if ($UseCurrentWallpaperAsSource) {
-                # 10:01 AM 6/27/2016 moved $wppath to top of begin
-                if (Test-Path -Path $wpath -PathType Leaf) {
-                    $bmp = new-object system.drawing.bitmap -ArgumentList $wpath ; 
+                if ($UseCurrentWallpaperAsSource) {
+                    # 10:01 AM 6/27/2016 moved $wppath to top of begin
+                    if (Test-Path -Path $wpath -PathType Leaf) {
+                        $bmp = new-object system.drawing.bitmap -ArgumentList $wpath ; 
+                        $image = [System.Drawing.Graphics]::FromImage($bmp) ; 
+                        $SR = $bmp | Select Width,Height ; 
+                    } else {
+                        Write-Warning -Message "Failed cannot find the current wallpaper $($wpath)" ; 
+                        break ; 
+                    } ; 
+                } else {
+                    # 1:43 PM 6/27/2016 psv2 is crapping out here, Primary needs to be tested $primary -eq $true for psv2
+                    #$SR = [System.Windows.Forms.Screen]::AllScreens | Where Primary | Select -ExpandProperty Bounds | Select Width,Height ; 
+                    $SR = [System.Windows.Forms.Screen]::AllScreens |?{$_.Primary} | Select -ExpandProperty Bounds | Select Width,Height ; 
+                    #}
+                    Write-Verbose -Message "Screen resolution is set to $($SR.Width)x$($SR.Height)" -Verbose ; 
+     
+                    # Create Bitmap
+                    $bmp = new-object system.drawing.bitmap($SR.Width,$SR.Height) ; 
                     $image = [System.Drawing.Graphics]::FromImage($bmp) ; 
-                    $SR = $bmp | Select Width,Height ; 
-                } else {
-                    Write-Warning -Message "Failed cannot find the current wallpaper $($wpath)" ; 
-                    break ; 
-                } ; 
-            } else {
-                # 1:43 PM 6/27/2016 psv2 is crapping out here, Primary needs to be tested $primary -eq $true for psv2
-                #$SR = [System.Windows.Forms.Screen]::AllScreens | Where Primary | Select -ExpandProperty Bounds | Select Width,Height ; 
-                $SR = [System.Windows.Forms.Screen]::AllScreens |?{$_.Primary} | Select -ExpandProperty Bounds | Select Width,Height ; 
-                #}
-                Write-Verbose -Message "Screen resolution is set to $($SR.Width)x$($SR.Height)" -Verbose ; 
-     
-                # Create Bitmap
-                $bmp = new-object system.drawing.bitmap($SR.Width,$SR.Height) ; 
-                $image = [System.Drawing.Graphics]::FromImage($bmp) ; 
          
-                $image.FillRectangle(
-                    (New-Object Drawing.SolidBrush (
-                        [System.Drawing.Color]::FromArgb($BG[0],$BG[1],$BG[2]) 
-                    )),
-                    (new-object system.drawing.rectanglef(0,0,($SR.Width),($SR.Height))) 
-                ) ; 
-            } ; 
-            
-        } Catch {
-            Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
-            break ; 
-        } ; 
-    } ;  # BEG-E
-    PROCESS {
-        # Split our string as it can be multiline
-        $artext = ($text -split "\r\n") ; 
-        $i = 1 ; 
-        Try {
-            for ($i ; $i -le $artext.Count ; $i++) {
-                if ($i -eq 1) {
-                    $font1 = New-Object System.Drawing.Font($FontName,$FS1,[System.Drawing.FontStyle]::Bold) ; 
-                    $Brush1 = New-Object Drawing.SolidBrush (
-                        [System.Drawing.Color]::FromArgb($FC1[0],$FC1[1],$FC1[2]) 
+                    $image.FillRectangle(
+                        (New-Object Drawing.SolidBrush (
+                            [System.Drawing.Color]::FromArgb($BG[0],$BG[1],$BG[2]) 
+                        )),
+                        (new-object system.drawing.rectanglef(0,0,($SR.Width),($SR.Height))) 
                     ) ; 
-                    $sz1 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font1) ; 
-                    $rect1 = New-Object System.Drawing.RectangleF (0,($sz1.Height),$SR.Width,$SR.Height) ; 
-                    $image.DrawString($artext[$i-1], $font1, $brush1, $rect1, $sFormat) ; 
-                } elseif ($i -eq 2) {
-                    $font2 = New-Object System.Drawing.Font($FontName,$FS2,[System.Drawing.FontStyle]::Bold) ; 
-                    $Brush2 = New-Object Drawing.SolidBrush (
-                        [System.Drawing.Color]::FromArgb($FC2[0],$FC2[1],$FC2[2]) 
-                    ) ; 
-                    $sz2 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font2) ; 
-                    $rect2 = New-Object System.Drawing.RectangleF (0,($i*$FontSize*2 + $sz2.Height),$SR.Width,$SR.Height) ; 
-                    $image.DrawString($artext[$i-1], $font2, $brush2, $rect2, $sFormat) ; 
-                } else {
-                    $font3 = New-Object System.Drawing.Font($FontName,$FS3,[System.Drawing.FontStyle]::Bold) ; 
-                    $Brush3 = New-Object Drawing.SolidBrush (
-                        [System.Drawing.Color]::FromArgb($FC2[0],$FC2[1],$FC2[2]) 
-                    ) ; 
-                    $sz3 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font2) ; 
-                    $rect3 = New-Object System.Drawing.RectangleF (0,($i*$FontSize*2 + $sz3.Height),$SR.Width,$SR.Height) ; 
-                    $image.DrawString($artext[$i-1], $font3, $Brush3, $rect3, $sFormat) ; 
                 } ; 
-            } ;  # loop-E
             
-        } Catch {
-            Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
-            break ; 
-        } ; 
+            } Catch {
+                Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
+                break ; 
+            } ; 
+        } ;  # BEG-E
+        PROCESS {
+            # Split our string as it can be multiline
+            $artext = ($text -split "\r\n") ; 
+            $i = 1 ; 
+            Try {
+                for ($i ; $i -le $artext.Count ; $i++) {
+                    if ($i -eq 1) {
+                        $font1 = New-Object System.Drawing.Font($FontName,$FS1,[System.Drawing.FontStyle]::Bold) ; 
+                        $Brush1 = New-Object Drawing.SolidBrush (
+                            [System.Drawing.Color]::FromArgb($FC1[0],$FC1[1],$FC1[2]) 
+                        ) ; 
+                        $sz1 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font1) ; 
+                        $rect1 = New-Object System.Drawing.RectangleF (0,($sz1.Height),$SR.Width,$SR.Height) ; 
+                        $image.DrawString($artext[$i-1], $font1, $brush1, $rect1, $sFormat) ; 
+                    } elseif ($i -eq 2) {
+                        $font2 = New-Object System.Drawing.Font($FontName,$FS2,[System.Drawing.FontStyle]::Bold) ; 
+                        $Brush2 = New-Object Drawing.SolidBrush (
+                            [System.Drawing.Color]::FromArgb($FC2[0],$FC2[1],$FC2[2]) 
+                        ) ; 
+                        $sz2 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font2) ; 
+                        $rect2 = New-Object System.Drawing.RectangleF (0,($i*$FontSize*2 + $sz2.Height),$SR.Width,$SR.Height) ; 
+                        $image.DrawString($artext[$i-1], $font2, $brush2, $rect2, $sFormat) ; 
+                    } else {
+                        $font3 = New-Object System.Drawing.Font($FontName,$FS3,[System.Drawing.FontStyle]::Bold) ; 
+                        $Brush3 = New-Object Drawing.SolidBrush (
+                            [System.Drawing.Color]::FromArgb($FC2[0],$FC2[1],$FC2[2]) 
+                        ) ; 
+                        $sz3 = [system.windows.forms.textrenderer]::MeasureText($artext[$i-1], $font2) ; 
+                        $rect3 = New-Object System.Drawing.RectangleF (0,($i*$FontSize*2 + $sz3.Height),$SR.Width,$SR.Height) ; 
+                        $image.DrawString($artext[$i-1], $font3, $Brush3, $rect3, $sFormat) ; 
+                    } ; 
+                } ;  # loop-E
+            
+            } Catch {
+                Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
+                break ; 
+            } ; 
         
-    } ;  # PROC-E
-    END {  
-        Try {
-            # Close Graphics
-            $image.Dispose(); ; 
+        } ;  # PROC-E
+        END {  
+            Try {
+                # Close Graphics
+                $image.Dispose(); ; 
      
-            # Save and close Bitmap
-            $bmp.Save($OutFile, [system.drawing.imaging.imageformat]::Bmp); ; 
-            $bmp.Dispose() ;      
-            # Output our file path into the pipeline
-            Get-Item -Path $OutFile ; 
-        } Catch {
-            Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
-            break ; 
-        } ; 
-    } ;  # END-E
-}
+                # Save and close Bitmap
+                $bmp.Save($OutFile, [system.drawing.imaging.imageformat]::Bmp); ; 
+                $bmp.Dispose() ;      
+                # Output our file path into the pipeline
+                Get-Item -Path $OutFile | write-output ; 
+            } Catch {
+                Write-Warning -Message "Failed to $($_.Exception.Message)" ; 
+                break ; 
+            } ; 
+        } ;  # END-E
+    }
 
-#*------^ new-WallpaperStatus.ps1 ^------
+#*------^ New-WallpaperStatusTDO.ps1 ^------
 
 
 #*------v Report-URL.ps1 v------
@@ -1480,6 +3109,73 @@ function Report-URL {
 If (!(Test-Path ALIAS:Rpt-URL)) { new-Alias -Name Rpt-URL -Value report-url}
 
 #*------^ Report-URL.ps1 ^------
+
+
+#*------v Reset-CurrentWallpaperTDO.ps1 v------
+Function Reset-CurrentWallpaperTDO {
+        <#
+        .SYNOPSIS
+        Reset-CurrentWallpaperTDO - Tests for, and clears any configured HKCU:\Control Panel\Desktop WallPaper Value to $NULL, and refreshes the desktop
+        .NOTES
+        Version     : 1.0.0
+        Author      : Todd Kadrie
+        Website     :	http://www.toddomation.com
+        Twitter     :	@tostka / http://twitter.com/tostka
+        CreatedDate : 2025-07-30
+        FileName    : Reset-CurrentWallpaperTDO.ps1
+        License     : MIT License
+        Copyright   : (c) 2025 Todd Kadrie
+        Github      : https://github.com/tostka/verb-io
+        Tags        : Powershell,Math,Round,Ceiling,Floor,Truncate,Number,Decimal
+        AddedCredit : REFERENCE
+        AddedWebsite:	URL
+        AddedTwitter:	URL
+        REVISIONS
+        * 11:17 AM 9/29/2025 CBH: corrected output spec to None.
+        * 4:06 PM 9/3/2025 init
+        .DESCRIPTION
+        Reset-CurrentWallpaperTDO - Tests for, and clears any configured HKCU:\Control Panel\Desktop WallPaper Value to $NULL, and refreshes the desktop
+        .OUTPUT
+        None
+        .EXAMPLE
+        PS> Reset-CurrentWallpaperTDO 
+        Demo call
+        .LINK
+        https://github.com/tostka/verb-desktop
+        #>
+        PARAM()
+        PROCESS{
+            $CurrentWallPaperValue = (Get-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "WallPaper").WallPaper ; 
+            if($CurrentWallPaperValue){
+                $smsg = "HKCU:\Control Panel\Desktop\ WallPaper Value is currently set to: $($CurrentWallPaperValue)" ;
+                if(test-path -path $CurrentWallPaperValue -PathType Leaf){
+                    $smsg += "`n(which exists)" ;                    
+                } else{
+                    $smsg += "`n(which does not exist)" ;
+                }; 
+                $smsg += "`nClearing the value..." ;
+                if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                } ;
+                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "WallPaper" -Value $NULL -verbose ; 
+                $CurrentWallPaperValue = (Get-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "WallPaper").WallPaper ; 
+                $smsg = "HKCU:\Control Panel\Desktop\ WallPaper value is now set: $($CurrentWallPaperValue)" ;
+                $smsg += "`nIssuing desktop reset:rundll32.exe user32.dll, UpdatePerUserSystemParameters..." ;
+                if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;              
+                } ;
+                rundll32.exe user32.dll, UpdatePerUserSystemParameters ; 
+            } else{
+                $smsg = "HKCU:\Control Panel\Desktop\ WallPaper Value is currently UNSET (NULL) (no change)" ; 
+                if(gcm Write-MyOutput -ea 0){Write-MyOutput $smsg } else {
+                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level H1 } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                    #Levels:Error|Warn|Info|H1|H2|H3|H4|H5|Debug|Verbose|Prompt|Success
+                } ;
+            } ; 
+        }
+    }
+
+#*------^ Reset-CurrentWallpaperTDO.ps1 ^------
 
 
 #*------v restart-Shell.ps1 v------
@@ -1612,43 +3308,65 @@ Function Set {
 #*------^ Set.ps1 ^------
 
 
-#*------v Set-Wallpaper.ps1 v------
-Function Set-Wallpaper {
-    <# 
-    .SYNOPSIS
-    Set-Wallpaper - Set specified file as desktop wallpaper
-    .NOTES
-    Author: _Emin_
-    Tweaked/Updated by: Todd Kadrie
-    Website:	https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
-    REVISIONS   :
-    * 9:12 AM 6/27/2016 TSK reformatted & added pshelp
-    * September 5, 2014 - posted version
-    .DESCRIPTION
-    .PARAMETER  Path
-    Path to image to be set as desktop background
-    .PARAMETER  Style
-    Style to apply to wallpaper [Center|Stretch|Fill|Tile|Fit]
-    .INPUTS
-    None. Does not accepted piped input.
-    .OUTPUTS
-    None. Returns no objects or output.
-    .EXAMPLE
-    Set-Wallpaper -Path $WallPaper.FullName -Style Fill ;
-    Set wallpaper file to fill screen
-    .LINK
-    https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
-    #>
-    [CmdletBinding()]
-    Param(
-        [Parameter(Mandatory=$true)]$Path,
-        [ValidateSet('Center','Stretch','Fill','Tile','Fit')]
-        $Style = 'Stretch' 
-    ) ; 
-    $verbose = ($VerbosePreference -eq "Continue") ; 
-    Try {
-        if (-not ([System.Management.Automation.PSTypeName]'Wallpaper.Setter').Type) {
-            Add-Type -TypeDefinition @"
+#*------v Set-WallpaperTDO.ps1 v------
+Function Set-WallpaperTDO {
+        <# 
+        .SYNOPSIS
+        Set-WallpaperTDO - Set specified file as desktop wallpaper
+        .NOTES
+        Version     : 0.0.
+        Author      : Todd Kadrie
+        Website     : http://www.toddomation.com
+        Twitter     : @tostka / http://twitter.com/tostka
+        CreatedDate : 2016-06-27
+        FileName    : Set-WallpaperTDO.ps1
+        License     : MIT License
+        Copyright   : (c) 2025 Todd Kadrie
+        Github      : https://github.com/tostka/verb-desktop
+        Tags        : Powershell,Wallpaper,Status
+        AddedCredit : _Emin_
+        AddedWebsite: https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
+        AddedTwitter: URL
+        REVISIONS   :
+        * 11:13 AM 9/29/2025 rplc verb-noun -> Set-WallpaperTDO
+        * 2:59 PM 9/4/2025 strongly type params, add parameter tags and helpmessage, update CBH
+        * 4:08 PM 9/3/2025 update name to new tagged standard: ren Set-Wallpaper => Set-WallpaperTDO (alias orig name)
+        * 9:12 AM 6/27/2016 TSK reformatted & added pshelp
+        * September 5, 2014 - posted version
+        .DESCRIPTION
+        .PARAMETER  Path
+        Path to image to be set as desktop backgroun[-Path c:\pathto\bg.bmp]
+        .PARAMETER  Style
+        Wallpaper image display style (Center|Stretch|Fill|Tile|Fit, default:Stretch)[-Style Fill]
+        .INPUTS
+        None. Does not accepted piped input.
+        .OUTPUTS
+        None. Returns no objects or output.
+        .EXAMPLE
+        PS> Set-WallpaperTDO -Path $WallPaper.FullName -Style Fill ;
+        Set wallpaper file to fill screen
+        .EXAMPLE
+        PS> Set-Wallpaper -Path "C:\Windows\Web\Wallpaper\Windows\img0.jpg" -Style Fill ; 
+        To Restore the default VM wallpaper (e.g. generally the Windows OS default)
+        .LINK
+        https://p0w3rsh3ll.wordpress.com/2014/08/29/poc-tatoo-the-background-of-your-virtual-machines/
+        .LINK
+        https://github.com/tostka/verb-desktop
+        #>
+        [CmdletBinding()]
+        [Alias('Set-Wallpaper')]
+        Param(
+            [Parameter(Mandatory=$true,HelpMessage="Path to image to be set as desktop backgroun[-Path c:\pathto\bg.bmp]")]
+                [ValidateScript({Test-Path $_ -pathtype Leaf})]
+                [string]$Path,
+            [Parameter(HelpMessage="Wallpaper image display style (Center|Stretch|Fill|Tile|Fit, default:Stretch)[-Style Fill]")]
+                [ValidateSet('Center','Stretch','Fill','Tile','Fit')]
+                [string]$Style = 'Stretch' 
+        ) ; 
+        $verbose = ($VerbosePreference -eq "Continue") ; 
+        Try {
+            if (-not ([System.Management.Automation.PSTypeName]'Wallpaper.Setter').Type) {
+                Add-Type -TypeDefinition @"
            using System;
             using System.Runtime.InteropServices;
             using Microsoft.Win32;
@@ -1692,18 +3410,18 @@ Function Set-Wallpaper {
                 }
             }
 "@ -ErrorAction Stop ; 
-            } else {
-                Write-Verbose -Message "Type already loaded" -Verbose ; 
+                } else {
+                    Write-Verbose -Message "Type already loaded" -Verbose ; 
+                } ; 
+            # } Catch TYPE_ALREADY_EXISTS
+            } Catch {
+                Write-Warning -Message "Failed because $($_.Exception.Message)" ; 
             } ; 
-        # } Catch TYPE_ALREADY_EXISTS
-        } Catch {
-            Write-Warning -Message "Failed because $($_.Exception.Message)" ; 
-        } ; 
      
-    [Wallpaper.Setter]::SetWallpaper( $Path, $Style ) ; 
-}
+        [Wallpaper.Setter]::SetWallpaper( $Path, $Style ) ; 
+    }
 
-#*------^ Set-Wallpaper.ps1 ^------
+#*------^ Set-WallpaperTDO.ps1 ^------
 
 
 #*------v show-TrayTip.ps1 v------
@@ -2298,6 +4016,153 @@ if ($env:WT_SESSION) {
 #*------^ Test-IsWindowsTerminal.ps1 ^------
 
 
+#*------v Test-MyPackageTDO.ps1 v------
+Function Test-MyPackageTDO{
+            <#
+            .SYNOPSIS
+            Test-MyPackageTDO - Given a PackageID or pipe-delimted ('|') array of PackageIDs as used in the Registry under \Uninstall, \Products, or \Updates keys (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632), this Tests-for/Confirms install status, and returns a string (variously the DisplayName HotfixID, or PackageName as stored on the matched key value) to the pipeline.
+            .NOTES
+            Version     : 0.0.1
+            Author      : Todd Kadrie
+            Website     : http://www.toddomation.com
+            Twitter     : @tostka / http://twitter.com/tostka
+            CreatedDate : 2025-08-15
+            FileName    : Test-MyPackageTDO.ps1
+            License     : (none asserted)
+            Copyright   : (none asserted)
+            Github      : https://github.com/tostka/verb-IO
+            Tags        : Powershell,FileSystem,Backup,Development,Build,Staging
+            AddedCredit :  Michel de Rooij / michel@eightwone.com
+            AddedWebsite: https://eightwone.com / https://github.com/michelderooij/Install-Exchange15
+            AddedTwitter: URL
+            REVISIONS  
+            * 9:10 AM 10/7/2025 added default pull via get-ciminstance, with fallback to Get-WMIObject; 
+            * 11:47 AM 10/2/2025 port to C:\sc\powershell\PSScripts\build\Test-MyPackageTDO_func.ps1 - niche use, doesn't bear building into verb-io mod etc, but useful for patch verifications; also in xopBuildLibrary.psm1      
+                substantially updated the CBH demos, citing specific pkg test examples that can be easily reused.
+            * 11:34 AM 8/15/2025 ren: Test-MyPackage -> Test-MyPackageTDO and alias the orig name; add: CBH, fleshed out Parameter specs into formal well specified block. Added variety of working examples, for reuse adding future patches/packages to the mix.
+            * 821's posted copy w/in install-Exchange15.ps1: Version 4.13, July 17th, 2025 821 install-Exchange15.ps1 func
+            .DESCRIPTION
+            Test-MyPackageTDO - Given a PackageID or pipe-delimted ('|') array of PackageIDs as used in the Registry under \Uninstall, \Products, or \Updates keys (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632), this Tests-for/Confirms install status, and returns a string (variously the DisplayName HotfixID, or PackageName as stored on the matched key value) to the pipeline. 
+
+            Usage relies on *knowing* the KBnnnnnnn number or GUID {nnDnnnFE-nFnD-nnFn-nnnn-nBnnDnDnnDnn} stored in the registry, that confirms patch/package install. 
+            But with that data, this will check the stack of nested registry locations for the matching package install record.
+
+            Self contained, has no dependancies.
+
+            .INPUTS
+            None. Does not accepted piped input.(.NET types, can add description)
+            .OUTPUTS            
+            System.String On a successful confirmation: Returns the DisplayName, HotfixID, or PackageName as stored on the matched key value
+            .PARAMETER PackageID
+            Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update, as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]
+            .EXAMPLE            
+            PS> $PackageID = 'KB5049233' ; $PackageName = "Security Update For Exchange Server 2016 CU23 SU14 V2" ;             
+            PS> if(Test-MyPackage -PackageID "KB3206632"){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2016 CU23 SU14 V2 package
+            .EXAMPLE
+            PS> $PackageID = "KB3206632"; $Package = "Cumulative Update for Windows Server 2016 for x64-based Systems" ; 
+            PS> if(Test-MyPackage -PackageID "KB3206632"){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Cumulative Update for Windows Server 2016 kb3206632 OS patch 
+            .EXAMPLE
+            PS> $PackageID = "{9BCA2118-F753-4A1E-BCF3-5A820729965C}" ; $Package = "URL Rewrite Module 2.1"
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of URL Rewrite Module 2.1
+            .EXAMPLE
+            PS> $PackageID = "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" ; $Package = "Unified Communications Managed API 4.0 Runtime (Core)" ; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Unified Communications Managed API 4.0 Runtime (Core) (from the unpacked Exchange setup ISO, blank -OnlineURL)
+            .EXAMPLE
+            PS> $PackageID = "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" ; $Package = "Unified Communications Managed API 4.0 Runtime" ; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Unified Communications Managed API 4.0 Runtime
+            .EXAMPLE
+            PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2019 CU14 SU3 V2' ;
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2019 CU14 SU3 V2
+            .EXAMPLE
+            PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2019 CU13 SU7 V2'; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2019 CU13 SU7 V2
+            .EXAMPLE
+            PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2016 CU23 SU14 V2';
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2016 CU23 SU14 V2
+            .EXAMPLE
+            PS> $PackageID = 'KB5057653' ; $Package = 'Hotfix Update for Exchange Server 2016 CU23 HU16'; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Hotfix Update for Exchange Server 2016 CU23 HU16          
+            .LINK
+            https://github.com/michelderooij/Install-Exchange15
+            .LINK
+            https://github.com/tostka/verb-io
+            .LINK
+            https://github.com/tostka/powershellbb/
+            #>
+            [CmdletBinding()]
+            [Alias('Test-MyPackage')]
+            PARAM( 
+                [Parameter(HelpMessage="Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update, as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]")]
+                    [String]$PackageID
+            ) 
+            $PackageSet= $PackageID.split('|')
+            $PresenceKey= $null
+            ForEach( $ID in $PackageSet) {
+                $smsg = "Checking if package $ID is installed .."
+                if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                    if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                } ;
+                if (get-command get-ciminstance -ea 0) {
+                    $PresenceKey = (get-ciminstance win32_quickfixengineering | Where-Object { $_.HotfixID -eq $ID }).HotfixID
+                } else {
+                    $PresenceKey= (Get-WmiObject win32_quickfixengineering | Where-Object { $_.HotfixID -eq $ID }).HotfixID
+                }
+                If( -not( $PresenceKey)) {
+                    $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
+                    If(-not( $PresenceKey)) {
+                        # Alternative (seen KB2803754, 2802063 register here)
+                        $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
+                        If( -not( $PresenceKey)){
+                            # Alternative (eg Office2010FilterPack SP1)
+                            $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
+                            If( -not( $PresenceKey)){
+                                # Check for installed Exchange IUs
+                                if(get-variable -name State -ea 0){
+                                    Switch( $State["MajorSetupVersion"]) {
+                                        $EX2016_MAJOR {
+                                            $IUPath= 'Exchange 2016'
+                                        }
+                                        default {
+                                            $IUPath= 'Exchange 2019'
+                                        }
+                                    }
+                                }elseif($MajorSetupVersion){
+                                    Switch( $MajorSetupVersion) {
+                                        $EX2016_MAJOR {
+                                            $IUPath= 'Exchange 2016'
+                                        }
+                                        default {
+                                            $IUPath= 'Exchange 2019'
+                                        }
+                                    }
+                                }else{
+                                    $smsg = "Missing Dep vari:Neither `$State['MajorSetupVersion'] -nor `$MajorSetupVersion FOUND!"
+                                    if(gcm Write-MyWarning -ea 0){Write-MyWarning $smsg } else {
+                                        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                                    } ;
+                                    break ; 
+                                } ; 
+                                $PresenceKey= (Get-ItemProperty -Path ('HKLM:\Software\Microsoft\Updates\{0}\{1}' -f $IUPath, $ID) -Name 'PackageName' -ErrorAction SilentlyContinue).PackageName
+                            }
+                        }
+                    }
+                }
+            } # loop-E
+            return $PresenceKey
+        }
+
+#*------^ Test-MyPackageTDO.ps1 ^------
+
+
 #*------v update-Environment.ps1 v------
 function update-Environment {
     <#
@@ -2347,7 +4212,7 @@ function update-Environment {
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-ServerRoles,invoke-Explore,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatus,Report-URL,restart-Shell,Set,Set-Wallpaper,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,update-Environment -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Disable-AutoLogonTDO,Disable-OpenFileSecurityWarningTDO,Disable-UACTDO,Enable-AutoLogonTDO,Enable-OpenFileSecurityWarningTDO,Enable-RunOnceTDO,Enable-UACTDO,get-localNicsTDO,Get-MyPackageTDO,get-OSFullVersionTDO,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-MyPackageTDO,Install-ServerRoles,invoke-Explore,Invoke-ExtractTDO,Invoke-ProcessTDO,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatusTDO,Report-URL,Reset-CurrentWallpaperTDO,restart-Shell,Set,Set-WallpaperTDO,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,Test-MyPackageTDO,update-Environment -Alias *
 
 
 
