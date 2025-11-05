@@ -15,12 +15,13 @@ function Enable-RunOnceTDO{
         FileName    : Enable-RunOnceTDO.ps1
         License     : (none asserted)
         Copyright   : (none asserted)
-        Github      : https://github.com/tostka/verb-io
+        Github      : https://github.com/tostka/verb-desktop
         Tags        : Powershell,ActiveDirectory,Forest,Domain
         AddedCredit : Michel de Rooij / michel@eightwone.com
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
+        * 1:23 PM 11/3/2025 add: alias:Enable-RunOnce
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             add splatting on the new-itemprop, to store the settings being set;  
             remove the write-my*() support (defer to native w-l support)
@@ -41,7 +42,7 @@ function Enable-RunOnceTDO{
         https://github.org/tostka/verb-Network/
         #>
         [CmdletBinding()]
-        [alias('Enable-RunOnce821')]
+        [alias('Enable-RunOnce821','Enable-RunOnce')]
         PARAM(
             [Parameter(HelpMessage = "Powershell script fullpath to be run at next startup")]
                 [system.io.fileinfo]$ScriptFullName,
