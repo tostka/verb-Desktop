@@ -21,6 +21,7 @@ function Enable-UACTDO{
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
+        * 1:26 PM 11/3/2025 Enable-UACTDO: add: alias: Enable-UAC
         * 4:41 PM 10/6/2025 fixed comment brackets ; 
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             remove the write-my*() support (defer to native w-l support)
@@ -35,7 +36,7 @@ function Enable-UACTDO{
         https://github.org/tostka/verb-Desktop/
         #>
         [CmdletBinding()]
-        [alias('Enable-UAC821')]
+        [alias('Enable-UAC821','Enable-UAC')]
         PARAM( ) ;
         $smsg = 'Enabling User Account Control'
         if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
