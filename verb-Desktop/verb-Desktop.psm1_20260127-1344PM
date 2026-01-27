@@ -1,11 +1,11 @@
-﻿# verb-Desktop.psm1
+﻿# verb-desktop.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 5.0.0.0
+  Version     : 4.2.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -799,13 +799,12 @@ function Enable-RunOnceTDO{
         FileName    : Enable-RunOnceTDO.ps1
         License     : (none asserted)
         Copyright   : (none asserted)
-        Github      : https://github.com/tostka/verb-desktop
+        Github      : https://github.com/tostka/verb-io
         Tags        : Powershell,ActiveDirectory,Forest,Domain
         AddedCredit : Michel de Rooij / michel@eightwone.com
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
-        * 1:23 PM 11/3/2025 add: alias:Enable-RunOnce
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             add splatting on the new-itemprop, to store the settings being set;  
             remove the write-my*() support (defer to native w-l support)
@@ -826,7 +825,7 @@ function Enable-RunOnceTDO{
         https://github.org/tostka/verb-Network/
         #>
         [CmdletBinding()]
-        [alias('Enable-RunOnce821','Enable-RunOnce')]
+        [alias('Enable-RunOnce821')]
         PARAM(
             [Parameter(HelpMessage = "Powershell script fullpath to be run at next startup")]
                 [system.io.fileinfo]$ScriptFullName,
@@ -924,7 +923,6 @@ function Enable-UACTDO{
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
-        * 1:26 PM 11/3/2025 Enable-UACTDO: add: alias: Enable-UAC
         * 4:41 PM 10/6/2025 fixed comment brackets ; 
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             remove the write-my*() support (defer to native w-l support)
@@ -939,7 +937,7 @@ function Enable-UACTDO{
         https://github.org/tostka/verb-Desktop/
         #>
         [CmdletBinding()]
-        [alias('Enable-UAC821','Enable-UAC')]
+        [alias('Enable-UAC821')]
         PARAM( ) ;
         $smsg = 'Enabling User Account Control'
         if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
@@ -3426,147 +3424,6 @@ Function Set-WallpaperTDO {
 #*------^ Set-WallpaperTDO.ps1 ^------
 
 
-#*------v show-processWindow.ps1 v------
-Function show-processWindow {
-    <#
-    .SYNOPSIS
-    show-processWindow - show specified process Window in foreground for specified -id. If an array of processes/identifiers are specified, each will be foregrounded in order specified.
-    .NOTES
-    Version     : 1.0.0
-    Author      : Todd Kadrie
-    Website     : http://www.toddomation.com
-    Twitter     : @tostka / http://twitter.com/tostka
-    CreatedDate : 2025-12-02
-    FileName    : show-processWindow.ps1
-    License     : MIT License
-    Copyright   : (c) 2025 Todd Kadrie
-    Github      : https://github.com/tostka/verb-desktop
-    Tags        : Powershell,Process,Management,Reporting
-    REVISIONS
-    * 9:33 AM 12/2/2025 💩 🚧 init vers, wrapped & functionalized GeminiAI referred sample code, works fine in ISE, throws Method invocation failed because [Win32.NativeMethods] does not
-contain a method named 'ShowWindowAsync' in native ps.
-    
-    .DESCRIPTION
-    show-processWindow - show specified process Window in foreground for specified -process. If an array of processes/identifiers are specified, each will be foregrounded in order specified.
-    Intent is to use get-process with post filtering to isolate a given window, and then use that pre-filtered spec to feed this function to foreground the application window (if exists), 
-    leveraging the user32.dll SetForegroundWindow call. 
-    (relies on the running powershell session having sufficient permissions/elevation to interact with the target window)
-    .PARAMETER process
-    Process or Process ID array : Specifies one or more processes by process ID (PID). To specify multiple IDs, use commas to separate the IDs. To find the PID of a process, type `Get-Process`.[-id 8788]
-    .INPUTS
-    Accepts piped input (id/pid, process object)
-    .OUTPUTS
-    None
-    .EXAMPLE
-    PS> $proc = get-process -ProcessName notepad2 | sort mainwindowtitle | ?{$_.mainwindowtitle -match 'psparamt'} ; 
-    PS> if($proc){show-processWindow -process $proc -verbose} ; 
-    Typical usage with a stored process object variable
-    .EXAMPLE
-    PS> show-processWindow -process 8788 -verbose ; 
-    Typical usage specifying an id/pid for the process identifier
-    PS> show-processWindow -process @('31408','8788') -verbose 
-    Typical usage specifying an id/pid array for the process identifier
-    .EXAMPLE
-    PS> $proc = get-process -ProcessName notepad2 | sort mainwindowtitle | ?{$_.mainwindowtitle -match 'psparamt'} ; 
-    PS> $proc | show-processWindow -verbose ; 
-    Pipeline usage fed a stored process object variable
-    .LINK
-    https://github.com/tostka/verb-desktop
-    #>
-    [CmdletBinding()]
-    [Alias('show-process')]
-    PARAM(
-        [Parameter(Position=0,Mandatory=$True,ValueFromPipeline=$true,HelpMessage="Process or Process ID array : Specifies one or more processes by process ID (PID). To specify multiple IDs, use commas to separate the IDs. To find the PID of a process, type `Get-Process`.[-id 8788]")]
-          #[System.Int32[]]$Id
-          $process
-    ) ;
-    BEGIN{
-        # Define the Windows API functions
-        #TRY{
-            Add-Type -MemberDefinition @'
-[DllImport("user32.dll")]
-public static extern bool SetForegroundWindow(IntPtr hWnd);
-[DllImport("user32.dll")]
-public static extern bool c(IntPtr hWnd, int nCmdShow);
-'@ -Name "NativeMethods" -Namespace "Win32" ; 
-        #}CATCH{} ; 
-        # eat dupe load errors
-    }
-    PROCESS{
-        foreach($proc in $process){
-            switch -regex ($proc.gettype().fullname){                
-                'System\.Int32\[]|System\.Int32|System\.String'{
-                    $smsg = "detected -Process is System.Int32[]: assuming it's an ID/PID(s)" ; 
-                    if($VerbosePreference -eq "Continue"){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } 
-                    else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ; 
-                    #TRY{
-                        $tProc = get-process -id $proc -ea STOP ; 
-                    #} CATCH {
-                        $ErrTrapd=$Error[0] ;
-                        write-host -foregroundcolor gray "TargetCatch:} CATCH [$($ErrTrapd.Exception.GetType().FullName)] {"  ;
-                        $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;
-                        write-warning "$((get-date).ToString('HH:mm:ss')):$($smsg)" ;
-                     #} ;                    
-                }
-                'System\.Diagnostics\.Process'{
-                    $smsg = "detected -Process is System.Diagnostics.Process: a process object(s)" ; 
-                    if($VerbosePreference -eq "Continue"){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } 
-                    else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ; 
-                    $tProc = $proc ; 
-                }
-                'System\.Object\[]'{
-                    $smsg = "detected -Process is System.Object[]: assuming it's a process object(s)" ; 
-                    if($VerbosePreference -eq "Continue"){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } 
-                    else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ; 
-                    $tProc = $proc ; 
-                }
-                default{
-                    $smsg = "unrecognized/unsupported `$process.gettype().fullname: $($proc.gettype().fullname)" ; 
-                    if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN -Indent} 
-                    else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; 
-                    
-                }
-            }
-            # Check if the process has a main window handle
-            if ($tProc.MainWindowHandle -ne [System.IntPtr]::Zero) {
-                # Restore the window if minimized (SW_RESTORE = 9)
-                <# generating error:
-                    #-=-=-=-=-=-=-=-=
-                    Method invocation failed because [Win32.NativeMethods] does not contain a method named 'ShowWindowAsync'.
-                    At C:\sc\verb-Desktop\Public\show-processWindow.ps1:106 char:17
-                    + ...             [Win32.NativeMethods]::ShowWindowAsync($tProc.MainWindowH ...
-                    +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        + CategoryInfo          : InvalidOperation: (:) [], RuntimeException
-                        + FullyQualifiedErrorId : MethodNotFound
-                    #-=-=-=-=-=-=-=-=                
-                , trycatch past to eat it (if foreground is sufficient)
-                #>
-                TRY{
-                    [Win32.NativeMethods]::ShowWindowAsync($tProc.MainWindowHandle, 9) | Out-Null
-                    $smsg = "Restore any minimized: '$($tProc.MainWindowTitle)'" ; 
-                    if($VerbosePreference -eq "Continue"){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } 
-                    else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ; 
-                }CATCH{} ; 
-                #} CATCH {$ErrTrapd=$Error[0] ;   write-host -foregroundcolor gray "TargetCatch:} CATCH [$($ErrTrapd.Exception.GetType().FullName)] {"  ;   $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;   write-warning "$((get-date).ToString('HH:mm:ss')):$($smsg)" ; } ;
-                
-                # Set the window to the foreground
-                TRY{
-                    [Win32.NativeMethods]::SetForegroundWindow($tProc.MainWindowHandle) | Out-Null
-                    $smsg = "Foroeground: '$($tProc.MainWindowTitle)'" ;
-                    if($VerbosePreference -eq "Continue"){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } 
-                    else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ; 
-                } CATCH {$ErrTrapd=$Error[0] ;   write-host -foregroundcolor gray "TargetCatch:} CATCH [$($ErrTrapd.Exception.GetType().FullName)] {"  ;   $smsg = "`n$(($ErrTrapd | fl * -Force|out-string).trim())" ;   write-warning "$((get-date).ToString('HH:mm:ss')):$($smsg)" ; } ;
-                
-            } else {
-                Write-Warning "Process '$($tProc.Name)' does not have a main window handle."
-            } ; 
-        } ; 
-    }
-}
-
-#*------^ show-processWindow.ps1 ^------
-
-
 #*------v show-TrayTip.ps1 v------
 function show-TrayTip {
     <#
@@ -4161,151 +4018,147 @@ if ($env:WT_SESSION) {
 
 #*------v Test-MyPackageTDO.ps1 v------
 Function Test-MyPackageTDO{
-    <#
-    .SYNOPSIS
-    Test-MyPackageTDO - Given a PackageID or pipe-delimted ('|') array of PackageIDs as used in the Registry under \Uninstall, \Products, or \Updates keys (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632), this Tests-for/Confirms install status, and returns a string (variously the DisplayName HotfixID, or PackageName as stored on the matched key value) to the pipeline.
-    .NOTES
-    Version     : 0.0.1
-    Author      : Todd Kadrie
-    Website     : http://www.toddomation.com
-    Twitter     : @tostka / http://twitter.com/tostka
-    CreatedDate : 2025-08-15
-    FileName    : Test-MyPackageTDO.ps1
-    License     : (none asserted)
-    Copyright   : (none asserted)
-    Github      : https://github.com/tostka/verb-IO
-    Tags        : Powershell,FileSystem,Backup,Development,Build,Staging
-    AddedCredit :  Michel de Rooij / michel@eightwone.com
-    AddedWebsite: https://eightwone.com / https://github.com/michelderooij/Install-Exchange15
-    AddedTwitter: URL
-    REVISIONS  
-    * 1:31 PM 12/19/2025 coded in alts to $State dep (defers to $global varis, discovered during xopBuildLibrary.psm1 load)
-    * 9:10 AM 10/7/2025 added default pull via get-ciminstance, with fallback to Get-WMIObject; 
-    * 11:47 AM 10/2/2025 port to C:\sc\powershell\PSScripts\build\Test-MyPackageTDO_func.ps1 - niche use, doesn't bear building into verb-io mod etc, but useful for patch verifications; also in xopBuildLibrary.psm1      
-        substantially updated the CBH demos, citing specific pkg test examples that can be easily reused.
-    * 11:34 AM 8/15/2025 ren: Test-MyPackage -> Test-MyPackageTDO and alias the orig name; add: CBH, fleshed out Parameter specs into formal well specified block. Added variety of working examples, for reuse adding future patches/packages to the mix.
-    * 821's posted copy w/in install-Exchange15.ps1: Version 4.13, July 17th, 2025 821 install-Exchange15.ps1 func
-    .DESCRIPTION
-    Test-MyPackageTDO - Given a PackageID or pipe-delimted ('|') array of PackageIDs as used in the Registry under \Uninstall, \Products, or \Updates keys (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632), this Tests-for/Confirms install status, and returns a string (variously the DisplayName HotfixID, or PackageName as stored on the matched key value) to the pipeline. 
+            <#
+            .SYNOPSIS
+            Test-MyPackageTDO - Given a PackageID or pipe-delimted ('|') array of PackageIDs as used in the Registry under \Uninstall, \Products, or \Updates keys (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632), this Tests-for/Confirms install status, and returns a string (variously the DisplayName HotfixID, or PackageName as stored on the matched key value) to the pipeline.
+            .NOTES
+            Version     : 0.0.1
+            Author      : Todd Kadrie
+            Website     : http://www.toddomation.com
+            Twitter     : @tostka / http://twitter.com/tostka
+            CreatedDate : 2025-08-15
+            FileName    : Test-MyPackageTDO.ps1
+            License     : (none asserted)
+            Copyright   : (none asserted)
+            Github      : https://github.com/tostka/verb-IO
+            Tags        : Powershell,FileSystem,Backup,Development,Build,Staging
+            AddedCredit :  Michel de Rooij / michel@eightwone.com
+            AddedWebsite: https://eightwone.com / https://github.com/michelderooij/Install-Exchange15
+            AddedTwitter: URL
+            REVISIONS  
+            * 9:10 AM 10/7/2025 added default pull via get-ciminstance, with fallback to Get-WMIObject; 
+            * 11:47 AM 10/2/2025 port to C:\sc\powershell\PSScripts\build\Test-MyPackageTDO_func.ps1 - niche use, doesn't bear building into verb-io mod etc, but useful for patch verifications; also in xopBuildLibrary.psm1      
+                substantially updated the CBH demos, citing specific pkg test examples that can be easily reused.
+            * 11:34 AM 8/15/2025 ren: Test-MyPackage -> Test-MyPackageTDO and alias the orig name; add: CBH, fleshed out Parameter specs into formal well specified block. Added variety of working examples, for reuse adding future patches/packages to the mix.
+            * 821's posted copy w/in install-Exchange15.ps1: Version 4.13, July 17th, 2025 821 install-Exchange15.ps1 func
+            .DESCRIPTION
+            Test-MyPackageTDO - Given a PackageID or pipe-delimted ('|') array of PackageIDs as used in the Registry under \Uninstall, \Products, or \Updates keys (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632), this Tests-for/Confirms install status, and returns a string (variously the DisplayName HotfixID, or PackageName as stored on the matched key value) to the pipeline. 
 
-    Usage relies on *knowing* the KBnnnnnnn number or GUID {nnDnnnFE-nFnD-nnFn-nnnn-nBnnDnDnnDnn} stored in the registry, that confirms patch/package install. 
-    But with that data, this will check the stack of nested registry locations for the matching package install record.
+            Usage relies on *knowing* the KBnnnnnnn number or GUID {nnDnnnFE-nFnD-nnFn-nnnn-nBnnDnDnnDnn} stored in the registry, that confirms patch/package install. 
+            But with that data, this will check the stack of nested registry locations for the matching package install record.
 
-    Self contained, has no dependancies.
+            Self contained, has no dependancies.
 
-    .INPUTS
-    None. Does not accepted piped input.(.NET types, can add description)
-    .OUTPUTS            
-    System.String On a successful confirmation: Returns the DisplayName, HotfixID, or PackageName as stored on the matched key value
-    .PARAMETER PackageID
-    Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update, as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]
-    .EXAMPLE            
-    PS> $PackageID = 'KB5049233' ; $PackageName = "Security Update For Exchange Server 2016 CU23 SU14 V2" ;             
-    PS> if(Test-MyPackage -PackageID "KB3206632"){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Security Update For Exchange Server 2016 CU23 SU14 V2 package
-    .EXAMPLE
-    PS> $PackageID = "KB3206632"; $Package = "Cumulative Update for Windows Server 2016 for x64-based Systems" ; 
-    PS> if(Test-MyPackage -PackageID "KB3206632"){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Cumulative Update for Windows Server 2016 kb3206632 OS patch 
-    .EXAMPLE
-    PS> $PackageID = "{9BCA2118-F753-4A1E-BCF3-5A820729965C}" ; $Package = "URL Rewrite Module 2.1"
-    PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of URL Rewrite Module 2.1
-    .EXAMPLE
-    PS> $PackageID = "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" ; $Package = "Unified Communications Managed API 4.0 Runtime (Core)" ; 
-    PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Unified Communications Managed API 4.0 Runtime (Core) (from the unpacked Exchange setup ISO, blank -OnlineURL)
-    .EXAMPLE
-    PS> $PackageID = "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" ; $Package = "Unified Communications Managed API 4.0 Runtime" ; 
-    PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Unified Communications Managed API 4.0 Runtime
-    .EXAMPLE
-    PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2019 CU14 SU3 V2' ;
-    PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Security Update For Exchange Server 2019 CU14 SU3 V2
-    .EXAMPLE
-    PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2019 CU13 SU7 V2'; 
-    PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Security Update For Exchange Server 2019 CU13 SU7 V2
-    .EXAMPLE
-    PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2016 CU23 SU14 V2';
-    PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Security Update For Exchange Server 2016 CU23 SU14 V2
-    .EXAMPLE
-    PS> $PackageID = 'KB5057653' ; $Package = 'Hotfix Update for Exchange Server 2016 CU23 HU16'; 
-    PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
-    Demo Test of Hotfix Update for Exchange Server 2016 CU23 HU16          
-    .LINK
-    https://github.com/michelderooij/Install-Exchange15
-    .LINK
-    https://github.com/tostka/verb-io
-    .LINK
-    https://github.com/tostka/powershellbb/
-    #>
-    [CmdletBinding()]
-    [Alias('Test-MyPackage')]
-    PARAM( 
-        [Parameter(HelpMessage="Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update, as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]")]
-            [String]$PackageID
-    ) 
-    if(-not $State -AND  -not $MajorSetupVersion -AND $global:InstalledExSetupVersion){
-        $MajorSetupVersion =  "{0}.{1}" -f $global:InstalledExSetupVersion.Major,$global:InstalledExSetupVersion.Minor
-    }
-    $PackageSet= $PackageID.split('|')
-    $PresenceKey= $null
-    ForEach( $ID in $PackageSet) {
-        $smsg = "Checking if package $ID is installed .."
-        if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
-            if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
-        } ;
-        if (get-command get-ciminstance -ea 0) {
-            $PresenceKey = (get-ciminstance win32_quickfixengineering | Where-Object { $_.HotfixID -eq $ID }).HotfixID
-        } else {
-            $PresenceKey= (Get-WmiObject win32_quickfixengineering | Where-Object { $_.HotfixID -eq $ID }).HotfixID
-        }
-        If( -not( $PresenceKey)) {
-            $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
-            If(-not( $PresenceKey)) {
-                # Alternative (seen KB2803754, 2802063 register here)
-                $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
-                If( -not( $PresenceKey)){
-                    # Alternative (eg Office2010FilterPack SP1)
-                    $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
-                    If( -not( $PresenceKey)){
-                        # Check for installed Exchange IUs
-                        if(get-variable -name State -ea 0){
-                            Switch( $State["MajorSetupVersion"]) {
-                                $EX2016_MAJOR {
-                                    $IUPath= 'Exchange 2016'
-                                }
-                                default {
-                                    $IUPath= 'Exchange 2019'
-                                }
+            .INPUTS
+            None. Does not accepted piped input.(.NET types, can add description)
+            .OUTPUTS            
+            System.String On a successful confirmation: Returns the DisplayName, HotfixID, or PackageName as stored on the matched key value
+            .PARAMETER PackageID
+            Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update, as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]
+            .EXAMPLE            
+            PS> $PackageID = 'KB5049233' ; $PackageName = "Security Update For Exchange Server 2016 CU23 SU14 V2" ;             
+            PS> if(Test-MyPackage -PackageID "KB3206632"){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2016 CU23 SU14 V2 package
+            .EXAMPLE
+            PS> $PackageID = "KB3206632"; $Package = "Cumulative Update for Windows Server 2016 for x64-based Systems" ; 
+            PS> if(Test-MyPackage -PackageID "KB3206632"){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Cumulative Update for Windows Server 2016 kb3206632 OS patch 
+            .EXAMPLE
+            PS> $PackageID = "{9BCA2118-F753-4A1E-BCF3-5A820729965C}" ; $Package = "URL Rewrite Module 2.1"
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of URL Rewrite Module 2.1
+            .EXAMPLE
+            PS> $PackageID = "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" ; $Package = "Unified Communications Managed API 4.0 Runtime (Core)" ; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Unified Communications Managed API 4.0 Runtime (Core) (from the unpacked Exchange setup ISO, blank -OnlineURL)
+            .EXAMPLE
+            PS> $PackageID = "{41D635FE-4F9D-47F7-8230-9B29D6D42D31}" ; $Package = "Unified Communications Managed API 4.0 Runtime" ; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Unified Communications Managed API 4.0 Runtime
+            .EXAMPLE
+            PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2019 CU14 SU3 V2' ;
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2019 CU14 SU3 V2
+            .EXAMPLE
+            PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2019 CU13 SU7 V2'; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2019 CU13 SU7 V2
+            .EXAMPLE
+            PS> $PackageID = 'KB5049233' ; $Package = 'Security Update For Exchange Server 2016 CU23 SU14 V2';
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Security Update For Exchange Server 2016 CU23 SU14 V2
+            .EXAMPLE
+            PS> $PackageID = 'KB5057653' ; $Package = 'Hotfix Update for Exchange Server 2016 CU23 HU16'; 
+            PS> if(Test-MyPackage -PackageID $PackageID){write-host "$($PackageID) : $($Package) is installed"} ; 
+            Demo Test of Hotfix Update for Exchange Server 2016 CU23 HU16          
+            .LINK
+            https://github.com/michelderooij/Install-Exchange15
+            .LINK
+            https://github.com/tostka/verb-io
+            .LINK
+            https://github.com/tostka/powershellbb/
+            #>
+            [CmdletBinding()]
+            [Alias('Test-MyPackage')]
+            PARAM( 
+                [Parameter(HelpMessage="Microsoft KB number or {GUID} (e.g. {41D635FE-4F9D-47F7-8230-9B29D6D42D31} or KB3206632) for the update, as used in the Registry under \Uninstall, \Products, \Updates keys (used for install confirmation/detection) [-PackageID KB5057653]")]
+                    [String]$PackageID
+            ) 
+            $PackageSet= $PackageID.split('|')
+            $PresenceKey= $null
+            ForEach( $ID in $PackageSet) {
+                $smsg = "Checking if package $ID is installed .."
+                if(gcm Write-MyVerbose -ea 0){Write-MyVerbose $smsg } else {
+                    if($VerbosePreference -eq 'Continue'){if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level VERBOSE } else{ write-verbose "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ; } ;
+                } ;
+                if (get-command get-ciminstance -ea 0) {
+                    $PresenceKey = (get-ciminstance win32_quickfixengineering | Where-Object { $_.HotfixID -eq $ID }).HotfixID
+                } else {
+                    $PresenceKey= (Get-WmiObject win32_quickfixengineering | Where-Object { $_.HotfixID -eq $ID }).HotfixID
+                }
+                If( -not( $PresenceKey)) {
+                    $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
+                    If(-not( $PresenceKey)) {
+                        # Alternative (seen KB2803754, 2802063 register here)
+                        $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
+                        If( -not( $PresenceKey)){
+                            # Alternative (eg Office2010FilterPack SP1)
+                            $PresenceKey= (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\$ID" -Name 'DisplayName' -ErrorAction SilentlyContinue).DisplayName
+                            If( -not( $PresenceKey)){
+                                # Check for installed Exchange IUs
+                                if(get-variable -name State -ea 0){
+                                    Switch( $State["MajorSetupVersion"]) {
+                                        $EX2016_MAJOR {
+                                            $IUPath= 'Exchange 2016'
+                                        }
+                                        default {
+                                            $IUPath= 'Exchange 2019'
+                                        }
+                                    }
+                                }elseif($MajorSetupVersion){
+                                    Switch( $MajorSetupVersion) {
+                                        $EX2016_MAJOR {
+                                            $IUPath= 'Exchange 2016'
+                                        }
+                                        default {
+                                            $IUPath= 'Exchange 2019'
+                                        }
+                                    }
+                                }else{
+                                    $smsg = "Missing Dep vari:Neither `$State['MajorSetupVersion'] -nor `$MajorSetupVersion FOUND!"
+                                    if(gcm Write-MyWarning -ea 0){Write-MyWarning $smsg } else {
+                                        if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
+                                    } ;
+                                    break ; 
+                                } ; 
+                                $PresenceKey= (Get-ItemProperty -Path ('HKLM:\Software\Microsoft\Updates\{0}\{1}' -f $IUPath, $ID) -Name 'PackageName' -ErrorAction SilentlyContinue).PackageName
                             }
-                        }elseif($MajorSetupVersion){
-                            Switch( $MajorSetupVersion) {
-                                $EX2016_MAJOR {
-                                    $IUPath= 'Exchange 2016'
-                                }
-                                default {
-                                    $IUPath= 'Exchange 2019'
-                                }
-                            }
-                        }else{
-                            $smsg = "Missing Dep vari:Neither `$State['MajorSetupVersion'] -nor `$MajorSetupVersion FOUND!"
-                            if(gcm Write-MyWarning -ea 0){Write-MyWarning $smsg } else {
-                                if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level WARN} else{ write-WARNING "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
-                            } ;
-                            break ; 
-                        } ; 
-                        $PresenceKey= (Get-ItemProperty -Path ('HKLM:\Software\Microsoft\Updates\{0}\{1}' -f $IUPath, $ID) -Name 'PackageName' -ErrorAction SilentlyContinue).PackageName
+                        }
                     }
                 }
-            }
+            } # loop-E
+            return $PresenceKey
         }
-    } # loop-E
-    return $PresenceKey
-}
 
 #*------^ Test-MyPackageTDO.ps1 ^------
 
@@ -4359,7 +4212,33 @@ function update-Environment {
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Disable-AutoLogonTDO,Disable-OpenFileSecurityWarningTDO,Disable-UACTDO,Enable-AutoLogonTDO,Enable-OpenFileSecurityWarningTDO,Enable-RunOnceTDO,Enable-UACTDO,get-localNicsTDO,Get-MyPackageTDO,get-OSFullVersionTDO,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-MyPackageTDO,Install-ServerRoles,invoke-Explore,Invoke-ExtractTDO,Invoke-ProcessTDO,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatusTDO,Report-URL,Reset-CurrentWallpaperTDO,restart-Shell,Set,Set-WallpaperTDO,show-processWindow,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,Test-MyPackageTDO,update-Environment -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Disable-AutoLogonTDO,Disable-OpenFileSecurityWarningTDO,Disable-UACTDO,Enable-AutoLogonTDO,Enable-OpenFileSecurityWarningTDO,Enable-RunOnceTDO,Enable-UACTDO,get-localNicsTDO,Get-MyPackageTDO,get-OSFullVersionTDO,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-MyPackageTDO,Install-ServerRoles,invoke-Explore,Invoke-ExtractTDO,Invoke-ProcessTDO,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatusTDO,Report-URL,Reset-CurrentWallpaperTDO,restart-Shell,Set,Set-WallpaperTDO,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,Test-MyPackageTDO,update-Environment -Alias *
 
 
 
+
+# SIG # Begin signature block
+# MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
+# gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUyoCPx6pqNuwxszvLwTAX0BH/
+# RQagggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
+# Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
+# ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
+# a+NnFYNRPPa8Bnm071ohGe27jNWKPVUbDfd0OY2sqCBQCEFVb5pqcIECRRnlhN5H
+# +EEJmm2x9AU0uS7IHxHeUo8fkW4vm49adkat5gAoOZOwbuNntBOAJy9LCyNs4F1I
+# KKphP3TyDwe8XqsEVwB2m9FPAgMBAAGjdjB0MBMGA1UdJQQMMAoGCCsGAQUFBwMD
+# MF0GA1UdAQRWMFSAEL95r+Rh65kgqZl+tgchMuKhLjAsMSowKAYDVQQDEyFQb3dl
+# clNoZWxsIExvY2FsIENlcnRpZmljYXRlIFJvb3SCEGwiXbeZNci7Rxiz/r43gVsw
+# CQYFKw4DAh0FAAOBgQB6ECSnXHUs7/bCr6Z556K6IDJNWsccjcV89fHA/zKMX0w0
+# 6NefCtxas/QHUA9mS87HRHLzKjFqweA3BnQ5lr5mPDlho8U90Nvtpj58G9I5SPUg
+# CspNr5jEHOL5EdJFBIv3zI2jQ8TPbFGC0Cz72+4oYzSxWpftNX41MmEsZkMaADGC
+# AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
+# Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
+# AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTFCflg
+# U3ASIXCb1alrDH6/HKei0TANBgkqhkiG9w0BAQEFAASBgAm0qBNlkmGV0w/+XYdH
+# Rth/wPl4ols2RUJDrMUciDNCdB5uTWkj/jo/IednHg/o8zlZxqDD78/Lk0xIpnfj
+# Ut+WpLsdd3tgQM2jhJVBh4Ojx/IBXdocaHqJStZBtN5um19+FHzKqWXkk7Rk2+oy
+# 3GzJNMTgs3JVUgPQGowfhkEo
+# SIG # End signature block
