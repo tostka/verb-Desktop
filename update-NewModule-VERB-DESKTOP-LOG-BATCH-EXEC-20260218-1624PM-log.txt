@@ -1,0 +1,609 @@
+﻿2026-02-18 16:24:52 INFO:  : #*======v VERB-dev.psm1:VERB-DESKTOP v======
+2026-02-18 16:24:53 INFO:  : Run: reset-ModulePublishingDirectory -ModuleName VERB-DESKTOP
+2026-02-18 16:24:54 ##  : 
+#*------v PROCESSING : VERB-DESKTOP v------
+2026-02-18 16:24:54 INFO:  : Pre-purge (CHANGELOG|README)\.md$ Root dir matches from :
+2026-02-18 16:24:54 INFO:  : VERB-DESKTOP resolved $ModPubPath:C:\sc\VERB-DESKTOP\VERB-DESKTOP\
+$ModResPath:C:\sc\VERB-DESKTOP\Resource\
+2026-02-18 16:24:55 INFO:  : VERB-DESKTOP resolved $ModPubPath:C:\sc\VERB-DESKTOP\VERB-DESKTOP\
+$ModResPath:C:\sc\VERB-DESKTOP\Licenses\
+2026-02-18 16:24:55 INFO:  : VERB-DESKTOP resolved $ModPubPath:C:\sc\VERB-DESKTOP\VERB-DESKTOP\
+$ModResPath:C:\sc\VERB-DESKTOP\Docs\
+2026-02-18 16:24:56 INFO:  : ==C:\sc\VERB-DESKTOP\CHANGELOG.md:
+2026-02-18 16:24:56 INFO:  : ==C:\sc\VERB-DESKTOP\README.md:
+2026-02-18 16:24:57 INFO:  : ==C:\sc\VERB-DESKTOP\Docs\Quick-Start-Installation-and-Example.md:
+2026-02-18 16:24:57 ##  : 
+#*------^ PROCESSING : VERB-DESKTOP ^------
+2026-02-18 16:24:58 INFO:  : Run: populate-ModulePublishingDirectory -ModuleName VERB-DESKTOP
+2026-02-18 16:24:58 ##  : 
+#*------v PROCESSING : VERB-DESKTOP v------
+2026-02-18 16:24:58 INFO:  : Locating (CHANGELOG|README)\.md$ Root dir matches from :
+2026-02-18 16:24:59 INFO:  : VERB-DESKTOP resolved $ModPubPath:C:\sc\VERB-DESKTOP\VERB-DESKTOP\
+$ModResPath:C:\sc\VERB-DESKTOP\Resource\
+2026-02-18 16:24:59 INFO:  : VERB-DESKTOP resolved $ModPubPath:C:\sc\VERB-DESKTOP\VERB-DESKTOP\
+$ModResPath:C:\sc\VERB-DESKTOP\Licenses\
+2026-02-18 16:25:00 INFO:  : VERB-DESKTOP resolved $ModPubPath:C:\sc\VERB-DESKTOP\VERB-DESKTOP\
+$ModResPath:C:\sc\VERB-DESKTOP\Docs\
+2026-02-18 16:25:00 INFO:  : copy-item w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+path                           {C:\sc\VERB-DESKTOP\CHANGELOG.md, C:\sc\VERB-DESKTOP\README.md, C:\sc\VERB-DESKTOP\Docs\Quick-Start-Installation-and-Example.md}                                                                                                               
+destination                    C:\sc\VERB-DESKTOP\VERB-DESKTOP\                                                                                                                                                                                                               
+force                          True                                                                                                                                                                                                                                           
+erroraction                    STOP                                                                                                                                                                                                                                           
+verbose                        False                                                                                                                                                                                                                                          
+whatif                         False
+--$pltCI.path:
+C:\sc\VERB-DESKTOP\CHANGELOG.md
+C:\sc\VERB-DESKTOP\README.md
+C:\sc\VERB-DESKTOP\Docs\Quick-Start-Installation-and-Example.md
+2026-02-18 16:25:01 ##  : 
+#*------^ PROCESSING : VERB-DESKTOP ^------
+2026-02-18 16:25:01 INFO:  : Run: Remove any non-pub garbage cp'd into c:\sc\VERB-DESKTOP\VERB-DESKTOP -ModuleName VERB-DESKTOP
+2026-02-18 16:25:01 INFO:  : Validate updated VERB-DESKTOP\VERB-DESKTOP dir contents against Manifest:
+Run: test-modulemanifest -Path C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1
+2026-02-18 16:25:02 INFO:  : NON-Republish pass detected:
+MERGE parm specified as well:`n-Merge Public|Internal|Classes include subdirs module content into updated .psm1
+-Sign updated files.
+-Uninstall/Remove existing profile module
+-Copy new module to profile
+-Confirm: Get-Module -ListAvailable
+-Check/Update existing Psd1 Version
+-Publish-Module
+-Remove existing installed profile module
+-Test Install-Module
+-Test Import-Module
+2026-02-18 16:25:02 INFO:  : -Merge specified...
+2026-02-18 16:25:03 INFO:  : ConvertTo-ModuleMergedTDO w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+ModuleName                     VERB-DESKTOP                                                                                                                                                                                                                                   
+ModuleSourcePath               {c:\sc\VERB-DESKTOP\Public, c:\sc\VERB-DESKTOP\Internal}                                                                                                                                                                                       
+ModuleDestinationPath          c:\sc\VERB-DESKTOP\VERB-DESKTOP                                                                                                                                                                                                                
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+LogSpec                        {logging, logfile, transcript}                                                                                                                                                                                                                 
+NoAliasExport                                                                                                                                                                                                                                                                 
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+showdebug                      False                                                                                                                                                                                                                                          
+whatif                         False
+2026-02-18 16:25:03 INFO:  : ConvertTo-ModuleMergedTDO w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+ModuleName                     VERB-DESKTOP                                                                                                                                                                                                                                   
+ModuleSourcePath               {c:\sc\VERB-DESKTOP\Public, c:\sc\VERB-DESKTOP\Internal}                                                                                                                                                                                       
+ModuleDestinationPath          c:\sc\VERB-DESKTOP\VERB-DESKTOP                                                                                                                                                                                                                
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+LogSpec                        {logging, logfile, transcript}                                                                                                                                                                                                                 
+NoAliasExport                                                                                                                                                                                                                                                                 
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+showdebug                      False                                                                                                                                                                                                                                          
+whatif                         False
+2026-02-18 16:25:04 INFO:  : (NON-dyn psm1 detected - purging existing non-CBH content...)
+2026-02-18 16:25:05 INFO:  : Initialize-PSModuleDirectories w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+ModuleSourcePath               {c:\sc\VERB-DESKTOP\Public, c:\sc\VERB-DESKTOP\Internal}                                                                                                                                                                                       
+ModuleDestinationPath          c:\sc\VERB-DESKTOP\VERB-DESKTOP                                                                                                                                                                                                                
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+whatif                         False
+2026-02-18 16:25:05 INFO:  : 
+#*------v (1/2):C:\sc\VERB-DESKTOP\Public v------
+2026-02-18 16:25:06 INFO:  : Processing 46 $ComponentScripts files through Remove-AuthenticodeSignature...
+2026-02-18 16:25:06 INFO:  : Processing (1/46):C:\sc\VERB-DESKTOP\Public\.....ps1...
+2026-02-18 16:25:06 INFO:  : Processing (2/46):C:\sc\VERB-DESKTOP\Public\....ps1...
+2026-02-18 16:25:07 INFO:  : Processing (3/46):C:\sc\VERB-DESKTOP\Public\...ps1...
+2026-02-18 16:25:07 INFO:  : Processing (4/46):C:\sc\VERB-DESKTOP\Public\~.ps1...
+2026-02-18 16:25:08 INFO:  : Processing (5/46):C:\sc\VERB-DESKTOP\Public\Clean-Desktop.ps1...
+2026-02-18 16:25:08 INFO:  : Processing (6/46):C:\sc\VERB-DESKTOP\Public\confirm-GoogleDriveRunning.ps1...
+2026-02-18 16:25:09 INFO:  : Processing (7/46):C:\sc\VERB-DESKTOP\Public\c-winsallk.ps1...
+2026-02-18 16:25:09 INFO:  : Processing (8/46):C:\sc\VERB-DESKTOP\Public\Define-MoveWindow.ps1...
+2026-02-18 16:25:10 INFO:  : Processing (9/46):C:\sc\VERB-DESKTOP\Public\Disable-AutoLogonTDO.ps1...
+2026-02-18 16:25:10 INFO:  : Processing (10/46):C:\sc\VERB-DESKTOP\Public\Disable-OpenFileSecurityWarningTDO.ps1...
+2026-02-18 16:25:11 INFO:  : Processing (11/46):C:\sc\VERB-DESKTOP\Public\Disable-UACTDO.ps1...
+2026-02-18 16:25:11 INFO:  : Processing (12/46):C:\sc\VERB-DESKTOP\Public\Enable-AutoLogonTDO.ps1...
+2026-02-18 16:25:11 INFO:  : Processing (13/46):C:\sc\VERB-DESKTOP\Public\Enable-OpenFileSecurityWarningTDO.ps1...
+2026-02-18 16:25:12 INFO:  : Processing (14/46):C:\sc\VERB-DESKTOP\Public\Enable-RunOnceTDO.ps1...
+2026-02-18 16:25:12 INFO:  : Processing (15/46):C:\sc\VERB-DESKTOP\Public\Enable-UACTDO.ps1...
+2026-02-18 16:25:13 INFO:  : Processing (16/46):C:\sc\VERB-DESKTOP\Public\get-localNicsTDO.ps1...
+2026-02-18 16:25:13 INFO:  : Processing (17/46):C:\sc\VERB-DESKTOP\Public\Get-MyPackageTDO.ps1...
+2026-02-18 16:25:14 INFO:  : Processing (18/46):C:\sc\VERB-DESKTOP\Public\get-OSFullVersionTDO.ps1...
+2026-02-18 16:25:14 INFO:  : Processing (19/46):C:\sc\VERB-DESKTOP\Public\get-processTitled.ps1...
+2026-02-18 16:25:15 INFO:  : Processing (20/46):C:\sc\VERB-DESKTOP\Public\install-ChocoPkg.ps1...
+2026-02-18 16:25:15 INFO:  : Processing (21/46):C:\sc\VERB-DESKTOP\Public\Install-ExePackage.ps1...
+2026-02-18 16:25:16 INFO:  : Processing (22/46):C:\sc\VERB-DESKTOP\Public\Install-MsiPackage.ps1...
+2026-02-18 16:25:16 INFO:  : Processing (23/46):C:\sc\VERB-DESKTOP\Public\Install-MyPackageTDO.ps1...
+2026-02-18 16:25:16 INFO:  : Processing (24/46):C:\sc\VERB-DESKTOP\Public\Install-ServerRoles.ps1...
+2026-02-18 16:25:17 INFO:  : Processing (25/46):C:\sc\VERB-DESKTOP\Public\invoke-Explore.ps1...
+2026-02-18 16:25:18 INFO:  : Processing (26/46):C:\sc\VERB-DESKTOP\Public\Invoke-ExtractTDO.ps1...
+2026-02-18 16:25:18 INFO:  : Processing (27/46):C:\sc\VERB-DESKTOP\Public\Invoke-ProcessTDO.ps1...
+2026-02-18 16:25:18 INFO:  : Processing (28/46):C:\sc\VERB-DESKTOP\Public\invoke-SpeakWords.ps1...
+2026-02-18 16:25:19 INFO:  : Processing (29/46):C:\sc\VERB-DESKTOP\Public\Move-Window.ps1...
+2026-02-18 16:25:19 INFO:  : Processing (30/46):C:\sc\VERB-DESKTOP\Public\Move-WindowByWindowTitle.ps1...
+2026-02-18 16:25:20 INFO:  : Processing (31/46):C:\sc\VERB-DESKTOP\Public\New-WallpaperStatusTDO.ps1...
+2026-02-18 16:25:20 INFO:  : Processing (32/46):C:\sc\VERB-DESKTOP\Public\Report-URL.ps1...
+2026-02-18 16:25:21 INFO:  : Processing (33/46):C:\sc\VERB-DESKTOP\Public\Reset-CurrentWallpaperTDO.ps1...
+2026-02-18 16:25:21 INFO:  : Processing (34/46):C:\sc\VERB-DESKTOP\Public\restart-Shell.ps1...
+2026-02-18 16:25:22 INFO:  : Processing (35/46):C:\sc\VERB-DESKTOP\Public\Set.ps1...
+2026-02-18 16:25:22 INFO:  : Processing (36/46):C:\sc\VERB-DESKTOP\Public\Set-WallpaperTDO.ps1...
+2026-02-18 16:25:23 INFO:  : Processing (37/46):C:\sc\VERB-DESKTOP\Public\show-processWindow.ps1...
+2026-02-18 16:25:23 INFO:  : Processing (38/46):C:\sc\VERB-DESKTOP\Public\show-TrayTip.ps1...
+2026-02-18 16:25:23 INFO:  : Processing (39/46):C:\sc\VERB-DESKTOP\Public\start-ItunesPlaylist.ps1...
+2026-02-18 16:25:24 INFO:  : Processing (40/46):C:\sc\VERB-DESKTOP\Public\stop-browsers.ps1...
+2026-02-18 16:25:24 INFO:  : Processing (41/46):C:\sc\VERB-DESKTOP\Public\test-InstalledApplication.ps1...
+2026-02-18 16:25:25 INFO:  : Processing (42/46):C:\sc\VERB-DESKTOP\Public\Test-InstalledWindowsFeature.ps1...
+2026-02-18 16:25:25 INFO:  : Processing (43/46):C:\sc\VERB-DESKTOP\Public\test-IsWindowsActivated.ps1...
+2026-02-18 16:25:26 INFO:  : Processing (44/46):C:\sc\VERB-DESKTOP\Public\Test-IsWindowsTerminal.ps1...
+2026-02-18 16:25:26 INFO:  : Processing (45/46):C:\sc\VERB-DESKTOP\Public\Test-MyPackageTDO.ps1...
+2026-02-18 16:25:27 INFO:  : Processing (46/46):C:\sc\VERB-DESKTOP\Public\update-Environment.ps1...
+2026-02-18 16:25:27 INFO:  : 
+#*------v (2/2):C:\sc\VERB-DESKTOP\Internal v------
+2026-02-18 16:25:28 INFO:  : Processing 0 $ComponentScripts files through Remove-AuthenticodeSignature...
+2026-02-18 16:25:28 INFO:  : (Updating Psm1 Export-ModuleMember -Function to reflect Public modules)
+2026-02-18 16:25:28 INFO:  : Adding:FooterBlock...
+2026-02-18 16:25:29 INFO:  : confirm-ModuleBuildSync w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+ModPsdPath                     c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP                                                                                                                                                                                          
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+NoTest                         True                                                                                                                                                                                                                                           
+whatif                         False                                                                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:29 INFO:  : (test-path confirms $ModPsm1 & $ModTestPs1)
+2026-02-18 16:25:30 INFO:  : Import-PowerShellDataFile w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP                                                                                                                                                                                          
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+verbose                        False
+2026-02-18 16:25:30 INFO:  : (resolved Module attributes:
+$ModuleName:	VERB-DESKTOP
+$ModRoot:	c:\sc\VERB-DESKTOP
+$ModPsd1:	c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP
+$ModPsm1:	c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP
+$ModTestPs1:	c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1
+$psd1Vers:	5.1.0
+$psd1guid:	0b3874ca-3dd9-44a0-af97-768d25aa11fb)
+2026-02-18 16:25:31 INFO:  : confirm-ModulePsd1Version w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP                                                                                                                                                                                          
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+whatif                         False                                                                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:31 INFO:  : (Version already updated to match)
+2026-02-18 16:25:31 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          False
+2026-02-18 16:25:32 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:32 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          True
+2026-02-18 16:25:33 INFO:  : #*======^ confirm-ModulePsd1Version: c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP ^======
+2026-02-18 16:25:33 INFO:  : (confirm-ModulePsd1Version:Success)
+2026-02-18 16:25:34 INFO:  : confirm-ModulePsm1Version w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP                                                                                                                                                                                          
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+whatif                         False                                                                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:34 WARNING:  : In:c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP
+Version present:(5.0.0)
+*does not* properly match:5.1.0
+FORCING MATCHING UPDATE!
+2026-02-18 16:25:35 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          False
+2026-02-18 16:25:35 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:36 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          True
+2026-02-18 16:25:36 INFO:  : #*======^ confirm-ModulePsm1Version: c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP ^======
+2026-02-18 16:25:36 INFO:  : (confirm-ModulePsm1Version:Success)
+2026-02-18 16:25:37 INFO:  : (-NoTest: skipping confirm-ModuleTestPs1Guid)
+2026-02-18 16:25:37 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Manifest                       c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP                                                                                                                                                                                          
+Module                         c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP                                                                                                                                                                                          
+Pester                         (SKIPPED)                                                                                                                                                                                                                                      
+Guid                           (SKIPPED)                                                                                                                                                                                                                                      
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          False
+2026-02-18 16:25:38 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:38 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Manifest                       c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP                                                                                                                                                                                          
+Module                         c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP                                                                                                                                                                                          
+Pester                         (SKIPPED)                                                                                                                                                                                                                                      
+Guid                           (SKIPPED)                                                                                                                                                                                                                                      
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          True
+2026-02-18 16:25:39 INFO:  : #*======^ confirm-ModuleBuildSync:  ^======
+2026-02-18 16:25:39 INFO:  : (confirm-ModuleBuildSync:Success)
+2026-02-18 16:25:40 INFO:  : Test-ModuleTMPFiles w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+ModuleNamePSM1Path             c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:40 INFO:  : #*======v Test-ModuleTMPFiles: c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP v======
+2026-02-18 16:25:40 INFO:  : 
+Psm1:c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP
+Psd1:c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1_TMP
+2026-02-18 16:25:41 INFO:  : Test-ModuleManifest:PASSED
+2026-02-18 16:25:41 INFO:  : Creating Testable c:\sc\VERB-DESKTOP\VERB-DESKTOP\a25dc3f4-31d0-4f68-8f90-75da776910d8.psm1
+ to validate c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP will Import-Module
+2026-02-18 16:25:42 INFO:  : Ipmo: PASSED
+2026-02-18 16:25:42 INFO:  : (remove-module -name c:\sc\VERB-DESKTOP\VERB-DESKTOP\a25dc3f4-31d0-4f68-8f90-75da776910d8.psm1 -force)
+2026-02-18 16:25:43 INFO:  : (remove-item -path c:\sc\VERB-DESKTOP\VERB-DESKTOP\a25dc3f4-31d0-4f68-8f90-75da776910d8.psm1 -ErrorAction SilentlyContinue ; 
+2026-02-18 16:25:43 INFO:  : (remove-item -path c:\sc\VERB-DESKTOP\VERB-DESKTOP\a25dc3f4-31d0-4f68-8f90-75da776910d8.psd1 -ErrorAction SilentlyContinue ; 
+2026-02-18 16:25:43 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Manifest                       a25dc3f4-31d0-4f68-8f90-75da776910d8                                                                                                                                                                                                           
+Module                         a25dc3f4-31d0-4f68-8f90-75da776910d8                                                                                                                                                                                                           
+Valid                          False
+2026-02-18 16:25:44 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:44 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Manifest                       a25dc3f4-31d0-4f68-8f90-75da776910d8                                                                                                                                                                                                           
+Module                         a25dc3f4-31d0-4f68-8f90-75da776910d8                                                                                                                                                                                                           
+Valid                          True
+2026-02-18 16:25:45 INFO:  : #*======^ Test-ModuleTMPFiles: c:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1_TMP ^======
+2026-02-18 16:25:45 INFO:  : #*======^ ConvertTo-ModuleMergedTDO: ^======
+2026-02-18 16:25:46 INFO:  : (Test-ModuleManifest:PASSED)
+2026-02-18 16:25:46 INFO:  : Checking sync of Psd1 module guid to the Pester Test Script: c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1
+2026-02-18 16:25:47 INFO:  : confirm-ModuleBuildSync w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+ModPsdPath                     C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1                                                                                                                                                                                              
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+whatif                         False                                                                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:47 INFO:  : (test-path confirms $ModPsm1 & $ModTestPs1)
+2026-02-18 16:25:47 INFO:  : Import-PowerShellDataFile w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1                                                                                                                                                                                              
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+verbose                        False
+2026-02-18 16:25:48 INFO:  : (resolved Module attributes:
+$ModuleName:	VERB-DESKTOP
+$ModRoot:	c:\sc\VERB-DESKTOP
+$ModPsd1:	C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1
+$ModPsm1:	C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1
+$ModTestPs1:	c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1
+$psd1Vers:	5.1.0
+$psd1guid:	0b3874ca-3dd9-44a0-af97-768d25aa11fb)
+2026-02-18 16:25:48 INFO:  : confirm-ModulePsd1Version w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1                                                                                                                                                                                              
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+whatif                         False                                                                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:49 INFO:  : (Version already updated to match)
+2026-02-18 16:25:49 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          False
+2026-02-18 16:25:50 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:50 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          True
+2026-02-18 16:25:51 INFO:  : #*======^ confirm-ModulePsd1Version: C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1 ^======
+2026-02-18 16:25:51 INFO:  : (confirm-ModulePsd1Version:Success)
+2026-02-18 16:25:51 INFO:  : confirm-ModulePsm1Version w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1                                                                                                                                                                                              
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+whatif                         False                                                                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:52 INFO:  : (Version already updated to match)
+2026-02-18 16:25:52 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          False
+2026-02-18 16:25:53 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:53 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          True
+2026-02-18 16:25:53 INFO:  : #*======^ confirm-ModulePsm1Version: C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1 ^======
+2026-02-18 16:25:54 INFO:  : (confirm-ModulePsm1Version:Success)
+2026-02-18 16:25:54 INFO:  : Checking sync of Psd1 module guid to the Pester Test Script: c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1
+2026-02-18 16:25:55 INFO:  : confirm-ModuleTestPs1Guid w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1                                                                                                                                                                                                
+RequiredGuid                   0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                                                           
+whatif                         False                                                                                                                                                                                                                                          
+verbose                        False
+2026-02-18 16:25:55 INFO:  : (Guid  already updated to match)
+2026-02-18 16:25:56 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                                                           
+Valid                          False
+2026-02-18 16:25:56 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:57 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                                                           
+Valid                          True
+2026-02-18 16:25:57 INFO:  : (confirm-ModuleTestPs1Guid:Success)
+2026-02-18 16:25:58 INFO:  : $objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Manifest                       C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1                                                                                                                                                                                              
+Module                         C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1                                                                                                                                                                                              
+Pester                         c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1                                                                                                                                                                                                
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                                                           
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          False
+2026-02-18 16:25:58 INFO:  : (SET:$objReport.Valid = $true ;)
+2026-02-18 16:25:58 INFO:  : (PIPELINE:New-Object PSObject -Property $objReport | write-output)
+$objReport
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Manifest                       C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1                                                                                                                                                                                              
+Module                         C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psm1                                                                                                                                                                                              
+Pester                         c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1                                                                                                                                                                                                
+Guid                           0b3874ca-3dd9-44a0-af97-768d25aa11fb                                                                                                                                                                                                           
+Version                        5.1.0                                                                                                                                                                                                                                          
+Valid                          True
+2026-02-18 16:25:59 INFO:  : #*======^ confirm-ModuleBuildSync:  ^======
+2026-02-18 16:25:59 INFO:  : (confirm-ModuleBuildSync:Success)
+2026-02-18 16:26:00 INFO:  : Signing appropriate files...
+2026-02-18 16:26:01 INFO:  : set-AuthenticodeSignatureTDO w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+file                           {C:\sc\VERB-DESKTOP\rebuild-module.ps1, C:\sc\VERB-DESKTOP\requirements.psd1, C:\sc\VERB-DESKTOP\Tests\PPoShScriptingStyle.psd1, C:\sc\VERB-DESKTOP\Tests\ToddomationScriptingStyle-medium.psd1...}                                            
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+whatif                         False
+2026-02-18 16:26:02 INFO:  : Removing existing profile VERB-DESKTOP content...
+2026-02-18 16:26:02 INFO:  : Uninstall-ModuleForce w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+ModuleName                     VERB-DESKTOP                                                                                                                                                                                                                                   
+Verbose                        False                                                                                                                                                                                                                                          
+whatif                         False
+2026-02-18 16:26:06 INFO:  : 
+#*------v Uninstall PSGet Mod:verb-Desktop:v5.0.0 v------
+2026-02-18 16:26:28 INFO:  : 
+#*------^ Uninstall PSGet Mod:verb-Desktop:v5.0.0 ^------
+2026-02-18 16:26:28 INFO:  : (Processing $env:PSModulePath paths, for surviving locked copies of VERB-DESKTOP to *manually* purge...)
+2026-02-18 16:26:29 INFO:  : Checking: VERB-DESKTOP below: C:\Users\kadritss\Documents\WindowsPowerShell\Modules...
+2026-02-18 16:26:29 INFO:  : Checking: VERB-DESKTOP below: C:\ProgramData\Boxstarter...
+2026-02-18 16:26:30 INFO:  : Checking: VERB-DESKTOP below: C:\Program Files\WindowsPowerShell\Modules...
+2026-02-18 16:26:30 INFO:  : Checking: VERB-DESKTOP below: C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules...
+2026-02-18 16:26:30 INFO:  : Checking: VERB-DESKTOP below: C:\Program Files (x86)\AutoIt3\AutoItX...
+2026-02-18 16:26:31 INFO:  : Copying module to profile (net of .git & .vscode dirs, and backed up content)...
+2026-02-18 16:26:31 INFO:  : $srcFiles:post-filter out:
+\\(Package|Tests|logs)\\|(\.ps[dm]1_(\d+-\d+[AP]M|TMP)|-LOG-BATCH-EXEC-\d+-\d+[AP]M-log\.txt|\\(fingerprint|Psd1filelist))$
+2026-02-18 16:26:32 INFO:  : Discovered mod-copy files ($srcFiles.fullname):w
+C:\sc\VERB-DESKTOP\verb-Desktop\CHANGELOG.md
+C:\sc\VERB-DESKTOP\verb-Desktop\LICENSE.txt
+C:\sc\VERB-DESKTOP\verb-Desktop\Quick-Start-Installation-and-Example.md
+C:\sc\VERB-DESKTOP\verb-Desktop\README.md
+C:\sc\VERB-DESKTOP\verb-Desktop\verb-Desktop.psd1
+C:\sc\VERB-DESKTOP\verb-Desktop\verb-Desktop.psm1
+2026-02-18 16:26:32 INFO:  : Non-Pre-existing:$to:C:\Users\kadritss\Documents\WindowsPowerShell\Modules\VERB-DESKTOP\VERB-DESKTOP
+Pre-creating before copy...
+2026-02-18 16:26:33 INFO:  : Mode   LastWriteTime        Length Name        
+----   -------------        ------ ----        
+d----- 2/18/2026 4:26:33 PM        VERB-DESKTOP
+2026-02-18 16:26:33 INFO:  : -Merge:exclude $MergeBuildExcl \\(Public|Internal|External|Private)\\.*.ps1$ files from temp build copy
+2026-02-18 16:26:34 INFO:  : Recursively remove empty subdirs below C:\Users\kadritss\Documents\WindowsPowerShell\Modules\VERB-DESKTOP\VERB-DESKTOP...
+2026-02-18 16:26:34 INFO:  : Move/Flatten Resource etc files into root of temp Build dir...
+2026-02-18 16:26:35 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\VERB-DESKTOP\VERB-DESKTOP COPY of Quick-Start-Installation-and-Example.md
+2026-02-18 16:26:35 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\VERB-DESKTOP\VERB-DESKTOP COPY of CHANGELOG.md
+2026-02-18 16:26:35 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\VERB-DESKTOP\VERB-DESKTOP COPY of LICENSE.txt
+2026-02-18 16:26:36 INFO:  : Unable to locate a problematic temp mod dir C:\Users\kadritss\Documents\WindowsPowerShell\Modules\VERB-DESKTOP\VERB-DESKTOP COPY of README.md
+2026-02-18 16:26:36 INFO:  : copy/Flatten Resource etc files into source root c:\sc\VERB-DESKTOP\VERB-DESKTOP dir...
+2026-02-18 16:26:37 INFO:  : Resolved $ModPsdPath:
+C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1
+2026-02-18 16:26:37 INFO:  : 
+==Verifying CU:Mods\VERB-DESKTOP\VERB-DESKTOP\Quick-Start-Installation-and-Example.md:
+2026-02-18 16:26:38 INFO:  : 
+==Verifying CU:Mods\VERB-DESKTOP\VERB-DESKTOP\CHANGELOG.md:
+2026-02-18 16:26:38 INFO:  : 
+==Verifying CU:Mods\VERB-DESKTOP\VERB-DESKTOP\LICENSE.txt:
+2026-02-18 16:26:38 INFO:  : 
+==Verifying CU:Mods\VERB-DESKTOP\VERB-DESKTOP\README.md:
+2026-02-18 16:26:39 INFO:  : Running pre-Publish-Module .psd1 test:
+Test-ModuleManifest -path C:\sc\VERB-DESKTOP\VERB-DESKTOP\VERB-DESKTOP.psd1
+2026-02-18 16:26:39 INFO:  : (Test-ModuleManifest:PASSED)
+2026-02-18 16:26:40 INFO:  : (Profiling Repo: get-PSRepository -name lyncRepo...)
+2026-02-18 16:26:41 INFO:  : 
+Publish-Module w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Name                           VERB-DESKTOP                                                                                                                                                                                                                                   
+Repository                     lyncRepo                                                                                                                                                                                                                                       
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+Verbose                        True                                                                                                                                                                                                                                           
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+errorVariable                  pbmo_Err                                                                                                                                                                                                                                       
+whatif                         False
+2026-02-18 16:26:51 WARNING:  :  FOUND $pbmo_Err: import-module HAD ERRORS! (no action, could be non-impacting)
+2026-02-18 16:26:51 WARNING:  :  Publish-Module PBMO UNDEFINED ERROR! System.Management.Automation.StopUpstreamCommandsException: System error.     at Microsoft.PowerShell.Commands.SelectObjectCommand.ProcessRecord()     at System.Management.Automation.CommandProcessor.ProcessRecord() (But PublishModule doesn't bother to return a functional Error object with an Exception, so we can't trust/parse or act on it. Just echo)
+2026-02-18 16:26:52 INFO:  : Waiting for:find-module -name VERB-DESKTOP -Repository lyncRepo ...
+2026-02-18 16:26:55 INFO:  : Install-Module w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Name                           VERB-DESKTOP                                                                                                                                                                                                                                   
+Repository                     lyncRepo                                                                                                                                                                                                                                       
+RequiredVersion                5.1.0                                                                                                                                                                                                                                          
+scope                          CurrentUser                                                                                                                                                                                                                                    
+force                          True                                                                                                                                                                                                                                           
+AllowClobber                   True                                                                                                                                                                                                                                           
+errorVariable                  ismo_Err                                                                                                                                                                                                                                       
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+whatif                         False
+2026-02-18 16:27:00 INFO:  : Testing Module:Import-Module w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Name                           VERB-DESKTOP                                                                                                                                                                                                                                   
+ErrorAction                    Stop                                                                                                                                                                                                                                           
+errorVariable                  ipmo_Err                                                                                                                                                                                                                                       
+force                          True                                                                                                                                                                                                                                           
+verbose                        True
+2026-02-18 16:27:00 INFO:  : Retrieving matching Repo .nupkg file:
+gci \\lynmsv10\lync_fs\scripts\sc\VERB-DESKTOP.5.1.0.nupkgl..
+2026-02-18 16:27:01 INFO:  : Proper updated .nupkg file found:VERB-DESKTOP.5.1.0.nupkg, copying to local Pkg directory.
+2026-02-18 16:27:02 INFO:  : remove-UnneededFileVariants w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           c:\sc\VERB-DESKTOP\Package                                                                                                                                                                                                                     
+Include                        VERB-DESKTOP*.nupkg                                                                                                                                                                                                                            
+Pattern                                                                                                                                                                                                                                                                       
+FilterOn                       CreationTime                                                                                                                                                                                                                                   
+Keep                           2                                                                                                                                                                                                                                              
+KeepToday                      True                                                                                                                                                                                                                                           
+verbose                        True                                                                                                                                                                                                                                           
+whatif                         False
+2026-02-18 16:27:02 INFO:  : remove-UnneededFileVariants w
+Name                           Value                                                                                                                                                                                                                                          
+----                           -----                                                                                                                                                                                                                                          
+Path                           c:\sc\VERB-DESKTOP\Tests                                                                                                                                                                                                                       
+Include                        ScriptAnalyzer-Results-*.xml                                                                                                                                                                                                                   
+Pattern                                                                                                                                                                                                                                                                       
+FilterOn                       CreationTime                                                                                                                                                                                                                                   
+Keep                           4                                                                                                                                                                                                                                              
+KeepToday                      True                                                                                                                                                                                                                                           
+verbose                        True                                                                                                                                                                                                                                           
+whatif                         False
+2026-02-18 16:27:03 INFO:  : 
+---------------------------------------------------------------------------------
+Processing completed: VERB-DESKTOP :: c:\sc\VERB-DESKTOP
+- Script is currently installed (from PsRep: with scope:CurrentUser, under TORO\kadritss profile
+
+- To update other scopes/accounts on same machine, or install on other machines:
+    1. Uninstall current module copies:
+
+        Uninstall-Module -Name VERB-DESKTOP) -AllVersion -whatif ;
+
+    2. Install the current version (or higher) from the Repo:lyncRepo:
+
+        install-Module -name VERB-DESKTOP -Repository lyncRepo -RequiredVersion 5.1.0 -scope currentuser -whatif ;
+
+    3. Reimport the module with -force, to ensure the current installed verison is loaded:
+
+        import-Module -name VERB-DESKTOP -force -verbose ;
+
+#-=-=-Stacked list for the above: CURRENTUSER=-=-=-=-=-=
+$whatif=$false ;  $tScop = 'CurrentUser' ; $tMod = 'VERB-DESKTOP' ; $tVer = '5.1.0' ;
+if($IsCoreCLR){
+    write-warning "WARNING YOU'RE INSTALLING INTO POWERSHELLCORE (7+)!
+THE MODULE WILL GO INTO \DOCS\POWERSHELL\MODULES
+(vs \DOCS\WINDOWSPOWERSHELL\MODULES)!" ; 
+    $bRet=Read-Host "Enter YYY to continue. Anything else will exit"  ; 
+    if ($bRet.ToUpper() -eq "YYY") {} else {WRITE-WARNING "HALTING!" ; BREAK} ; 
+} ; 
+TRY {
+    switch($tScop){
+        'CurrentUser'{$ModPath = "$(split-path $profile)\Modules\$($tmod)" }
+        'AllUsers' {$ModPath = "$($env:ProgramFiles)\WindowsPowerShell\Modules)\$($tmod)"} 
+    } ;
+    if($Repository = (Get-PSRepository -Name $localPSRepo -ea 'STOP').name){
+        rmo -Name $tmod -ea 0 ;
+        Uninstall-Module -Name $tmod -AllVersion -force -ea 0 -whatif:$($whatif);
+        gi -path $ModPath -ea 0 |ri -Recurse -force -verbose  -whatif:$($whatif) ;
+        if($thisVers = find-module -name $tmod -Repository $Repository -RequiredVersion $tVer){
+            $thisvers  | ft -a Name,Version,Repository ; 
+            $thisVers | install-Module -scope $tScop -Force -AllowClobber -ea 'STOP' -whatif:$($whatif) ;
+        }else {
+            throw "Unable to:find-module -name $($tmod) -Repository $($Repository) -RequiredVersion $($tVer)" ; 
+            break ; 
+        } ; 
+        rmo -Name $tmod -force -ea 0 ;
+        ipmo -name $tmod -force -verbose -ea 'STOP'  ;
+        gmo -name $tmod | ? version -ne $tVer | rmo -Force -Verbose ; 
+        gmo -name $tmod -list ;
+    } else {
+        throw "Unable to resolve `lyncRepo to a configured local PSRepository" ;
+    } ;
+} CATCH {
+    $ErrTrapd=$Error[0] ;
+    $smsg = "
+$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+    write-warning "$((get-date).ToString('HH:mm:ss')):$($smsg)" ;
+} ;
+#-=-=-=-=-=-=-=-=
+#-=-=-Stacked list for the above: ALLUSERS=-=-=-=-=-=
+$whatif=$false ; $tScop = 'AllUsers' ; $tMod = 'VERB-DESKTOP' ; $tVer = '5.1.0' ;  
+if($IsCoreCLR){
+    write-warning "WARNING YOU'RE INSTALLING INTO POWERSHELLCORE (7+)!
+THE MODULE WILL GO INTO \DOCS\POWERSHELL\MODULES
+(vs \DOCS\WINDOWSPOWERSHELL\MODULES)!" ; 
+    $bRet=Read-Host "Enter YYY to continue. Anything else will exit"  ; 
+    if ($bRet.ToUpper() -eq "YYY") {} else {WRITE-WARNING "HALTING!" ; BREAK} ; 
+} ; 
+TRY {
+    switch($tScop){
+        'CurrentUser'{$ModPath = "$(split-path $profile)\Modules\$($tmod)" }
+        'AllUsers' {$ModPath = "$($env:ProgramFiles)\WindowsPowerShell\Modules)\$($tmod)"} 
+    } ;
+    if($Repository = (Get-PSRepository -Name $localPSRepo -ea 'STOP').name){
+        rmo -Name $tmod -ea 0 ;
+        Uninstall-Module -Name $tmod -AllVersion -force -ea 0 -whatif:$($whatif);
+        gi -path $ModPath -ea 0 |ri -Recurse -force -verbose  -whatif:$($whatif) ;
+        if($thisVers = find-module -name $tmod -Repository $Repository -RequiredVersion $tVer){
+            $thisvers  | ft -a Name,Version,Repository ; 
+            $thisVers | install-Module -scope $tScop -Force -AllowClobber -ea 'STOP' -whatif:$($whatif) ;
+        }else {
+            throw "Unable to:find-module -name $($tmod) -Repository $($Repository) -RequiredVersion $($tVer)" ; 
+            break ; 
+        } ; 
+        rmo -Name $tmod -force -ea 0 ;
+        ipmo -name $tmod -force -verbose -ea 'STOP'  ;
+        gmo -name $tmod | ? version -ne $tVer | rmo -Force -Verbose ; 
+        gmo -name $tmod -list ;
+    } else {
+        throw "Unable to resolve `lyncRepo to a configured local PSRepository" ;
+    } ;
+} CATCH {
+    $ErrTrapd=$Error[0] ;
+    $smsg = "
+$(($ErrTrapd | fl * -Force|out-string).trim())" ;
+    write-warning "$((get-date).ToString('HH:mm:ss')):$($smsg)" ;
+} ;
+#-=-=-=-=-=-=-=-=
+
+- You may also want to run the configured Pester Tests of the new script:
+
+        . c:\sc\VERB-DESKTOP\Tests\VERB-DESKTOP.tests.ps1
+
+Full Processing Details can be found in:
+
+c:\scripts\logs\update-NewModule-VERB-DESKTOP-LOG-BATCH-EXEC-20260218-1624PM-log.txt
+
+---------------------------------------------------------------------------------
+
+2026-02-18 16:27:03 INFO:  : 
+(Most recent processing log can be found at:c:\sc\VERB-DESKTOP\update-NewModule-VERB-DESKTOP-LOG-BATCH-EXEC-20260218-1624PM-log.txt)
+(perm copy stored at:c:\scripts\logs\update-NewModule-VERB-DESKTOP-LOG-BATCH-EXEC-20260218-1624PM-log.txt

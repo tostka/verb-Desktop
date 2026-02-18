@@ -1,11 +1,11 @@
-﻿# VERB-DESKTOP.psm1
+﻿# verb-Desktop.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 5.1.0.0
+  Version     : 5.0.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -309,7 +309,6 @@ function Disable-AutoLogonTDO{
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
-        * 2:35 PM 2/17/2026 add missing base alias
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             remove the write-my*() support (defer to native w-l support)
         * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
@@ -325,7 +324,7 @@ function Disable-AutoLogonTDO{
         https://github.org/tostka/verb-Desktop/
         #>
         [CmdletBinding()]
-        [alias('Disable-AutoLogon821','Disable-AutoLogon')]
+        [alias('Disable-AutoLogon821')]
         PARAM() ;
         $smsg = 'Disabling Automatic Logon'
         if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;
@@ -589,7 +588,6 @@ function Enable-AutoLogonTDO{
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
-        * 2:35 PM 2/17/2026 add missing base alias
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             remove the write-my*() support (defer to native w-l support)
         * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
@@ -605,7 +603,7 @@ function Enable-AutoLogonTDO{
         https://github.org/tostka/verb-Desktop/
         #>
         [CmdletBinding()]
-        [alias('Enable-AutoLogon821','Enable-AutoLogon')]
+        [alias('Enable-AutoLogon821')]
         PARAM(
             [Parameter(Mandatory = $false, HelpMessage = "Use specific Credentials[-Credentials [credential object]")]
                 [System.Management.Automation.PSCredential]$Credential
@@ -4369,8 +4367,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUw2qmvYY5CAeNkoxRgVUmeJtJ
-# HQWgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUV4h3l1p8od113rX8Wk+irU9I
+# otygggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -4385,9 +4383,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTGn1vO
-# OywP4cfvq5fCmX1lPOj57DANBgkqhkiG9w0BAQEFAASBgBMWEh38Z1E4ZO5oJjRe
-# OBglQw2xjt5RRo7/vYCEvthwZ9l+7ERuXojoFOVgzrdA6TOvSB9EXhGIDj3SyX8C
-# ElYTW6BiFgh5rqxpmV2H/Phh0toC9HQh8Hx6sqnTdyffwcrttI2b4ZtbejmIM4Pt
-# YtuXlW5jghcCtdy6ak7lOWyg
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSBikMs
+# NxH0+62teA7JGDdPX5xU6jANBgkqhkiG9w0BAQEFAASBgBAVzIFwxqxHI34eH6rn
+# U6AvEb5o2ugdDlqljmSpKNeUej9zmd3eXxw763TD41VxfLs1qT2NLNItQQUW3xgG
+# bRI2OHfrBHbIOMalXhvhrAxXC/Mir3WWO8oau6EGzx6vFJIrX6Q+cmVKIEdCBgdi
+# yukqA4gMN/u9b/97ENcKkjzT
 # SIG # End signature block
