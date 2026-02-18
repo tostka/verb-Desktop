@@ -21,6 +21,7 @@ function Disable-AutoLogonTDO{
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
+        * 2:35 PM 2/17/2026 add missing base alias
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             remove the write-my*() support (defer to native w-l support)
         * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
@@ -36,7 +37,7 @@ function Disable-AutoLogonTDO{
         https://github.org/tostka/verb-Desktop/
         #>
         [CmdletBinding()]
-        [alias('Disable-AutoLogon821')]
+        [alias('Disable-AutoLogon821','Disable-AutoLogon')]
         PARAM() ;
         $smsg = 'Disabling Automatic Logon'
         if ($logging) { Write-Log -LogContent $smsg -Path $logfile -useHost -Level PROMPT } else{ write-host -foregroundcolor green "$((get-date).ToString('HH:mm:ss')):$($smsg)" } ;

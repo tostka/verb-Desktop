@@ -21,6 +21,7 @@ function Enable-AutoLogonTDO{
         AddedWebsite: http://eightwone.com
         AddedTwitter: URL        
         REVISIONS
+        * 2:35 PM 2/17/2026 add missing base alias
         * 3:00 PM 9/18/2025 port to vdesk from xopBuildLibrary; add CBH, and Adv Function specs ; 
             remove the write-my*() support (defer to native w-l support)
         * 10:45 AM 8/6/2025 added write-myOutput|Warning|Verbose support (for xopBuildLibrary/install-Exchange15.ps1 compat) 
@@ -36,7 +37,7 @@ function Enable-AutoLogonTDO{
         https://github.org/tostka/verb-Desktop/
         #>
         [CmdletBinding()]
-        [alias('Enable-AutoLogon821')]
+        [alias('Enable-AutoLogon821','Enable-AutoLogon')]
         PARAM(
             [Parameter(Mandatory = $false, HelpMessage = "Use specific Credentials[-Credentials [credential object]")]
                 [System.Management.Automation.PSCredential]$Credential
