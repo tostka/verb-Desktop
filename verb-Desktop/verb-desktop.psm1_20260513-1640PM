@@ -1,11 +1,11 @@
-﻿# verb-desktop.psm1
+﻿# VERB-DESKTOP.psm1
 
 
   <#
   .SYNOPSIS
   verb-Desktop - Powershell Desktop generic functions module
   .NOTES
-  Version     : 5.1.1.0
+  Version     : 5.1.0.0
   Author      : Todd Kadrie
   Website     :	https://www.toddomation.com
   Twitter     :	@tostka
@@ -2742,7 +2742,7 @@ Function New-WallpaperStatusTDO {
             $cDarkMagenta = @(136,23,152) ; 
             $cWhite = @(242,242,242) ;
             $cDefaultWhite = @(254,253,254) ; 
-            $cMedGrey = @(185.1.1,188) ; 
+            $cMedGrey = @(185,190,188) ; 
         
         
             Switch ($Theme) {
@@ -3182,220 +3182,6 @@ Function Reset-CurrentWallpaperTDO {
 #*------^ Reset-CurrentWallpaperTDO.ps1 ^------
 
 
-#*------v resolve-CommonFolderCurrentLocation.ps1 v------
-function resolve-CommonFolderCurrentLocation {
-    <#
-    .SYNOPSIS
-    resolve-CommonFolderCurrentLocation - Resolve common folder current location (through Known Folder Move/redirection (OneDrive), and Environement::getFolderPath() lookup)
-    .NOTES
-    Version     : 1.0.0.0
-    Author: Todd Kadrie
-    Website:	http://toddomation.com
-    Twitter:	http://twitter.com/tostka
-    CreatedDate : 2026-05-08
-    FileName    : resolve-CommonFolderCurrentLocation
-    License     : MIT License
-    Copyright   : (c) 2026 Todd Kadrie
-    AddedCredit : 
-    AddedWebsite: 
-    AddedTwitter: 
-    Github      : https://github.com/tostka/verb-desktop
-    Tags        : Powershell,OS,KnownFolderMove,KFM,Profile,ProfileRedirection,Test
-    REVISIONS
-    * 11:37 AM 5/8/2026 init
-    .DESCRIPTION
-    resolve-CommonFolderCurrentLocation - Resolve common folder current location (through Known Folder Move/redirection (OneDrive), and Environement::getFolderPath() lookup)
-    
-    # Expanding coverage to the [Environment]::GetFolderPath("MyDocuments") .dotnet call: 
-    # dumping the full list of folders available for resolution: 
-    ([Environment+SpecialFolder]::GetNames([Environment+SpecialFolder])) -join ", " ; 
-
-        Desktop
-        Programs
-        MyDocuments
-        Personal
-        Favorites
-        Startup
-        Recent
-        SendTo
-        StartMenu
-        MyMusic
-        MyVideos
-        DesktopDirectory
-        MyComputer
-        NetworkShortcuts
-        Fonts
-        Templates
-        CommonStartMenu
-        CommonPrograms
-        CommonStartup
-        CommonDesktopDirectory
-        ApplicationData
-        PrinterShortcuts
-        LocalApplicationData
-        InternetCache
-        Cookies
-        History
-        CommonApplicationData
-        Windows
-        System
-        ProgramFiles
-        MyPictures
-        UserProfile
-        SystemX86
-        ProgramFilesX86
-        CommonProgramFiles
-        CommonProgramFilesX86
-        CommonTemplates
-        CommonDocuments
-        CommonAdminTools
-        AdminTools
-        CommonMusic
-        CommonPictures
-        CommonVideos
-        Resources
-        LocalizedResources
-        CommonOemLinks
-        CDBurning
-
-        ## folders only on the ShellFolder list:
-        NetHood                <=        
-        Cache                  <=
-        PrintHood              <=
-
-        # items that are renamed between the lists (rename and defer to Env resoloution)
-        Local AppData          <= <> LocalApplicationData
-        AppData                <= <> ApplicationData
-        My Music               <= <> MyMusic
-        My Video               <= <> MyVideos
-        Start Menu             <= <> StartMenu
-        My Pictures            <= <> MyPictures
-        Local AppData          <= <> LocalApplicationData
-        AppData                <= <> ApplicationData
-        My Music               <= <> MyMusic
-        My Video               <= <> MyVideos
-        Start Menu             <= <> StartMenu
-        My Pictures            <= <> MyPictures
-
-        ## folders on both lists:
-        Programs               ==
-        Templates              ==
-        Favorites              ==
-        History                ==
-        Cookies                ==
-        Desktop                ==
-        Personal               ==
-        Recent                 ==
-        Startup                ==
-        SendTo                 ==
-        => defer those to the Environment resolution
-
-    .PARAMETER FolderName
-    FolderName (full OS spec dynamically supported: common items: AppData|LocalAppData|Programs|StartMenu|Startup|Templates|Documents|Desktop|Favorites|MyPictures|MyMusic|MyVideo|) to resolve[-FolderName Documents]
-    .PARAMETER TestRedirected
-    Switch to run a test for redirection: If detected redirected, return resolved redirected location, otherwise return boolean $false[-testRedirected]
-    .INPUTS
-    Accepts piped input.
-    .OUTPUTS
-    Returns either System.Boolean (default) or System.Object (-detail)
-    .EXAMPLE
-    PS>  if(resolve-CommonFolderCurrentLocation -folderName Desktop -testredirection ){
-    PS>  	write-host "$($env:computername) is Activated/Licensed" ; 
-    PS>  } else { 
-    PS>  	write-warning "$($env:computername) is NOT Activated/Licensed!" ; 
-    PS>  } ; 
-    Test standard windows activation
-    .EXAMPLE
-    PS> $rgxGuid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" ;
-    PS> (Get-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders").Property | ?{$_ -notmatch $rgxGuid} ;
-
-        AppData
-        Cache
-        Cookies
-        History
-        Local AppData
-        NetHood
-        PrintHood
-        Programs
-        Recent
-        SendTo
-        Start Menu
-        Startup
-        Templates
-        Desktop
-        Favorites
-        My Pictures
-        My Music
-        My Video
-        Personal
-
-    Dump full list of folder names/properties configured on local HKCU (excluding GUID-named folders), for configuration of the ValidatePattern on the TargetFolder parameter
-    .EXAMPLE
-    PS> write-verbose "static lists" ; 
-    PS> $shellFolders = 'AppData','Cache','Cookies','History','Local AppData','NetHood','PrintHood','Programs','Recent','SendTo','Start Menu','Startup','Templates','Desktop','Favorites','My Pictures','My Music','My Video','Personal'
-    PS> $envFolders = 'Desktop','Programs','MyDocuments','Personal','Favorites','Startup','Recent','SendTo','StartMenu','MyMusic','MyVideos','DesktopDirectory','MyComputer','NetworkShortcuts','Fonts','Templates','CommonStartMenu','CommonPrograms','CommonStartup','CommonDesktopDirectory','ApplicationData','PrinterShortcuts','LocalApplicationData','InternetCache','Cookies','History','CommonApplicationData','Windows','System','ProgramFiles','MyPictures','UserProfile','SystemX86','ProgramFilesX86','CommonProgramFiles','CommonProgramFilesX86','CommonTemplates','CommonDocuments','CommonAdminTools','AdminTools','CommonMusic','CommonPictures','CommonVideos','Resources','LocalizedResources','CommonOemLinks','CDBurning'
-    PS> write-verbose "queried lists (current for local OS)" ; 
-    PS> $shellFolders = (Get-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders").Property ; 
-    PS> $envFolders = ([Environment+SpecialFolder]::GetNames([Environment+SpecialFolder])) ; 
-    PS> Compare-Object -ReferenceObject $shellFolders -DifferenceObject $envFolders -IncludeEqual | sort sideindicator ; 
-    Obtain and compare the population and overlap, between the observed registry ShellFolder contents, and the dotNet EnvironmentFolder feature support.
-    .LINK
-    https://stackoverflow.com/questions/29368414/need-script-to-find-server-activation-status
-    https://github.com/tostka/verb-desktop
-    #>
-    [CmdletBinding()]
-    #[Alias('')]
-    PARAM(
-        [Parameter(Mandatory = $True,Position = 0,HelpMessage = 'FolderName (full OS spec dynamically supported: common items: AppData|LocalAppData|Programs|StartMenu|Startup|Templates|Documents|Desktop|Favorites|MyPictures|MyMusic|MyVideo|) to resolve[-FolderName Documents]')]
-            #[ValidateSet('AppData','Cache','Cookies','History','LocalAppData','NetHood','PrintHood','Programs','Recent','SendTo','StartMenu','Startup','Templates','Desktop','Favorites','MyPictures','MyMusic','MyVideo','Personal','Documents')]
-            [ValidateScript({
-                $suppFolderNames = $(@('NetHood','Cache','PrintHood');@([Environment+SpecialFolder]::GetNames([Environment+SpecialFolder]))) | sort ; 
-                if($suppFolderNames -contains $_){
-                    $true ;
-                }else{
-                    $smsg = "Unsupported FolderName! (needs to be supported by Environment::GetNames(), or HKCU ShellFolders)" ; 
-                    $smsg += "`nPlease use a supported folder designator:`n$(($suppFolderNames -join ', '|out-string).trim())" ; 
-                    throw $smsg ; 
-                }                
-            })]
-            [string[]] $FolderName,
-        [Parameter(Mandatory = $False,Position = 1,HelpMessage = 'Switch to run a test for redirection: If detected redirected, return resolved redirected location, otherwise return boolean $false[-testRedirected]')]
-            [switch]$TestRedirected
-    ) ;
-    BEGIN{
-        $registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" ; 
-        # collect current contents of the key
-        $redirectedFolders = Get-ItemProperty -Path $registryPath ; 
-        if ($PSCmdlet.MyInvocation.ExpectingInput) {
-          write-verbose "Data received from pipeline input: '$($InputObject)'" ; 
-        } else {
-          #write-verbose "Data received from parameter input: '$($InputObject)'" ; 
-          write-verbose "(non-pipeline - param - input)" ; 
-        } ;         
-    }
-    PROCESS{
-        foreach ($folder in $FolderName) {
-            # push no-space param specs back to in-use strings for matching - shellfolders supports spacees in names, but that doesn't work for parameters -> use the Enviro folder designators
-            #if($redirectedFolders.PsObject.Properties.name -contains $foldername){
-            switch -regex ($FolderName){
-                # items only supported by the shellfolder (e.g. unsupported by [Environment]::GetFolderPath())
-                'NetHood|Cache|PrintHood'{$path = $redirectedFolders.$FolderName }
-                default{$Path = [Environment]::GetFolderPath($FolderName)} ; 
-            }
-            if ($path -match "OneDrive") {
-                Write-Host "[+] $folder is REDIRECTED to: $path" -ForegroundColor Green
-                $path | write-output  ; 
-            } else {
-                Write-Host "[-] $folder is NOT redirected (Local path: $path)" -ForegroundColor Yellow
-                if($test){$false | write-output } else {$path | write-output }
-            } ; 
-        }
-    } ;
-}
-
-#*------^ resolve-CommonFolderCurrentLocation.ps1 ^------
-
-
 #*------v restart-Shell.ps1 v------
 function restart-Shell {
     <#
@@ -3781,6 +3567,129 @@ public static extern bool c(IntPtr hWnd, int nCmdShow);
 }
 
 #*------^ show-processWindow.ps1 ^------
+
+
+#*------v show-TrayTip.ps1 v------
+function show-TrayTip {
+    <#
+    .SYNOPSIS
+    Show-TrayTip() - Display popup System Tray Tooltip
+    .NOTES
+    Version     : 1.0.0
+    Author      : Todd Kadrie
+    Website     : http://www.toddomation.com
+    Twitter     : @tostka / http://twitter.com/tostka
+    CreatedDate : 2020-
+    FileName    :
+    License     : MIT License
+    Copyright   : (c) 2020 Todd Kadrie
+    Github      : https://github.com/tostka
+    Tags        : Powershell
+    AddedCredit : Pat Richard (pat@innervation.com)
+    AddedWebsite: http://www.ehloworld.com/1038
+    AddedTwitter:
+    REVISIONS
+    * 2:23 PM 3/10/2016 reworked the $TrayIcon validation, to permit either a valid path to an .ico, or a variable of Icon type (of the type pulled from shell32.dll by Extract-Icon()); debugged and functional in check-kpconflict.ps1 ; added some concepts from the src Pat used: Dr. Tobias Weltner, http://www.powertheshell.com/balloontip/ (Pat was in the comments asking questions on the subject) ; added some concepts from Pat Richard http://www.ehloworld.com/1038
+    * 11:19 AM 3/6/2016 - unknown original, updating with formatting, pshelp and updated params
+    .DESCRIPTION
+    Show-TrayTip() - Display popup System Tray Tooltip
+    .PARAMETER Type
+    Tip Icon type [Error|Info|Warning|None]
+    .PARAMETER Text
+    Tip Text to be displayed [string]
+    .PARAMETER title
+    Tip Title [string]
+    .PARAMETER ShowTime
+    Tip Display Time (secs, default:2)[int]
+    .PARAMETER TrayIcon
+    Specify variant Systray icon (defaults per type)
+    .INPUTS
+    None. Does not accepted piped input.
+    .OUTPUTS
+    None. Returns no objects or output.
+    .EXAMPLE
+    show-TrayTip -type "error" -text "$computer is still ONLINE; Check that reboot is initiated properly" -title "Computer is not rebooting"
+    Show TrayTip with default (powershell) Systray Icon, Error-type balloon icon, and balloon title & text specified, for 30 seconds
+    .EXAMPLE
+    show-TrayTip -type "error" -title "CONFLICT!" -text "CONFLICTED KEEPASS DB FOUND!" -ShowTime 30 -TrayIcon $TrayIcon ;
+    Show TrayTip with custom Systray Icon, Error-type balloon icon, and balloon title & text specified, for 30 seconds
+    .EXAMPLE
+    show-TrayTip -type info -text "PowerShell script has finished processing" -title "Completed"
+    Basic Example using parameter names (rest defaults)
+    .EXAMPLE
+    show-TrayTip info "PowerShell script has finished processing" "Completed"
+    Basic Example using positional parameters
+    .EXAMPLE
+    if($script:TrayTip) { $script:TrayTip.Dispose() ; Remove-Variable -Scope script -Name TrayTip ; }
+    Cleanup code that should be used at script-end to cleanup the objects
+    .LINK
+    #>
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    Param(
+        [Parameter(Position=0,Mandatory=$True,HelpMessage="Tip Icon type [Error|Info|Warning|None]")][ValidateSet("Error","Info","Warning","None")]
+        [string]$Type
+        ,[Parameter(Position=1,Mandatory=$True,HelpMessage="Tip Text to be displayed [string]")][ValidateNotNullOrEmpty()]
+        [string]$Text
+        ,[Parameter(Position=2,Mandatory=$True,HelpMessage="Tip Title [string]")]
+        [string]$Title
+        ,[Parameter(HelpMessage="Tip Display Time (secs, default:2)[int]")][ValidateRange(1,30)]
+        [int]$ShowTime=2
+        ,[parameter(HelpMessage = "Specify variant Systray icon (defaults to Powershell)")]
+        $TrayIcon
+    )  ;
+    BEGIN {
+        if($TrayIcon){
+            if( (test-path $TrayIcon) -OR ($TrayIcon.gettype().name -eq 'Icon') ){ }
+            else {
+                write-warning "Invalid TrayIcon, resetting to Default Icon" ;
+                $TrayIcon =$null ;
+            } ;
+        } ;
+    } ;
+    PROCESS {
+        if(!($NoTray)){
+            #load Windows Forms and drawing assemblies
+            [reflection.assembly]::loadwithpartialname("System.Windows.Forms") | Out-Null ; # used for TrayTip tips
+            [reflection.assembly]::loadwithpartialname("System.Drawing") | Out-Null ; # used for icon extraction
+            #define an icon image pulled from PowerShell.exe
+            #$icon=[system.drawing.icon]::ExtractAssociatedIcon((join-path $pshome powershell.exe)) ;
+            # load the TrayTip
+            if ($script:TrayTip -eq $null) {  $script:TrayTip = New-Object System.Windows.Forms.NotifyIcon } ;
+            <# TrayIcon (BalloonTip): configurable property's:
+              # the systray icon to be displayed (extracted from the PS path here)
+              $path                    = Get-Process -id $pid | Select-Object -ExpandProperty Path ;
+              $TrayTip.Icon            = [System.Drawing.Icon]::ExtractAssociatedIcon($path) ;
+              # the following configure settings _within_ the balloon popup
+              $TrayTip.BalloonTipIcon  = $Icon ;
+              $TrayTip.BalloonTipText  = $Text ;
+              $TrayTip.BalloonTipTitle = $Title ;
+              # finally show the BalloonTip, with a specified timeout.
+              $TrayTip.Visible         = $true ;
+              $TrayTip.ShowBalloonTip($Timeout) ;
+            #>
+            if ($TrayIcon) { $TrayTip.Icon = $TrayIcon  }
+            else {
+                # use the extracted Powershell process icon
+                $Path = Get-Process -id $pid | Select-Object -ExpandProperty Path ;
+                $TrayTip.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($path) ;
+            }
+            $TrayTip.BalloonTipIcon  = $Type ;
+            $TrayTip.BalloonTipText  = $Text ;
+            $TrayTip.BalloonTipTitle = $Title ;
+            $TrayTip.Visible         = $true ;
+            # set timeout (in ms)
+            $TrayTip.ShowBalloonTip($ShowTime*1000) ;
+            write-verbose -verbose:$verbose "`$TrayTip:`n$(($TrayTip | fl * |out-string).trim())" ;
+        } ;# if-E $NoTray ;
+    } ;
+    END {
+        <# Cleanup code that should be used at script-end to cleanup the objects
+            if($script:TrayTip) { $script:TrayTip.Dispose() ; Remove-Variable -Scope script -Name TrayTip ; }
+        #>
+    } ;
+}
+
+#*------^ show-TrayTip.ps1 ^------
 
 
 #*------v start-ItunesPlaylist.ps1 v------
@@ -4452,7 +4361,7 @@ function update-Environment {
 
 #*======^ END FUNCTIONS ^======
 
-Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Disable-AutoLogonTDO,Disable-OpenFileSecurityWarningTDO,Disable-UACTDO,Enable-AutoLogonTDO,Enable-OpenFileSecurityWarningTDO,Enable-RunOnceTDO,Enable-UACTDO,get-localNicsTDO,Get-MyPackageTDO,get-OSFullVersionTDO,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-MyPackageTDO,Install-ServerRoles,invoke-Explore,Invoke-ExtractTDO,Invoke-ProcessTDO,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatusTDO,Report-URL,Reset-CurrentWallpaperTDO,resolve-CommonFolderCurrentLocation,restart-Shell,Set,Set-WallpaperTDO,show-processWindow,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,Test-MyPackageTDO,update-Environment -Alias *
+Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRunning,c-winsallk,Define-MoveWindow,Disable-AutoLogonTDO,Disable-OpenFileSecurityWarningTDO,Disable-UACTDO,Enable-AutoLogonTDO,Enable-OpenFileSecurityWarningTDO,Enable-RunOnceTDO,Enable-UACTDO,get-localNicsTDO,Get-MyPackageTDO,get-OSFullVersionTDO,get-processTitled,Install-ChocoPkg,Install-ExePackage,Install-MsiPackage,Install-MyPackageTDO,Install-ServerRoles,invoke-Explore,Invoke-ExtractTDO,Invoke-ProcessTDO,invoke-speakwords,Move-Window,Move-WindowByWindowTitle,New-WallpaperStatusTDO,Report-URL,Reset-CurrentWallpaperTDO,restart-Shell,Set,Set-WallpaperTDO,show-processWindow,show-TrayTip,start-ItunesPlaylist,stop-browsers,test-InstalledApplication,Test-InstalledWindowsFeature,test-IsWindowsActivated,Test-IsWindowsTerminal,Test-MyPackageTDO,update-Environment -Alias *
 
 
 
@@ -4460,8 +4369,8 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # SIG # Begin signature block
 # MIIELgYJKoZIhvcNAQcCoIIEHzCCBBsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU2kWJ4Vh4CEM4MTteS1u2Xjd9
-# 33igggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUw2qmvYY5CAeNkoxRgVUmeJtJ
+# HQWgggI4MIICNDCCAaGgAwIBAgIQWsnStFUuSIVNR8uhNSlE6TAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDEyMjkxNzA3MzNaFw0zOTEyMzEyMzU5NTlaMBUxEzARBgNVBAMTClRvZGRT
 # ZWxmSUkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALqRVt7uNweTkZZ+16QG
@@ -4476,9 +4385,9 @@ Export-ModuleMember -Function ....,...,..,~,Clean-Desktop,confirm-GoogleDriveRun
 # AWAwggFcAgEBMEAwLDEqMCgGA1UEAxMhUG93ZXJTaGVsbCBMb2NhbCBDZXJ0aWZp
 # Y2F0ZSBSb290AhBaydK0VS5IhU1Hy6E1KUTpMAkGBSsOAwIaBQCgeDAYBgorBgEE
 # AYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwG
-# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTCCte8
-# JkbeWJqiRLz8ENDiX1NG5jANBgkqhkiG9w0BAQEFAASBgJSBiuD4JCdYLGf+kkyP
-# ZhHb1XZambULjCb/gI9vZvvlS3A4P9cdrgAIw0aG4AndMFi576JbH6fXYVECQyZS
-# AuiP9Eoehm4wY+Qcxxf94nf8u8cgrg1vvNzpS8NPmhH3D2gVzvDRuPmfYLhYZhlP
-# D8Qz8Hg8POrJ8qdNyVrxOvfq
+# CisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTGn1vO
+# OywP4cfvq5fCmX1lPOj57DANBgkqhkiG9w0BAQEFAASBgBMWEh38Z1E4ZO5oJjRe
+# OBglQw2xjt5RRo7/vYCEvthwZ9l+7ERuXojoFOVgzrdA6TOvSB9EXhGIDj3SyX8C
+# ElYTW6BiFgh5rqxpmV2H/Phh0toC9HQh8Hx6sqnTdyffwcrttI2b4ZtbejmIM4Pt
+# YtuXlW5jghcCtdy6ak7lOWyg
 # SIG # End signature block
