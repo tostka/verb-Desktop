@@ -1,6 +1,6 @@
 ﻿#*------v Function Set v------
 # If an alias exists, remove it.
-If (Test-Path ALIAS:set) { Remove-Item ALIAS:set } ;
+If (Test-Path ALIAS:set) { Remove-Item -path ALIAS:set } ;
 Function Set {
     <#
     .SYNOPSIS
